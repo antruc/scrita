@@ -1,0 +1,57 @@
+name: scrita
+description: >
+  Records or imports audio with one or more speakers and produces a text
+  transcript labeled with each speaker's name. Offline with sherpa-onnx; the
+  voice model is downloaded once.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  sherpa_onnx: 1.13.8
+  # Already a dependency of sherpa_onnx; used to call its C resampler.
+  ffi: ^2.1.0
+  record: ^7.1.2
+  path_provider: ^2.1.6
+  path: ^1.9.1
+  file_picker: ^13.1.0
+  flutter_foreground_task: ^11.0.3
+  share_plus: ^13.3.1
+  audioplayers: ^6.8.1
+  shared_preferences: ^2.5.6
+  archive: ^4.5.2
+  dynamic_color: ^2.1.0
+  url_launcher: ^6.3.2
+  # SHA-256 of the downloaded model (lib/models.dart) and tool/fetch_models.dart.
+  crypto: ^3.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  # Launcher icons from assets/icon/: dart run flutter_launcher_icons.
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: assets/icon/icon.png
+  adaptive_icon_background: "#3F51B5"
+  adaptive_icon_foreground: assets/icon/icon_foreground.png
+  adaptive_icon_monochrome: assets/icon/icon_monochrome.png
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/models/
+    - NOTICE

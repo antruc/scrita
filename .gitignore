@@ -1,0 +1,26 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Android
+android/.gradle/
+android/local.properties
+android/app/.cxx/
+*.iml
+.idea/
+
+# Release signing: never in the repo
+android/key.properties
+*.jks
+*.keystore
+
+# ruff lint cache (tool/make_icon.py)
+.ruff_cache/
+
+# Models: downloaded by tool/fetch_models.dart
+assets/models/*
+!assets/models/.gitkeep
+

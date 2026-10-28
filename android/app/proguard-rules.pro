@@ -1,0 +1,3 @@
+-keep class io.flutter.plugins.sharedpreferences.** { *; }
+-keep class kotlin.coroutines.** { *; }
+-keep class kotlin.Result** { *; }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11. requireFlags keeps each include to a direct copy to a new
+     phone, so the Google Drive backup and adb backup come out empty. Same
+     content as device-transfer in data_extraction_rules.xml. -->
+<full-backup-content>
+    <include domain="root" path="app_flutter/" requireFlags="deviceToDeviceTransfer" />
+    <include domain="sharedpref" path="." requireFlags="deviceToDeviceTransfer" />
+</full-backup-content>

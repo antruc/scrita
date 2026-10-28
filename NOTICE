@@ -1,0 +1,18 @@
+Scrita
+Copyright (C) 2026 antruc
+Licensed under the GNU General Public License v3.0 or later. See LICENSE.
+
+Scrita uses the NVIDIA Parakeet TDT 0.6B v3 speech recognition model
+(nvidia/parakeet-tdt-0.6b-v3), Copyright (c) NVIDIA Corporation, licensed
+under the Creative Commons Attribution 4.0 International License (CC-BY-4.0),
+https://creativecommons.org/licenses/by/4.0/
+Changes: converted to ONNX and quantized to int8 by the sherpa-onnx project
+(sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8). Scrita ships it unmodified from
+that package.
+
+Scrita uses the NVIDIA NeMo TitaNet small speaker embedding model
+(titanet_small, exported as nemo_en_titanet_small.onnx), Copyright (c) NVIDIA
+Corporation, licensed under the Apache License 2.0 (the NeMo Toolkit license,
+per its NGC card), https://www.apache.org/licenses/LICENSE-2.0
+Changes: converted to ONNX by the sherpa-onnx project. Scrita ships it
+unmodified from that release.

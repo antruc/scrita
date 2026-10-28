@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+. Nothing goes to Google Drive. A direct copy to a new phone
+     carries recordings, transcripts (app_flutter/, the documents directory)
+     and settings. The models in files/ stay out: the new phone copies them
+     again from the APK. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="root" path="app_flutter/" />
+        <include domain="sharedpref" path="." />
+    </device-transfer>
+</data-extraction-rules>
