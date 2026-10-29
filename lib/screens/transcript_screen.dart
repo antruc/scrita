@@ -1054,6 +1054,9 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
               Slider(
                 value: _pos.inMilliseconds.clamp(0, max).toDouble(),
                 max: max > 0 ? max.toDouble() : 1,
+                // M3's secondaryContainer vanishes on the footer's
+                // surfaceContainerHigh; outline keeps 3:1 on every seed.
+                inactiveColor: theme.colorScheme.outline,
                 onChanged: max > 0
                     ? (v) => _player.seek(Duration(milliseconds: v.round()))
                     : null,

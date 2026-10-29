@@ -14,7 +14,7 @@ import '../prefs.dart' show audioSource, exportM4a, materialYou, seedColor;
 import 'onboarding_screen.dart';
 
 // ponytail: duplicates pubspec's version name; package_info_plus if it drifts.
-const _appVersion = '1.0';
+const _appVersion = '1.0.0';
 
 /// Seeds offered as palettes. Material 3 derives light and dark schemes
 /// from each one.
