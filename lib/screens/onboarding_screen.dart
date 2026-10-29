@@ -709,10 +709,7 @@ class _AssignArt extends StatelessWidget {
                   onPressed: () {},
                   child: Text(tr('Asignar a Tomás', 'Assign to Tom')),
                 ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(tr('Editar', 'Edit')),
-                ),
+                TextButton(onPressed: () {}, child: Text(tr('Editar', 'Edit'))),
               ],
             ),
           ),
