@@ -15,7 +15,7 @@ import '../main.dart' show appFooter;
 import '../models.dart' as models;
 import '../recorder.dart';
 
-enum _Kind { permissions, download, record, speakers, review, save }
+enum _Kind { permissions, download, record, speakers, review, assign, save }
 
 class OnboardingScreen extends StatefulWidget {
   /// [modelDir] set: the model is missing there and gets downloaded.
@@ -47,6 +47,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _Kind.record,
       _Kind.speakers,
       _Kind.review,
+      _Kind.assign,
       _Kind.save,
     ],
   ];
@@ -457,6 +458,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             'while you read',
       ),
     ),
+    _Kind.assign => _slide(
+      theme,
+      const _AssignArt(),
+      tr('Corrige quién habla', "Fix who's speaking"),
+      tr(
+        'Si un párrafo mezcla dos voces, mantén presionado el texto, '
+            'selecciona la parte de la otra persona y toca Asignar a',
+        'If a paragraph mixes two voices, press and hold the text, select '
+            "the other person's part and tap Assign to",
+      ),
+    ),
     _Kind.save => _slide(
       theme,
       const _SaveArt(),
@@ -620,15 +632,9 @@ class _SpeakersArt extends StatelessWidget {
   );
 }
 
-/// Two paragraphs of a transcript, each with its speaker's color.
-class _TranscriptArt extends StatelessWidget {
-  const _TranscriptArt();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final c = theme.colorScheme;
-    Widget paragraph(String name, Color color, String text) => Padding(
+/// One transcript paragraph: speaker dot, name, time and [text].
+Widget _paragraph(ThemeData theme, String name, Color color, Widget text) =>
+    Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -646,25 +652,87 @@ class _TranscriptArt extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          Text(text),
+          text,
         ],
       ),
     );
+
+String get _question =>
+    tr('¿Cómo empezó el proyecto?', 'How did the project start?');
+String get _answer => tr(
+  'Con una grabadora y muchas preguntas.',
+  'With a recorder and a lot of questions.',
+);
+
+/// Two paragraphs of a transcript, each with its speaker's color.
+class _TranscriptArt extends StatelessWidget {
+  const _TranscriptArt();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final c = theme.colorScheme;
     return _mock(
       Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          paragraph(
-            'Ana',
-            c.primary,
-            tr('¿Cómo empezó el proyecto?', 'How did the project start?'),
+          _paragraph(theme, tr('Lucía', 'Lucy'), c.primary, Text(_question)),
+          _paragraph(theme, tr('Tomás', 'Tom'), c.tertiary, Text(_answer)),
+        ],
+      ),
+    );
+  }
+}
+
+/// One paragraph that mixes two voices: Tom's part is selected and the
+/// selection menu offers "Assign to Tom".
+class _AssignArt extends StatelessWidget {
+  const _AssignArt();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final c = theme.colorScheme;
+    return _mock(
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Material(
+            elevation: 3,
+            color: c.surfaceContainerHigh,
+            borderRadius: BorderRadius.circular(8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton(
+                  onPressed: () {},
+                  child: Text(tr('Asignar a Tomás', 'Assign to Tom')),
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(tr('Editar', 'Edit')),
+                ),
+              ],
+            ),
           ),
-          paragraph(
-            'Luis',
-            c.tertiary,
-            tr(
-              'Con una grabadora y muchas preguntas.',
-              'With a recorder and a lot of questions.',
+          const SizedBox(height: 4),
+          _paragraph(
+            theme,
+            tr('Lucía', 'Lucy'),
+            c.primary,
+            Text.rich(
+              TextSpan(
+                text: '$_question ',
+                children: [
+                  TextSpan(
+                    text: _answer,
+                    style: TextStyle(
+                      backgroundColor: c.primary.withValues(alpha: 0.25),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

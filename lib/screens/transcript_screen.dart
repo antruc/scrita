@@ -913,6 +913,8 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
 
   /// Speaker name and dot. The 500 shades fail 4.5:1 text contrast in light
   /// or dark mode, so each mode takes a shade that passes on its surface.
+  /// Light mode uses 700, not 900: the 900s are near black and look alike.
+  /// deepOrange 700 is 3.7:1, so it keeps 900.
   /// Harmonized toward the theme's primary: rotates the hue, keeps the tone,
   /// so the contrast holds.
   Color _color(int speaker) {
@@ -926,7 +928,8 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     ];
     final c = palette[speaker % palette.length];
     final theme = Theme.of(context);
-    return (theme.brightness == Brightness.dark ? c.shade200 : c.shade900)
+    final light = c == Colors.deepOrange ? c.shade900 : c.shade700;
+    return (theme.brightness == Brightness.dark ? c.shade200 : light)
         .harmonizeWith(theme.colorScheme.primary);
   }
 

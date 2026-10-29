@@ -6,7 +6,7 @@ download the voice model.**
 
 ![Android 11+](https://img.shields.io/badge/Android-11%2B-3DDC84?logo=android&logoColor=white)
 ![Flutter 3.44+](https://img.shields.io/badge/Flutter-3.44%2B-02569B?logo=flutter&logoColor=white)
-![Offline](https://img.shields.io/badge/transcription-offline-555)
+![Offline](https://img.shields.io/badge/transcription-offline-success)
 ![sherpa-onnx](https://img.shields.io/badge/engine-sherpa--onnx-orange)
 [![License: GPL v3+](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
 
@@ -18,12 +18,12 @@ transcript:
 ```
 Date: 2026-10-09 10:32
 Duration: 00:42:17
-Participants: Interviewer, Maria
+Participants: Interviewer, Lucy
 
 [00:00:04] Interviewer:
 Good morning, thanks for coming. Could you introduce yourself?
 
-[00:00:09] Maria:
+[00:00:09] Lucy:
 Sure, my name is...
 ```
 

@@ -254,12 +254,6 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.privacy_tip_outlined),
             title: Text(tr('Privacidad', 'Privacy')),
-            subtitle: Text(
-              tr(
-                'Tus grabaciones no salen de tu teléfono',
-                'Your recordings never leave your phone',
-              ),
-            ),
             onTap: () => showDialog<void>(
               context: context,
               builder: (ctx) => AlertDialog(
