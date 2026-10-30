@@ -1,3 +1,7 @@
+import java.util.Properties
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -6,7 +10,7 @@ plugins {
 
 // Release signing key, outside git (android/.gitignore). Without it the
 // release build is unsigned, never debug-signed.
-val keystoreProperties = java.util.Properties()
+val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
     keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
@@ -55,10 +59,10 @@ android {
     }
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-    }
+// Flutter applies the Kotlin plugin itself, so the `kotlin {}` accessor is
+// not always generated. Configuring the compile tasks does not need it.
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
 }
 
 flutter {
