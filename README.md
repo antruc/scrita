@@ -2,7 +2,7 @@
 
 **Record audio and get a transcript, with who said what when several people
 speak. No cloud: everything happens on the phone. Internet is used once, to
-download the voice model.**
+download the voice model**
 
 ![Android 11+](https://img.shields.io/badge/Android-11%2B-3DDC84?logo=android&logoColor=white)
 ![Flutter 3.44+](https://img.shields.io/badge/Flutter-3.44%2B-02569B?logo=flutter&logoColor=white)
@@ -43,29 +43,29 @@ Sure, my name is...
 
 - **Private:** the audio never leaves the phone. Internet is used only to
   download the voice model once from this repository's GitHub releases. No
-  accounts, no ads and no analytics.
-- **Speaker separation:** tells 1 to 6 voices apart and lets you name them.
+  accounts, no ads and no analytics
+- **Speaker separation:** tells 1 to 6 voices apart and lets you name them
 - **25 languages, one model:** NVIDIA Parakeet TDT 0.6B v3 recognizes
   Spanish, English and 23 other European languages, with punctuation and
-  capitalization, and detects the language on its own.
+  capitalization, and detects the language on its own
 - **Record or import:** record in the app, open a WAV, OPUS, OGG, M4A,
   MP3, AAC, FLAC, AMR or 3GP file, or share a voice note straight from
-  WhatsApp or any other app.
+  WhatsApp or any other app
 - **Runs in the background:** records and transcribes with the screen off,
-  with progress shown in a notification.
+  with progress shown in a notification
 - **Edit the result:** fix a paragraph's text, change its speaker, join or
   delete paragraphs, or select words and assign them to another speaker, with
-  undo. Play back the original audio while you review.
+  undo. Play back the original audio while you review
 - **Export:** copy or share the `.txt`, or save it to `Documents/Scrita`
   together with the audio. The app records 48 kHz WAV; when saved to
   Documents it is converted to M4A (default, ~29 MB per hour) or kept as WAV.
-  Imported files keep their own format.
+  Imported files keep their own format
 - **Backup:** one `.zip` with all audio, transcripts and settings, and a
-  restore option for moving to a new phone.
+  restore option for moving to a new phone
 - **Customizable:** recording modes (clean voice, noise reduction, group,
   unprocessed), light/dark theme, wallpaper colors by default (Material You,
   Android 12+) or a fixed palette, and a Spanish or English interface that
-  follows the phone's language.
+  follows the phone's language
 
 ## Using the app
 
@@ -73,29 +73,29 @@ Sure, my name is...
    permissions, then downloads the voice model (~670 MB) while a short
    tutorial plays. It checks free space first, and asks before using mobile
    data. The tutorial is in **Settings → View
-   tutorial**.
+   tutorial**
 2. Tap **Record** and allow the microphone and notification permissions.
-   You can turn the screen off or switch apps; recording continues.
-3. Tap **Stop recording**. The audio appears under **Not transcribed**.
+   You can turn the screen off or switch apps; recording continues
+3. Tap **Stop recording**. The audio appears under **Not transcribed**
 4. Open it, tap **Transcribe** and choose how many people speak. The
-   notification shows the progress.
+   notification shows the progress
 
    To transcribe an existing file instead, tap the audio file icon
    (**Transcribe an audio file**) on the home screen, or share it to
-   **Scrita** from another app. It goes straight to step 4.
+   **Scrita** from another app. It goes straight to step 4
 5. When it finishes, the transcript moves to **Transcripts**. Tap
-   **Name participants** to name them and tap a paragraph to correct it.
-6. Share, copy or **Save to Documents** from the transcript's menu.
+   **Name participants** to name them and tap a paragraph to correct it
+6. Share, copy or **Save to Documents** from the transcript's menu
 
 > Some brands (Xiaomi, Huawei, Oppo, Vivo, some Samsung) kill background
 > apps even with a notification. If recording stops with the screen off, set
 > **Settings → Apps → Scrita → Battery → Unrestricted**. See
-> [dontkillmyapp.com](https://dontkillmyapp.com) for your brand.
+> [dontkillmyapp.com](https://dontkillmyapp.com) for your brand
 
 ## Building and installing
 
 There is no prebuilt APK yet: build it from source. It takes about 15 minutes
-the first time, most of it Gradle and model downloads.
+the first time, most of it Gradle and model downloads
 
 ### Requirements
 
@@ -108,7 +108,7 @@ the first time, most of it Gradle and model downloads.
 | Disk | ~6 GB free (Flutter, NDK, Gradle cache, ~710 MB of models) |
 
 Linux, macOS and Windows all work. Run `flutter doctor` and make sure
-**Flutter** and **Android toolchain** pass.
+**Flutter** and **Android toolchain** pass
 
 ### Build
 
@@ -136,7 +136,7 @@ Linux, macOS and Windows all work. Run `flutter doctor` and make sure
    to leave the files in `build/release-models/` for publishing: Parakeet is
    not in the APK. The app downloads it (~670 MB) on first launch. Every
    download is checked against `tool/models.lock.json`, which the first run
-   creates.
+   creates
 
 4. Build one APK per CPU architecture:
 
@@ -145,13 +145,13 @@ Linux, macOS and Windows all work. Run `flutter doctor` and make sure
    ```
 
 The APKs land in `build/app/outputs/flutter-apk/`. Most current phones use
-`app-arm64-v8a-release.apk`.
+`app-arm64-v8a-release.apk`
 
 ### Install
 
 1. On the phone, enable **Developer options** (tap **Build number** 7 times)
-   and turn on **USB debugging**.
-2. Connect it over USB and accept the debugging prompt.
+   and turn on **USB debugging**
+2. Connect it over USB and accept the debugging prompt
 3. Install the APK:
 
    ```bash
@@ -159,7 +159,7 @@ The APKs land in `build/app/outputs/flutter-apk/`. Most current phones use
    ```
 
 Or build and launch in one step with `flutter run --release`. Debug builds
-are several times slower.
+are several times slower
 
 ### Troubleshooting
 
@@ -180,20 +180,20 @@ WAV 48 kHz ──► diarization ──► VAD ──► ASR per phrase ──�
 
 1. **Recording** to 48 kHz mono WAV, straight to disk. Imported formats are
    decoded with Android's codecs. Before transcribing, audio is resampled to
-   16 kHz with sherpa-onnx's resampler.
+   16 kHz with sherpa-onnx's resampler
 2. **Diarization** of the whole recording with pyannote segmentation 3.0 and
    TitaNet small embeddings. Giving the number of participants makes
-   clustering much more reliable.
+   clustering much more reliable
 3. **Silero VAD** splits the recording into phrases. Past 20 s it ends a
    phrase at the next dip in speech, which can fall mid-word. This removes
-   the silences where models hallucinate.
-4. **Speech recognition** of each phrase with Parakeet TDT 0.6B v3.
+   the silences where models hallucinate
+4. **Speech recognition** of each phrase with Parakeet TDT 0.6B v3
 5. **Speaker per word:** each word takes the diarization speaker at its
-   timestamp, and a phrase is split where the speaker changes.
-6. A `.json` (to reopen and edit) and the `.txt` are saved.
+   timestamp, and a phrase is split where the speaker changes
+6. A `.json` (to reopen and edit) and the `.txt` are saved
 
 Everything runs in a separate isolate, so the interface never freezes. On the
-test phone, transcribing takes about 0.22× the length of the recording.
+test phone, transcribing takes about 0.22× the length of the recording
 
 ### Models
 
@@ -209,7 +209,7 @@ from the [sherpa-onnx releases](https://github.com/k2-fsa/sherpa-onnx/releases).
 The small ones go into `assets/models/` and are bundled into the APK.
 Parakeet is too big for it: the app downloads it on first launch from the
 `models-v1` release of this repository (`modelsUrl` in `lib/models.dart`),
-resumes a cut download and checks each file's SHA-256.
+resumes a cut download and checks each file's SHA-256
 
 To publish the model (once, or with a new tag when it changes). The app's own
 releases live in the same repository under their own tags; `--latest=false`
@@ -248,21 +248,21 @@ flutter test         # pure logic tests
 
 Do not edit `modelsVersion` in `lib/models.dart` by hand:
 `tool/fetch_models.dart` rewrites it, and a new value makes phones copy the
-models again.
+models again
 
 In debug and profile builds, each transcription ends with a timing summary
-(also in `flutter logs`). Measure with `flutter run --profile`.
+(also in `flutter logs`). Measure with `flutter run --profile`
 
 <details>
 <summary><b>Foreground service</b></summary>
 
 - Recording starts a `microphone` type service. Android 14+ requires starting
   it with the app visible and the microphone permission granted, which is
-  why it starts right before recording.
+  why it starts right before recording
 - Transcribing an imported audio uses the `dataSync` type, since there is no
-  microphone. Android 15 limits that type to 6 h per day.
+  microphone. Android 15 limits that type to 6 h per day
 - While the service runs, the back button minimizes the app instead of
-  closing it. Closing it from "recents" stops the service (`stopWithTask`).
+  closing it. Closing it from "recents" stops the service (`stopWithTask`)
 
 </details>
 
@@ -270,32 +270,32 @@ In debug and profile builds, each transcription ends with a timing summary
 <summary><b>Tuning</b></summary>
 
 - **Threads:** the app counts the phone's big cores (faster than the slowest
-  cluster) and uses at most 4. If it cannot read the frequencies, it uses 2.
+  cluster) and uses at most 4. If it cannot read the frequencies, it uses 2
 - **VAD** in `lib/models.dart`: `vadThreshold` (0.1, low so quiet and far
-  voices are kept), `vadMinSilence` (0.5 s) and `vadMaxSpeech` (20 s).
+  voices are kept), `vadMinSilence` (0.5 s) and `vadMaxSpeech` (20 s)
 - `mergeGap` in `buildTurns`: the longest pause (in seconds) that joins two
-  fragments of the same person.
+  fragments of the same person
 - `speakerMinRun` in `lib/transcript.dart` (1 s): the shortest run split off
   a phrase as another speaker. Raise it if stray words land on the wrong
-  speaker; lower it if a short "yes" from the other one is lost.
+  speaker; lower it if a short "yes" from the other one is lost
 
 </details>
 
 ## Known limitations
 
 - **Memory:** diarization needs the whole audio at 16 kHz, about 230 MB per
-  hour of recording.
-- When two people talk at once, the fragment goes to only one of them.
-- Numbers and proper names are sometimes wrong: review them by hand.
+  hour of recording
+- When two people talk at once, the fragment goes to only one of them
+- Numbers and proper names are sometimes wrong: review them by hand
 - Speaker boundaries can be off by about one word, and occasionally a whole
-  paragraph gets the wrong speaker. Fix it with **Assign to** in the editor.
+  paragraph gets the wrong speaker. Fix it with **Assign to** in the editor
 - Imported files of 60 s or more are decoded in 3 parallel parts; the text
-  may differ slightly at a seam from a single-pass decode.
+  may differ slightly at a seam from a single-pass decode
 
 ## Roadmap
 
-- [ ] Export to .docx and .srt besides .txt.
-- [ ] Play a single paragraph's audio while editing it.
+- [ ] Export to .docx and .srt besides .txt
+- [ ] Play a single paragraph's audio while editing it
 
 ## License
 
@@ -304,11 +304,11 @@ Copyright (C) 2026 antruc
 Scrita is free software: you can redistribute it and/or modify it under the
 terms of the [GNU General Public License](LICENSE) as published by the Free
 Software Foundation, either version 3 or (at your option) any later version
-(`GPL-3.0-or-later`). It comes with no warranty.
+(`GPL-3.0-or-later`). It comes with no warranty
 
 The models are not part of the repository and have their own licenses. If
 you distribute an APK that includes them, or host them for download, you must
-comply with those licenses too.
+comply with those licenses too
 
 ### Model licenses
 
@@ -322,7 +322,7 @@ comply with those licenses too.
 Parakeet's CC-BY-4.0 allows commercial use and redistribution with
 attribution and a note of changes. Scrita gives both in [NOTICE](NOTICE),
 also shown in the app under **Settings → About → View licenses**. Anyone
-redistributing an APK with the model must keep that NOTICE.
+redistributing an APK with the model must keep that NOTICE
 
 ### Package licenses
 
@@ -336,16 +336,16 @@ redistributing an APK with the model must keep that NOTICE.
 
 All are compatible with GPL-3.0. The app lists every package's license text
 under **Settings → About → View licenses**, including the Silero and
-pyannote MIT texts that `tool/fetch_models.dart` downloads with the models.
+pyannote MIT texts that `tool/fetch_models.dart` downloads with the models
 
 ## Credits
 
 - [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx) by k2-fsa: the
-  on-device speech engine, and the ONNX conversions of every model.
+  on-device speech engine, and the ONNX conversions of every model
 - [NVIDIA NeMo](https://github.com/NVIDIA/NeMo): Parakeet TDT 0.6B v3 and
-  TitaNet small.
+  TitaNet small
 - [pyannote.audio](https://github.com/pyannote/pyannote-audio): speaker
-  segmentation.
+  segmentation
 - [Silero VAD](https://github.com/snakers4/silero-vad): voice activity
-  detection.
-- [Flutter](https://flutter.dev) and the package authors listed above.
+  detection
+- [Flutter](https://flutter.dev) and the package authors listed above
