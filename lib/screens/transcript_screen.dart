@@ -1094,7 +1094,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     final t = _t!;
     return ListView.separated(
       // The footer takes the navigation bar inset.
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+      padding: const EdgeInsets.fromLTRB(16, 36, 16, 36),
       itemCount: t.turns.length,
       separatorBuilder: (_, _) => const SizedBox(height: 14),
       itemBuilder: (context, i) {

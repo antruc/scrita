@@ -484,26 +484,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _slide(ThemeData theme, Widget art, String title, String body) =>
       Padding(
-        padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+        padding: const EdgeInsets.fromLTRB(24, 36, 24, 0),
         child: Column(
           children: [
+            const Spacer(),
+            // Decorative: a screen reader reads only the title and body.
+            ExcludeSemantics(child: IgnorePointer(child: art)),
+            // The text sits centered between the art and the footer.
             Expanded(
-              // Decorative: a screen reader reads only the title and body.
-              child: Center(
-                child: ExcludeSemantics(child: IgnorePointer(child: art)),
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: theme.textTheme.headlineSmall,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      body,
+                      style: theme.textTheme.bodyLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              title,
-              style: theme.textTheme.headlineSmall,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              body,
-              style: theme.textTheme.bodyLarge,
-              textAlign: TextAlign.center,
             ),
           ],
         ),
