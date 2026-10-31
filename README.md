@@ -94,8 +94,19 @@ Sure, my name is...
 
 ## Building and installing
 
-There is no prebuilt APK yet: build it from source. It takes about 15 minutes
-the first time, most of it Gradle and model downloads
+[<img src="docs/badge_obtainium.png" alt="Get it on Obtainium" height="48">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22dev.antruc.scrita%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fantruc%2Fscrita%22%2C%22author%22%3A%22antruc%22%2C%22name%22%3A%22Scrita%22%2C%22additionalSettings%22%3A%22%7B%5C%22filterReleaseTitlesByRegEx%5C%22%3A%5C%22%5EScrita%5C%22%7D%22%7D)
+
+Prebuilt arm64 APKs are on the [GitHub releases](https://github.com/antruc/scrita/releases).
+Tap the badge on the phone to add Scrita to
+[Obtainium](https://github.com/ImranR98/Obtainium) and get updates
+automatically. To add it by hand instead, use `https://github.com/antruc/scrita`
+and set **Filter release titles by regex** to `^Scrita`, so it skips the
+model release. The GitHub
+APK is signed with a different key than the Play Store one: switching
+between them means uninstalling first (back up from **Settings** before)
+
+To build it from source instead: it takes about 15 minutes the first time,
+most of it Gradle and model downloads
 
 ### Requirements
 
