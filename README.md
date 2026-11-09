@@ -10,10 +10,12 @@ download the voice model**
 ![sherpa-onnx](https://img.shields.io/badge/engine-sherpa--onnx-orange)
 [![License: GPL v3+](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
 
-Scrita is an Android app that turns speech into text: a voice note, a
-lecture, a meeting or an interview, with one speaker or up to six. It records
-(or imports an audio file), tells the voices apart and produces a timestamped
-transcript:
+**Looking for an Android app to transcribe an interview offline?** Scrita
+turns speech into text on the phone: a voice note, a lecture, a meeting or an
+interview, with one speaker or up to six. Record in the app or import an audio
+file, and get a timestamped transcript split by speaker. Free, no account,
+Spanish, English and 23 other European languages, with the interface in
+English and Spanish:
 
 ```
 Date: 2026-10-09 10:32
@@ -26,12 +28,6 @@ Good morning, thanks for coming. Could you introduce yourself?
 [00:00:09] Lucy:
 Sure, my name is...
 ```
-
-**Looking for an Android app to transcribe an interview offline?** Scrita
-records it, or imports the audio, and returns the transcript split by
-speaker, with timestamps, without sending the audio anywhere. It is free, needs
-no account and recognizes Spanish, English and 23 other European languages.
-The interface is available in English and Spanish
 
 ## Contents
 
