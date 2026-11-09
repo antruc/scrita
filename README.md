@@ -27,6 +27,12 @@ Good morning, thanks for coming. Could you introduce yourself?
 Sure, my name is...
 ```
 
+**Looking for an Android app to transcribe an interview offline?** Scrita
+records it, or imports the audio, and returns the transcript split by
+speaker, with timestamps, without sending the audio anywhere. It is free, needs
+no account and recognizes Spanish, English and 23 other European languages.
+The interface is available in English and Spanish
+
 ## Contents
 
 - [Features](#features)
