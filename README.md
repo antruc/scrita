@@ -75,17 +75,16 @@ Sure, my name is...
 1. Open the app. The first launch asks for the microphone and notification
    permissions, then downloads the voice model (~670 MB) while a short
    tutorial plays. It checks free space first, and asks before using mobile
-   data. The tutorial is in **Settings → View
-   tutorial**
-2. Tap **Record** and allow the microphone and notification permissions.
-   You can turn the screen off or switch apps; recording continues
+   data. To see the tutorial again: **Settings → View tutorial**
+2. Tap **Record**. If you denied a permission on first launch, it asks
+   again. You can turn the screen off or switch apps; recording continues
 3. Tap **Stop recording**. The audio appears under **Not transcribed**
 4. Open it, tap **Transcribe** and choose how many people speak. The
    notification shows the progress
 
    To transcribe an existing file instead, tap the audio file icon
    (**Transcribe an audio file**) on the home screen, or share it to
-   **Scrita** from another app. It goes straight to step 4
+   **Scrita** from another app. It skips steps 2 and 3
 5. When it finishes, the transcript moves to **Transcripts**. Tap
    **Name participants** to name them and tap a paragraph to correct it
 6. Share, copy or **Save to Documents** from the transcript's menu
@@ -200,13 +199,14 @@ WAV 48 kHz ──► diarization ──► VAD ──► ASR per phrase ──�
    16 kHz with sherpa-onnx's resampler
 2. **Diarization** of the whole recording with pyannote segmentation 3.0 and
    TitaNet small embeddings. Giving the number of participants makes
-   clustering much more reliable
+   clustering much more reliable. With two or more speakers, the turns are
+   then regrouped into exactly that count with one embedding per turn
 3. **Silero VAD** splits the recording into phrases. Past 20 s it ends a
    phrase at the next dip in speech, which can fall mid-word. This removes
    the silences where models hallucinate
 4. **Speech recognition** of each phrase with Parakeet TDT 0.6B v3
-5. **Speaker per word:** each word takes the diarization speaker at its
-   timestamp, and a phrase is split where the speaker changes
+5. **Speaker per word:** each word takes the speaker of the turn it overlaps
+   most, and a phrase is split where the speaker changes
 6. A `.json` (to reopen and edit) and the `.txt` are saved
 
 Everything runs in a separate isolate, so the interface never freezes. On the
@@ -248,7 +248,7 @@ flutter test         # pure logic tests
 | Path | What it does |
 |---|---|
 | [lib/main.dart](lib/main.dart) | App start, theme (Material You or fixed palette) and language |
-| [lib/pipeline.dart](lib/pipeline.dart) | Diarization → VAD → ASR in an isolate |
+| [lib/pipeline.dart](lib/pipeline.dart) | Diarization → regrouping → VAD → ASR in an isolate |
 | [lib/transcript.dart](lib/transcript.dart) | Turns, cleanup, resampling and .txt/.json format (pure logic, tested) |
 | [lib/models.dart](lib/models.dart) | Downloads Parakeet, copies the bundled models to disk, picks threads and builds the sherpa-onnx configs |
 | [lib/recorder.dart](lib/recorder.dart) | 48 kHz mono WAV recording |
@@ -347,7 +347,7 @@ redistributing an APK with the model must keep that NOTICE
 |---|---|
 | Flutter SDK (`flutter`, `flutter_localizations`) | BSD-3-Clause |
 | `sherpa_onnx` (includes onnxruntime, MIT) | Apache-2.0 |
-| `record`, `path_provider`, `path`, `share_plus`, `shared_preferences`, `ffi`, `url_launcher` | BSD-3-Clause |
+| `record`, `path_provider`, `path`, `share_plus`, `shared_preferences`, `ffi`, `url_launcher`, `crypto` | BSD-3-Clause |
 | `file_picker`, `flutter_foreground_task`, `audioplayers`, `archive` | MIT |
 | `dynamic_color` | Apache-2.0 |
 
