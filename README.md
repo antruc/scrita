@@ -184,7 +184,7 @@ are several times slower
 | The app says the models are missing | Run `dart run tool/fetch_models.dart` and rebuild |
 | Android licenses not accepted | Install **Android SDK Command-line Tools**, then `flutter doctor --android-licenses` |
 | Gradle complains about the Java version | `flutter config --jdk-dir <Android Studio>/jbr` |
-| Gradle runs out of memory | Set `org.gradle.jvmargs=-Xmx4g` in `android/gradle.properties` |
+| Gradle runs out of memory | Lower `-Xmx8G` to `-Xmx4g` in `org.gradle.jvmargs`, in `android/gradle.properties` |
 | `adb devices` shows `unauthorized` | Unlock the phone and accept the debugging prompt |
 
 ## How it works

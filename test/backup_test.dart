@@ -50,6 +50,16 @@ void main() {
       expect((await readBackup(zip, dst.path)).added, 0);
       expect(await File(p.join(dst.path, 'a.txt')).readAsString(), 'editado');
 
+      // Another recording already has the audio's name: the transcript is
+      // left out instead of pointing at the wrong audio.
+      final other = await Directory(
+        p.join(root.path, 'other', 'scrita'),
+      ).create(recursive: true);
+      await File(p.join(other.path, 'a.wav')).writeAsBytes([9]);
+      await readBackup(zip, other.path);
+      expect(File(p.join(other.path, 'a.json')).existsSync(), isFalse);
+      expect(await File(p.join(other.path, 'a.wav')).readAsBytes(), [9]);
+
       // Anything that is not a Scrita backup is rejected.
       await expectLater(
         () => readBackup(p.join(src.path, 'a.txt'), dst.path),

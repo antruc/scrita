@@ -36,13 +36,19 @@ Future<SavedTranscript> saveTranscript(Transcript t, {String? jsonPath}) async {
       jsonPath = '${base}_${DateTime.now().millisecondsSinceEpoch}.json';
     }
   }
-  await File(jsonPath).writeAsString(t.encode(), flush: true);
+  // Written aside, then renamed: a kill mid-write must not truncate the
+  // transcript, which listTranscripts would then skip as corrupt.
+  final tmp = File('$jsonPath.tmp');
+  await tmp.writeAsString(t.encode(), flush: true);
+  await tmp.rename(jsonPath);
   await File(
     p.setExtension(jsonPath, '.txt'),
   ).writeAsString(t.toPlainText(), flush: true);
   return SavedTranscript(jsonPath, t);
 }
 
+// ponytail: parses every .json on each Home refresh, fine for hundreds of
+// interviews; cache by path and mtime (like _durations) if Home gets slow.
 Future<List<SavedTranscript>> listTranscripts() async {
   final dir = Directory(await recordingsDir());
   final out = <SavedTranscript>[];

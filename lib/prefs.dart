@@ -72,17 +72,34 @@ Map<String, Object> exportPrefs() => {
   for (final k in _prefs.getKeys()) k: _prefs.get(k)!,
 };
 
-/// Restores settings from a backup. Values of unknown type are skipped.
+/// Type each setting above is read back with; rtf_* keys are doubles. A new
+/// setting must be added here or backups will not restore it.
+const _types = <String, Type>{
+  'audioSource': String,
+  'themeMode': String,
+  'lastSpeakers': int,
+  'seedColor': int,
+  'materialYou': bool,
+  'exportM4a': bool,
+  'tutorialSeen': bool,
+  'saveText': bool,
+  'saveAudio': bool,
+};
+
+/// Restores settings from a backup. The file comes from outside the app, so
+/// unknown keys and values of the wrong type are skipped: a getter reading
+/// another type throws, and the theme ones run on every launch.
 Future<void> importPrefs(Map<String, dynamic> m) async {
   for (final MapEntry(:key, :value) in m.entries) {
+    final type = key.startsWith('rtf_') ? double : _types[key];
     switch (value) {
-      case String v:
+      case String v when type == String:
         await _prefs.setString(key, v);
-      case int v:
+      case int v when type == int:
         await _prefs.setInt(key, v);
-      case double v:
+      case double v when type == double:
         await _prefs.setDouble(key, v);
-      case bool v:
+      case bool v when type == bool:
         await _prefs.setBool(key, v);
     }
   }

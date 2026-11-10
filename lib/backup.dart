@@ -107,7 +107,19 @@ Future<({Map<String, dynamic> prefs, int added})> readBackup(
         try {
           // audioPath is absolute: point it at this device's folder.
           final j = jsonDecode(await f.readAsString()) as Map<String, dynamic>;
-          j['audioPath'] = p.join(dir, p.basename(j['audioPath'] as String));
+          final audio = p.basename(j['audioPath'] as String);
+          // Its audio is still in staging when [dir] already had one of that
+          // name, which stays. If that one is another recording, the
+          // transcript would point at the wrong audio: leave it out.
+          // ponytail: told apart by size only, hash them if that ever lies.
+          final theirs = File(p.join(staging.path, audio));
+          final ours = File(p.join(dir, audio));
+          if (await theirs.exists() &&
+              await ours.exists() &&
+              await theirs.length() != await ours.length()) {
+            continue;
+          }
+          j['audioPath'] = ours.path;
           await to.writeAsString(
             const JsonEncoder.withIndent('  ').convert(j),
             flush: true,

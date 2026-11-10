@@ -11,7 +11,8 @@ val newBuildDir: Directory =
         .get()
 rootProject.layout.buildDirectory.value(newBuildDir)
 
-// setup.sh: force compileSdk
+// Builds every plugin (library module) against the app's compileSdk instead
+// of the one it declares.
 subprojects {
     val forceCompileSdk: Project.() -> Unit = {
         if (plugins.hasPlugin("com.android.library")) {

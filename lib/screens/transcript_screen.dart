@@ -324,7 +324,21 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     );
   }
 
+  /// True from the tap until the run ends, so a double tap before the dialog
+  /// shows does not start two runs on the same audio.
+  bool _starting = false;
+
   Future<void> _transcribe() async {
+    if (_starting || _busy) return;
+    _starting = true;
+    try {
+      await _transcribeOnce();
+    } finally {
+      _starting = false;
+    }
+  }
+
+  Future<void> _transcribeOnce() async {
     var audioSeconds = 0.0;
     try {
       audioSeconds = await audioDurationSeconds(widget.audioPath);
@@ -589,9 +603,23 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
 
   // ── Transcript editing (only when _t != null) ─────────────────────────
 
-  Future<void> _persist() async {
-    _saved = await saveTranscript(_t!, jsonPath: _saved!.jsonPath);
+  /// False if the save failed: the edit shows on screen but is not on disk,
+  /// and the snackbar says so.
+  Future<bool> _persist() async {
+    var ok = true;
+    try {
+      _saved = await saveTranscript(_t!, jsonPath: _saved!.jsonPath);
+    } catch (_) {
+      ok = false;
+      _snack(
+        tr(
+          'No se pudo guardar el cambio. Revisa el espacio libre',
+          'Could not save the change. Check free space',
+        ),
+      );
+    }
     if (mounted) setState(() {});
+    return ok;
   }
 
   Future<void> _renameSpeakers() async {
@@ -655,7 +683,8 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     t.turns
       ..clear()
       ..addAll(out);
-    await _persist();
+    // The undo snackbar would replace the error one.
+    if (!await _persist()) return;
     _showUndo(
       tr(
         'Texto asignado a ${t.speakerName(speaker)}',
@@ -781,8 +810,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     t.turns
       ..clear()
       ..addAll(cleaned);
-    await _persist();
-    if (speakerChanged) {
+    if (await _persist() && speakerChanged) {
       _showUndo(
         tr(
           'Párrafo asignado a ${t.speakerName(speaker)}',
