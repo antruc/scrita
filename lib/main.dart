@@ -13,13 +13,20 @@ import 'screens/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Before anything that can fail, so the error screen is in the same
-  // language. ponytail: read once at launch, a device language change shows
-  // on next start. Live switching would rebuild back at Home, cutting a
-  // recording.
-  uiSpanish =
-      WidgetsBinding.instance.platformDispatcher.locale.languageCode == 'es';
+  // ponytail: read once at launch, a device language change shows on next
+  // start. Live switching would rebuild back at Home, cutting a recording.
+  final device = WidgetsBinding.instance.platformDispatcher.locale;
+  _language = uiLanguages.contains(device.languageCode)
+      ? device.languageCode
+      : 'en';
   try {
+    // First, so the error screen is in the same language. ponytail: if the
+    // strings themselves fail to load, that screen shows the raw keys.
+    loadStrings([
+      await rootBundle.loadString('assets/l10n/en.json'),
+      if (_language != 'en')
+        await rootBundle.loadString('assets/l10n/$_language.json'),
+    ]);
     await _setup();
   } catch (e, s) {
     // A throw before runApp leaves the launch screen blank forever: show it.
@@ -37,12 +44,7 @@ Future<void> main() async {
               padding: const EdgeInsets.all(24),
               children: [
                 Text(
-                  tr(
-                    'Scrita no pudo abrirse. Ciérrala y vuelve a abrirla. Si '
-                        'sigue pasando, actualiza la app',
-                    "Scrita couldn't open. Close it and open it again. If it "
-                        'keeps happening, update the app',
-                  ),
+                  tr('startupFailed'),
                   style: const TextStyle(fontSize: 18),
                 ),
                 const SizedBox(height: 24),
@@ -50,14 +52,14 @@ Future<void> main() async {
                 Builder(
                   builder: (context) => OutlinedButton.icon(
                     icon: const Icon(Icons.copy),
-                    label: Text(tr('Copiar detalles', 'Copy details')),
+                    label: Text(tr('copyDetails')),
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: '$e\n\n$s'));
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            tr('Detalles copiados', 'Details copied'),
+                            tr('detailsCopied'),
                           ),
                         ),
                       );
@@ -74,6 +76,9 @@ Future<void> main() async {
   }
   runApp(const ScritaApp());
 }
+
+/// UI language code, one of [uiLanguages].
+String _language = 'en';
 
 Future<void> _setup() async {
   await initPrefs();
@@ -149,9 +154,12 @@ class ScritaApp extends StatelessWidget {
       title: 'Scrita',
       debugShowCheckedModeBanner: false,
       // Material's own texts (tooltips, accessibility) follow the same
-      // language.
-      locale: Locale(uiSpanish ? 'es' : 'en'),
-      supportedLocales: const [Locale('en'), Locale('es')],
+      // language. Flutter has no Maltese Material texts: those stay English.
+      locale: Locale(_language == 'mt' ? 'en' : _language),
+      supportedLocales: [
+        for (final l in uiLanguages)
+          if (l != 'mt') Locale(l),
+      ],
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       themeMode: mode,
       theme: _theme(seed, Brightness.light),

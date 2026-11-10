@@ -83,7 +83,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   String get _progressText =>
-      '${tr('Descargando el modelo de voz', 'Downloading the voice model')}'
+      '${tr('downloadingTheVoiceModel')}'
       ' - $_percent %';
 
   /// Starts the download and, if the checks pass, moves on to the tutorial
@@ -124,28 +124,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final left = models.bytesLeft(dir);
     final free = await freeBytes(dir);
     if (free != null && free < left + _spareBytes) {
-      return tr(
-        'Falta espacio: se necesitan '
-            '${models.formatMb(left + _spareBytes)} libres y hay '
-            '${models.formatMb(free)}. Libera espacio y toca Reintentar',
-        'Not enough space: '
-            '${models.formatMb(left + _spareBytes)} free needed, '
-            '${models.formatMb(free)} available. Free up space and tap Retry',
-      );
+      return tr('notEnoughSpaceRetry', {'needed': models.formatMb(left + _spareBytes), 'free': models.formatMb(free)});
     }
     switch (await network()) {
       case 'none':
-        return tr(
-          'Sin conexión. Conéctate a internet y toca Reintentar',
-          'No connection. Connect to the internet and tap Retry',
-        );
+        return tr('noConnectionRetry');
       case 'metered' when !_meteredOk:
         _meteredOk = await _confirmMetered(left);
         if (!_meteredOk) {
-          return tr(
-            'Descarga en espera. Conéctate a una red Wi-Fi y toca Reintentar',
-            'Download on hold. Connect to Wi-Fi and tap Retry',
-          );
+          return tr('waitingForWifiRetry');
         }
     }
     return null;
@@ -157,23 +144,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         icon: const Icon(Icons.signal_cellular_alt),
-        title: Text(tr('¿Usar datos móviles?', 'Use mobile data?')),
+        title: Text(tr('useMobileDataQuestion')),
         content: Text(
-          tr(
-            'No estás en una red Wi-Fi. La descarga usará '
-                '${models.formatMb(bytes)} de tu plan de datos',
-            "You're not on Wi-Fi. The download will use "
-                '${models.formatMb(bytes)} of your data plan',
-          ),
+          tr('mobileDataWarning', {'size': models.formatMb(bytes)}),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(tr('Esperar Wi-Fi', 'Wait for Wi-Fi')),
+            child: Text(tr('waitForWiFi')),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(tr('Descargar igual', 'Download anyway')),
+            child: Text(tr('downloadAnyway')),
           ),
         ],
       ),
@@ -199,7 +181,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       setState(() => _ready = true);
       // Tapping it reopens the app if the user left during the download.
       await BackgroundService.finish(
-        tr('Scrita está lista', 'Scrita is ready'),
+        tr('scritaIsReady'),
       );
     } on models.ModelDownloadError catch (e) {
       await BackgroundService.stop();
@@ -253,9 +235,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final text =
         _error ??
         (_ready
-            ? tr('Modelo de voz listo', 'Voice model ready')
+            ? tr('voiceModelReady')
             : _percent >= 100
-            ? tr('Verificando el modelo...', 'Verifying the model...')
+            ? tr('verifyingTheModelEllipsis')
             : _progressText);
     final fg = error ? c.onErrorContainer : c.onSecondaryContainer;
     return Material(
@@ -282,7 +264,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 if (error)
                   TextButton(
                     onPressed: _download,
-                    child: Text(tr('Reintentar', 'Retry')),
+                    child: Text(tr('retry')),
                   ),
               ],
             ),
@@ -306,7 +288,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final Widget secondary = switch (kind) {
       _Kind.permissions => TextButton(
         onPressed: _next,
-        child: Text(tr('Ahora no', 'Not now')),
+        child: Text(tr('notNow')),
       ),
       _ when kind.index > _Kind.download.index && !_last => TextButton(
         onPressed: () => _pages.animateToPage(
@@ -314,7 +296,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOutCubic,
         ),
-        child: Text(tr('Saltar', 'Skip')),
+        child: Text(tr('skip')),
       ),
       _ => const SizedBox.shrink(),
     };
@@ -331,14 +313,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (kind == _Kind.permissions) {
       return FilledButton(
         onPressed: _askPermissions,
-        child: Text(tr('Permitir', 'Allow')),
+        child: Text(tr('allow')),
       );
     }
     if (kind == _Kind.download && !_started) {
       return FilledButton(
         onPressed: _startDownload,
         child: Text(
-          '${tr('Descargar', 'Download')} '
+          '${tr('download')} '
           '(${models.formatMb(models.downloadBytes)})',
         ),
       );
@@ -346,7 +328,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (!_last) {
       return FilledButton(
         onPressed: _next,
-        child: Text(tr('Siguiente', 'Next')),
+        child: Text(tr('next')),
       );
     }
     if (_ready) {
@@ -354,23 +336,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         onPressed: _finish,
         child: Text(
           widget.modelDir == null && !widget.permissions
-              ? tr('Listo', 'Done')
-              : tr('Empezar', 'Get started'),
+              ? tr('done')
+              : tr('getStarted'),
         ),
       );
     }
     if (_error != null) {
       return FilledButton(
         onPressed: _download,
-        child: Text(tr('Reintentar', 'Retry')),
+        child: Text(tr('retry')),
       );
     }
     return FilledButton(
       onPressed: null,
       child: Text(
         _percent >= 100
-            ? tr('Verificando...', 'Verifying...')
-            : '${tr('Descargando', 'Downloading')} $_percent %',
+            ? tr('verifyingEllipsis')
+            : '${tr('downloading')} $_percent %',
       ),
     );
   }
@@ -402,83 +384,44 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _Kind.permissions => _slide(
       theme,
       const _PermissionsArt(),
-      tr('Antes de empezar', 'Before you start'),
-      tr(
-        'Scrita necesita estos permisos. Tus grabaciones nunca salen de tu '
-            'teléfono',
-        'Scrita needs these permissions. Your recordings never leave your '
-            'phone',
-      ),
+      tr('beforeYouStart'),
+      tr('permissionsIntro'),
     ),
     _Kind.download => _slide(
       theme,
       _circle(theme, Icons.download_for_offline_outlined),
-      tr('Descarga el modelo de voz', 'Download the voice model'),
-      tr(
-        'Scrita transcribe sin internet con un modelo de '
-            '${models.formatMb(models.downloadBytes)} que se descarga una sola '
-            'vez. Mejor con Wi-Fi. Mientras se descarga, te mostramos cómo '
-            'funciona la app',
-        'Scrita transcribes offline with a '
-            '${models.formatMb(models.downloadBytes)} model, downloaded only '
-            'once. Wi-Fi recommended. While it downloads, we show you how the '
-            'app works',
-      ),
+      tr('downloadTheVoiceModel'),
+      tr('downloadModelBody', {'size': models.formatMb(models.downloadBytes)}),
     ),
     _Kind.record => _slide(
       theme,
       const _HomeArt(),
-      tr('Graba o importa', 'Record or import'),
-      tr(
-        'Toca el micrófono para grabar una entrevista, o importa un audio. '
-            'También puedes compartir notas de voz de WhatsApp con Scrita',
-        'Tap the mic to record an interview, or import an audio file. You '
-            'can also share WhatsApp voice notes with Scrita',
-      ),
+      tr('recordOrImport'),
+      tr('tutorialRecordBody'),
     ),
     _Kind.speakers => _slide(
       theme,
       const _SpeakersArt(),
-      tr('¿Cuántas personas hablan?', 'How many people speak?'),
-      tr(
-        'Al transcribir, elige el número exacto de personas. Así Scrita '
-            'sabe a quién pertenece cada frase',
-        'When you transcribe, pick the exact number of people. That way '
-            'Scrita knows who said each sentence',
-      ),
+      tr('howManyPeopleSpeakQuestion'),
+      tr('tutorialSpeakersBody'),
     ),
     _Kind.review => _slide(
       theme,
       const _TranscriptArt(),
-      tr('Revisa y corrige', 'Review and fix'),
-      tr(
-        'Pon nombre a cada persona, edita un párrafo o escucha el audio '
-            'original mientras lees',
-        'Name each person, edit a paragraph or play the original audio '
-            'while you read',
-      ),
+      tr('reviewAndFix'),
+      tr('tutorialReviewBody'),
     ),
     _Kind.assign => _slide(
       theme,
       const _AssignArt(),
-      tr('Corrige quién habla', "Fix who's speaking"),
-      tr(
-        'Si un párrafo mezcla dos voces, mantén presionado el texto, '
-            'selecciona la parte de la otra persona y toca Asignar a',
-        'If a paragraph mixes two voices, press and hold the text, select '
-            "the other person's part and tap Assign to",
-      ),
+      tr('fixWhosSpeaking'),
+      tr('tutorialFixBody'),
     ),
     _Kind.save => _slide(
       theme,
       const _SaveArt(),
-      tr('Guarda y comparte', 'Save and share'),
-      tr(
-        'Comparte el texto, cópialo o guárdalo en Documentos. Haz una copia '
-            'de seguridad desde Configuración',
-        'Share the text, copy it or save it to Documents. Back up from '
-            'Settings',
-      ),
+      tr('saveAndShare'),
+      tr('tutorialShareBody'),
     ),
   };
 
@@ -546,17 +489,14 @@ class _PermissionsArt extends StatelessWidget {
       children: [
         ListTile(
           leading: const Icon(Icons.mic_none),
-          title: Text(tr('Micrófono', 'Microphone')),
-          subtitle: Text(tr('Solo mientras grabas', 'Only while you record')),
+          title: Text(tr('microphone')),
+          subtitle: Text(tr('onlyWhileYouRecord')),
         ),
         ListTile(
           leading: const Icon(Icons.notifications_none),
-          title: Text(tr('Notificaciones', 'Notifications')),
+          title: Text(tr('notifications')),
           subtitle: Text(
-            tr(
-              'El progreso, con la pantalla apagada',
-              'Progress, with the screen off',
-            ),
+            tr('notificationsHint'),
           ),
         ),
       ],
@@ -587,14 +527,14 @@ class _HomeArt extends StatelessWidget {
         children: [
           row(
             Icons.graphic_eq,
-            tr('Nota de voz', 'Voice note'),
+            tr('voiceNote'),
             '02:14',
             false,
           ),
           row(
             Icons.description_outlined,
-            tr('Entrevista', 'Interview'),
-            '18:40 - 2 ${tr('personas', 'speakers')}',
+            tr('interview'),
+            '18:40 - ${tr('speakersMany', {'n': 2})}',
             true,
           ),
           const SizedBox(height: 16),
@@ -620,7 +560,7 @@ class _SpeakersArt extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          tr('Personas que hablan', 'People speaking'),
+          tr('peopleSpeaking'),
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 12),
@@ -666,11 +606,8 @@ Widget _paragraph(ThemeData theme, String name, Color color, Widget text) =>
     );
 
 String get _question =>
-    tr('¿Cómo empezó el proyecto?', 'How did the project start?');
-String get _answer => tr(
-  'Con una grabadora y muchas preguntas.',
-  'With a recorder and a lot of questions.',
-);
+    tr('demoQuestion');
+String get _answer => tr('demoAnswer');
 
 /// Two paragraphs of a transcript, each with its speaker's color.
 class _TranscriptArt extends StatelessWidget {
@@ -684,8 +621,8 @@ class _TranscriptArt extends StatelessWidget {
       Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _paragraph(theme, tr('Lucía', 'Lucy'), c.primary, Text(_question)),
-          _paragraph(theme, tr('Tomás', 'Tom'), c.tertiary, Text(_answer)),
+          _paragraph(theme, tr('demoName1'), c.primary, Text(_question)),
+          _paragraph(theme, tr('demoName2'), c.tertiary, Text(_answer)),
         ],
       ),
     );
@@ -715,16 +652,16 @@ class _AssignArt extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () {},
-                  child: Text(tr('Asignar a Tomás', 'Assign to Tom')),
+                  child: Text(tr('demoAssignTo')),
                 ),
-                TextButton(onPressed: () {}, child: Text(tr('Editar', 'Edit'))),
+                TextButton(onPressed: () {}, child: Text(tr('edit'))),
               ],
             ),
           ),
           const SizedBox(height: 4),
           _paragraph(
             theme,
-            tr('Lucía', 'Lucy'),
+            tr('demoName1'),
             c.primary,
             Text.rich(
               TextSpan(
@@ -763,9 +700,9 @@ class _SaveArt extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        action(Icons.share, tr('Compartir', 'Share')),
-        action(Icons.copy, tr('Copiar', 'Copy')),
-        action(Icons.folder_outlined, tr('Documentos', 'Documents')),
+        action(Icons.share, tr('share')),
+        action(Icons.copy, tr('copy')),
+        action(Icons.folder_outlined, tr('documents')),
       ],
     );
   }

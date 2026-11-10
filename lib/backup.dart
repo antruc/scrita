@@ -15,12 +15,7 @@ import 'store.dart';
 
 const _manifest = 'scrita_backup.json';
 
-String get _notABackup => tr(
-  'Este archivo no es una copia de seguridad de Scrita. Elige el archivo '
-      'que creaste con "Hacer copia de seguridad"',
-  'This file is not a Scrita backup. Pick the file you created with '
-      '"Back up"',
-);
+String get _notABackup => tr('notABackup');
 const _exts = {'.json', '.txt', ...audioExts};
 
 /// Writes a backup to Documents/Scrita and returns its path.

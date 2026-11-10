@@ -15,7 +15,7 @@ turns speech into text on the phone: a voice note, a lecture, a meeting or an
 interview, with one speaker or up to six. Record in the app or import an audio
 file, and get a timestamped transcript split by speaker. Free, no account,
 Spanish, English and 23 other European languages, with the interface in
-English and Spanish:
+the same 25 languages:
 
 ```
 Date: 2026-10-09 10:32
@@ -67,7 +67,7 @@ Sure, my name is...
   restore option for moving to a new phone
 - **Customizable:** recording modes (clean voice, noise reduction, group,
   unprocessed), light/dark theme, wallpaper colors by default (Material You,
-  Android 12+) or a fixed palette, and a Spanish or English interface that
+  Android 12+) or a fixed palette, and an interface in 25 languages that
   follows the phone's language
 
 ## Using the app
@@ -257,7 +257,7 @@ flutter test         # pure logic tests
 | [lib/store.dart](lib/store.dart) | Transcript history and export to `Documents/Scrita` |
 | [lib/backup.dart](lib/backup.dart) | Full .zip backup and restore |
 | [lib/prefs.dart](lib/prefs.dart) | Settings (`shared_preferences`) and the learned time estimate |
-| [lib/l10n.dart](lib/l10n.dart) | Spanish/English strings, inline as `tr('es', 'en')` |
+| [lib/l10n.dart](lib/l10n.dart) | `tr('key')` lookup of the UI strings in `assets/l10n/<language>.json` (25 languages) |
 | [lib/screens/](lib/screens/) | Onboarding (permissions, model download, tutorial), home, transcript viewer/editor and settings |
 | [tool/fetch_models.dart](tool/fetch_models.dart) | Downloads the models and stamps their sizes, hashes and version in `lib/models.dart` |
 | [tool/make_icon.py](tool/make_icon.py) | Draws the launcher icons in `assets/icon/`; apply them with `dart run flutter_launcher_icons` |

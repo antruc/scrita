@@ -187,7 +187,7 @@ Future<String> documentsDir() async {
   final ext = await getExternalStorageDirectory();
   if (ext == null) {
     throw Exception(
-      tr('No hay almacenamiento compartido', 'No shared storage'),
+      tr('noSharedStorage'),
     );
   }
   // .../Android/data/<package>/files -> root of shared storage.

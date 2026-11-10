@@ -19,10 +19,7 @@ Float32List readWavMono(String path, int toRate, {BlockResampler? resample}) {
   final f = File(path).openSync();
   try {
     Never invalid() => throw FormatException(
-      tr(
-        'No se puede abrir este audio. Prueba con otro archivo',
-        "This audio can't be opened. Try another file",
-      ),
+      tr('cannotOpenAudio'),
     );
     ByteData read(int n) {
       final b = f.readSync(n);
@@ -632,7 +629,7 @@ String formatEta(double seconds) =>
     seconds < 60 ? '< 1 min' : '≈ ${(seconds / 60).round()} min';
 
 /// Name shown for a speaker the user has not named yet.
-String defaultSpeakerName(int i) => tr('Persona ${i + 1}', 'Speaker ${i + 1}');
+String defaultSpeakerName(int i) => tr('defaultSpeakerName', {'n': i + 1});
 
 String formatDate(DateTime d) {
   String two(int n) => n.toString().padLeft(2, '0');
@@ -670,12 +667,12 @@ class Transcript {
 
   String toPlainText() {
     final b = StringBuffer()
-      ..writeln('${tr('Fecha', 'Date')}: ${formatDate(createdAt)}')
+      ..writeln('${tr('date')}: ${formatDate(createdAt)}')
       ..writeln(
-        '${tr('Duración', 'Duration')}: ${formatTimestamp(durationSeconds)}',
+        '${tr('duration')}: ${formatTimestamp(durationSeconds)}',
       )
       ..writeln(
-        '${tr('Participantes', 'Participants')}: ${speakerNames.join(', ')}',
+        '${tr('participants')}: ${speakerNames.join(', ')}',
       )
       ..writeln();
     for (final t in turns) {

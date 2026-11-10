@@ -170,20 +170,13 @@ Future<void> downloadModels(
   } on FileSystemException catch (e) {
     debugPrint('Model download: $e');
     throw ModelDownloadError(
-      tr(
-        'No hay espacio suficiente. Libera ${formatMb(downloadBytes)} y '
-            'vuelve a intentarlo',
-        'Not enough space. Free up ${formatMb(downloadBytes)} and try again',
-      ),
+      tr('notEnoughSpace', {'size': formatMb(downloadBytes)}),
     );
   } on Exception catch (e) {
     // SocketException, HttpException, TimeoutException, HandshakeException.
     debugPrint('Model download: $e');
     throw ModelDownloadError(
-      tr(
-        'No se pudo descargar. Revisa tu conexión y vuelve a intentarlo',
-        "Couldn't download. Check your connection and try again",
-      ),
+      tr('downloadFailed'),
     );
   } finally {
     client.close(force: true);
@@ -226,10 +219,7 @@ Future<String> prepareModels({void Function(String)? onStatus}) async {
 
   if (!upToDate) {
     onStatus?.call(
-      tr(
-        'Preparando la app por primera vez. Puede tardar un minuto...',
-        'Setting up the app for the first time. It may take a minute...',
-      ),
+      tr('firstSetup'),
     );
     for (final src in assets) {
       final data = await rootBundle.load(src);
@@ -252,10 +242,7 @@ Future<String> prepareModels({void Function(String)? onStatus}) async {
       'Run dart run tool/fetch_models.dart before building',
     );
     throw StateError(
-      tr(
-        'Scrita no se instaló bien. Actualiza la app',
-        "Scrita wasn't installed correctly. Update the app",
-      ),
+      tr('badInstall'),
     );
   }
   return dir;

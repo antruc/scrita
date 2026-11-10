@@ -36,86 +36,40 @@ const _seeds = <Color>[
 List<(AndroidAudioSource, String, String)> get _sources => [
   (
     AndroidAudioSource.voiceRecognition,
-    tr('Voz limpia (recomendado)', 'Clean voice (recommended)'),
-    tr(
-      'Audio sin filtros, el que mejor transcribe',
-      'Unfiltered audio, the best for transcription',
-    ),
+    tr('cleanVoiceRecommended'),
+    tr('cleanVoiceHint'),
   ),
   (
     AndroidAudioSource.voiceCommunication,
-    tr('Reducción de ruido', 'Noise reduction'),
-    tr(
-      'Quita ruido de fondo y eco, aunque la voz pierde nitidez',
-      'Removes background noise and echo, but the voice loses clarity',
-    ),
+    tr('noiseReduction'),
+    tr('noiseReductionHint'),
   ),
   (
     AndroidAudioSource.mic,
-    tr('Predeterminado', 'Default'),
-    tr(
-      'Usa el ajuste del fabricante, el resultado cambia según el modelo',
-      "Uses the maker's tuning, results vary by model",
-    ),
+    tr('modeDefault'),
+    tr('modeDefaultHint'),
   ),
   (
     AndroidAudioSource.camcorder,
-    tr('Varias personas', 'Group'),
-    tr(
-      'Usa varios micrófonos, sirve para una mesa con mucha gente',
-      'Uses several mics, good for a table with many people',
-    ),
+    tr('modeGroup'),
+    tr('modeGroupHint'),
   ),
   (
     AndroidAudioSource.unprocessed,
-    tr('Sin procesar', 'Unprocessed'),
-    tr(
-      'Sin ningún ajuste, el volumen queda bajo y no funciona en todos los teléfonos',
-      'No processing at all, low volume and not every phone supports it',
-    ),
+    tr('unprocessed'),
+    tr('unprocessedHint'),
   ),
 ];
 
 String _modeName(ThemeMode m) => switch (m) {
-  ThemeMode.system => tr('Sistema', 'System'),
-  ThemeMode.light => tr('Claro', 'Light'),
-  ThemeMode.dark => tr('Oscuro', 'Dark'),
+  ThemeMode.system => tr('system'),
+  ThemeMode.light => tr('light'),
+  ThemeMode.dark => tr('dark'),
 };
 
 /// Matches the code: INTERNET is used only by downloadModels
 /// (lib/models.dart). Update it if that ever changes.
-String get _privacy => tr(
-  'Scrita no recopila, envía ni comparte ningún dato. No tiene cuentas, '
-      'anuncios ni analíticas.\n\n'
-      'Internet: se usa una sola vez, para descargar el modelo de voz desde '
-      'GitHub. Como en cualquier descarga, GitHub ve tu dirección IP. Nada '
-      'de lo que grabas se envía: la transcripción se hace en tu '
-      'teléfono.\n\n'
-      'Micrófono: se usa solo mientras grabas. Las grabaciones, '
-      'transcripciones y ajustes se guardan en el almacenamiento privado de '
-      'la app, en tu teléfono.\n\n'
-      'Notificaciones: muestran el progreso de una grabación o '
-      'transcripción en curso.\n\n'
-      'Los archivos solo salen de la app cuando tú lo decides: al guardar en '
-      'Documentos, compartir o exportar una copia. Desde ahí, su privacidad '
-      'depende de dónde los guardes o con quién los compartas.\n\n'
-      'Desinstalar la app borra todos sus datos, salvo lo que hayas guardado '
-      'en Documentos o exportado.',
-  'Scrita does not collect, send or share any data. It has no accounts, ads '
-      'or analytics.\n\n'
-      'Internet: used only once, to download the voice model from GitHub. '
-      'As with any download, GitHub sees your IP address. Nothing you record '
-      'is sent: transcription happens on your phone.\n\n'
-      'Microphone: used only while you record. Recordings, transcripts and '
-      "settings are stored in the app's private storage, on your phone.\n\n"
-      'Notifications: show the progress of a recording or transcription in '
-      'progress.\n\n'
-      'Files leave the app only when you choose to: saving to Documents, '
-      'sharing or exporting a backup. From there, their privacy depends on '
-      'where you keep them or who you share them with.\n\n'
-      "Uninstalling the app deletes all its data, except what you saved to "
-      'Documents or exported.',
-);
+String get _privacy => tr('privacyText');
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -123,7 +77,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(tr('Configuración', 'Settings'))),
+      appBar: AppBar(title: Text(tr('settings'))),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -131,7 +85,7 @@ class SettingsScreen extends StatelessWidget {
           const _AudioFormatTile(),
           ListTile(
             leading: const Icon(Icons.palette_outlined),
-            title: Text(tr('Tema', 'Theme')),
+            title: Text(tr('theme')),
             subtitle: ValueListenableBuilder(
               valueListenable: appTheme,
               builder: (_, t, _) => Text(_modeName(t.$1)),
@@ -143,32 +97,26 @@ class SettingsScreen extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.file_upload_outlined),
-            title: Text(tr('Hacer copia', 'Back up')),
+            title: Text(tr('backUp')),
             subtitle: Text(
-              tr('Grabaciones y ajustes', 'Recordings and settings'),
+              tr('recordingsAndSettings'),
             ),
             onTap: () async {
               if (!await _confirmExport(context) || !context.mounted) return;
               await _run(
                 context,
-                tr(
-                  'No se pudo hacer la copia. Revisa el espacio libre',
-                  'Could not back up. Check free space',
-                ),
+                tr('backupFailed'),
                 () async {
                   await exportBackup();
-                  return tr(
-                    'Copia guardada en Documentos › Scrita',
-                    'Backup saved to Documents › Scrita',
-                  );
+                  return tr('backupSaved');
                 },
               );
             },
           ),
           ListTile(
             leading: const Icon(Icons.file_download_outlined),
-            title: Text(tr('Recuperar copia', 'Restore backup')),
-            subtitle: Text(tr('Desde un archivo', 'From a file')),
+            title: Text(tr('restoreBackup')),
+            subtitle: Text(tr('fromAFile')),
             onTap: () async {
               final picked = (await FilePicker.pickFile(
                 type: FileType.custom,
@@ -177,14 +125,11 @@ class SettingsScreen extends StatelessWidget {
               if (picked == null || !context.mounted) return;
               await _run(
                 context,
-                tr(
-                  'No se pudo recuperar la copia',
-                  'Could not restore the backup',
-                ),
+                tr('couldNotRestoreTheBackup'),
                 () async {
                   try {
                     await importBackup(picked);
-                    return tr('Copia recuperada', 'Backup restored');
+                    return tr('backupRestored');
                   } finally {
                     // file_picker's cache copy can be as big as the backup.
                     if (p.isWithin(
@@ -202,8 +147,8 @@ class SettingsScreen extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.school_outlined),
-            title: Text(tr('Ver tutorial', 'View tutorial')),
-            subtitle: Text(tr('Cómo usar Scrita', 'How to use Scrita')),
+            title: Text(tr('viewTutorial')),
+            subtitle: Text(tr('howToUseScrita')),
             onTap: () => Navigator.of(
               context,
             ).push(MaterialPageRoute(builder: (_) => const OnboardingScreen())),
@@ -219,8 +164,8 @@ class SettingsScreen extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.info_outline),
-            title: Text(tr('Acerca de', 'About')),
-            subtitle: Text('${tr('Versión', 'Version')} $_appVersion'),
+            title: Text(tr('about')),
+            subtitle: Text('${tr('version')} $_appVersion'),
             // Own dialog, not showAboutDialog: that one indents the text for an
             // icon slot and leaves an empty legalese line at the bottom.
             onTap: () => showDialog<void>(
@@ -230,7 +175,7 @@ class SettingsScreen extends StatelessWidget {
                 return AlertDialog(
                   title: const Text('Scrita'),
                   content: Text(
-                    '${tr('Versión', 'Version')} $_appVersion\n'
+                    '${tr('version')} $_appVersion\n'
                     'GPL-3.0-or-later',
                   ),
                   actions: [
@@ -253,11 +198,11 @@ class SettingsScreen extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.privacy_tip_outlined),
-            title: Text(tr('Privacidad', 'Privacy')),
+            title: Text(tr('privacy')),
             onTap: () => showDialog<void>(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: Text(tr('Política de privacidad', 'Privacy policy')),
+                title: Text(tr('privacyPolicy')),
                 content: SingleChildScrollView(child: Text(_privacy)),
                 actions: [
                   TextButton(
@@ -277,23 +222,18 @@ class SettingsScreen extends StatelessWidget {
       await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text(tr('¿Hacer copia de seguridad?', 'Back up?')),
+          title: Text(tr('backUpQuestion')),
           content: Text(
-            tr(
-              'Se guardarán grabaciones, transcripciones y ajustes en un archivo. '
-                  'Puede tardar y ocupar bastante espacio',
-              'Recordings, transcripts and settings will be saved to a file. '
-                  'It can take a while and use a lot of space',
-            ),
+            tr('backupConfirmBody'),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: Text(tr('Cancelar', 'Cancel')),
+              child: Text(tr('cancel')),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: Text(tr('Hacer copia', 'Back up')),
+              child: Text(tr('backUp')),
             ),
           ],
         ),
@@ -343,14 +283,14 @@ class _AudioFormatTileState extends State<_AudioFormatTile> {
   Widget build(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.audio_file_outlined),
-      title: Text(tr('Formato del audio', 'Audio format')),
+      title: Text(tr('audioFormat')),
       subtitle: Text(exportM4a ? 'M4A' : 'WAV'),
       onTap: () async {
         final m4a = await showDialog<bool>(
           context: context,
           builder: (ctx) => AlertDialog(
             title: Text(
-              tr('Formato del audio al guardar', 'Audio format when saving'),
+              tr('audioFormatWhenSaving'),
             ),
             content: RadioGroup<bool>(
               groupValue: exportM4a,
@@ -359,34 +299,21 @@ class _AudioFormatTileState extends State<_AudioFormatTile> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    tr(
-                      'Formato de tus grabaciones al guardarlas en Documentos. Los '
-                          'audios importados en otro formato se guardan tal cual',
-                      'Format of your recordings when saved to Documents. Audios '
-                          'imported in another format are saved as they are',
-                    ),
+                    tr('audioFormatHint'),
                   ),
                   const SizedBox(height: 8),
                   RadioListTile(
                     value: true,
-                    title: Text(tr('M4A (recomendado)', 'M4A (recommended)')),
+                    title: Text(tr('m4aRecommended')),
                     subtitle: Text(
-                      tr(
-                        'Ocupa mucho menos espacio y suena casi igual. Se abre '
-                            'en cualquier teléfono o computadora',
-                        'Takes much less space and sounds almost the same. Opens '
-                            'on any phone or computer',
-                      ),
+                      tr('m4aHint'),
                     ),
                   ),
                   RadioListTile(
                     value: false,
                     title: const Text('WAV'),
                     subtitle: Text(
-                      tr(
-                        'Calidad original, pero ocupa mucho espacio',
-                        'Original quality, but takes a lot of space',
-                      ),
+                      tr('wavHint'),
                     ),
                   ),
                 ],
@@ -395,7 +322,7 @@ class _AudioFormatTileState extends State<_AudioFormatTile> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: Text(tr('Cancelar', 'Cancel')),
+                child: Text(tr('cancel')),
               ),
             ],
           ),
@@ -426,13 +353,13 @@ class _RecordingModeTileState extends State<_RecordingModeTile> {
         .first;
     return ListTile(
       leading: const Icon(Icons.mic_none),
-      title: Text(tr('Modo de grabación', 'Recording mode')),
+      title: Text(tr('recordingMode')),
       subtitle: Text(name),
       onTap: () async {
         final source = await showDialog<AndroidAudioSource>(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text(tr('Modo de grabación', 'Recording mode')),
+            title: Text(tr('recordingMode')),
             // Five options with hints may not fit a small screen.
             content: SingleChildScrollView(
               child: RadioGroup<AndroidAudioSource>(
@@ -454,7 +381,7 @@ class _RecordingModeTileState extends State<_RecordingModeTile> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: Text(tr('Cancelar', 'Cancel')),
+                child: Text(tr('cancel')),
               ),
             ],
           ),
@@ -479,7 +406,7 @@ class _ThemeDialog extends StatelessWidget {
       child: Text(text, style: theme.textTheme.titleSmall),
     );
     return AlertDialog(
-      title: Text(tr('Tema', 'Theme')),
+      title: Text(tr('theme')),
       content: ValueListenableBuilder(
         valueListenable: appTheme,
         builder: (context, t, _) {
@@ -494,13 +421,10 @@ class _ThemeDialog extends StatelessWidget {
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(
-                      tr('Colores del fondo de pantalla', 'Wallpaper colors'),
+                      tr('wallpaperColors'),
                     ),
                     subtitle: Text(
-                      tr(
-                        'La app toma los colores de tu fondo',
-                        'The app takes the colors of your wallpaper',
-                      ),
+                      tr('wallpaperColorsHint'),
                     ),
                     value: wallpaper,
                     // Off restores the saved palette.
@@ -508,7 +432,7 @@ class _ThemeDialog extends StatelessWidget {
                         ? setTheme(wallpaper: true)
                         : setTheme(seed: seedColor),
                   ),
-                label(tr('Paletas', 'Palettes')),
+                label(tr('palettes')),
                 // Dimmed but still checked while the switch is on, so it shows
                 // which palette comes back.
                 Opacity(
@@ -526,7 +450,7 @@ class _ThemeDialog extends StatelessWidget {
                     ],
                   ),
                 ),
-                label(tr('Modo', 'Mode')),
+                label(tr('mode')),
                 SegmentedButton<ThemeMode>(
                   segments: [
                     for (final m in ThemeMode.values)
@@ -543,7 +467,7 @@ class _ThemeDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(tr('Listo', 'Done')),
+          child: Text(tr('done')),
         ),
       ],
     );
@@ -554,7 +478,7 @@ class _ThemeDialog extends StatelessWidget {
     required bool selected,
     required VoidCallback? onTap,
   }) => Semantics(
-    label: tr('Paleta', 'Palette'),
+    label: tr('palette'),
     selected: selected,
     enabled: onTap != null,
     button: true,

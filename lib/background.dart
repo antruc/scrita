@@ -53,14 +53,8 @@ class BackgroundService {
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
         channelId: 'scrita_work',
-        channelName: tr(
-          'Grabación y transcripción',
-          'Recording and transcription',
-        ),
-        channelDescription: tr(
-          'Se muestra mientras se graba o se transcribe',
-          'Shown while recording or transcribing',
-        ),
+        channelName: tr('recordingAndTranscription'),
+        channelDescription: tr('notificationChannelDescription'),
         onlyAlertOnce: true,
       ),
       iosNotificationOptions: const IOSNotificationOptions(
@@ -103,10 +97,7 @@ class BackgroundService {
     );
     if (result is ServiceRequestFailure) {
       throw Exception(
-        tr(
-          'No se pudo iniciar el servicio: ${result.error}',
-          'Could not start the service: ${result.error}',
-        ),
+        tr('serviceStartFailed', {'error': result.error}),
       );
     }
   }

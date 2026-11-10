@@ -32,7 +32,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _recorder = InterviewRecorder();
   _Phase _phase = _Phase.preparing;
-  String _status = tr('Preparando la app...', 'Getting the app ready...');
+  String _status = tr('gettingAppReady');
   String? _modelDir;
 
   double _level = -60;
@@ -118,13 +118,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            tr(
-              'Scrita necesita el micrófono para grabar. Actívalo en los ajustes',
-              'Scrita needs the microphone to record. Turn it on in settings',
-            ),
+            tr('micPermissionNeeded'),
           ),
           action: SnackBarAction(
-            label: tr('Abrir ajustes', 'Open settings'),
+            label: tr('openSettings'),
             onPressed: openAppSettings,
           ),
         ),
@@ -138,11 +135,11 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       await BackgroundService.start(
         BackgroundWork.recording,
-        tr('Grabando...', 'Recording...'),
+        tr('recordingEllipsis'),
       );
     } catch (_) {
       _snack(
-        tr('No se pudo iniciar la grabación', 'Could not start recording'),
+        tr('couldNotStartRecording'),
       );
       return;
     }
@@ -152,10 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (_) {
       await BackgroundService.stop();
       _snack(
-        tr(
-          'No se pudo iniciar la grabación. Cierra otras apps que usen el micrófono',
-          'Could not start recording. Close other apps using the microphone',
-        ),
+        tr('micBusy'),
       );
       return;
     }
@@ -164,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {});
       if (timer.tick % 5 == 0) {
         BackgroundService.update(
-          '${tr('Grabando', 'Recording')} - '
+          '${tr('recording')} - '
           '${formatTimestamp(_recorder.elapsed.inSeconds.toDouble())}',
         );
       }
@@ -186,14 +180,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     _snack(
       path == null
-          ? tr(
-              'No se pudo guardar la grabación',
-              'Could not save the recording',
-            )
-          : tr(
-              'Audio guardado en "Sin transcribir"',
-              'Audio saved to "Not transcribed"',
-            ),
+          ? tr('couldNotSaveTheRecording')
+          : tr('audioSavedToNotTranscribed'),
     );
     await _refreshHistory();
   }
@@ -219,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       path = await takeSharedAudio();
     } catch (_) {
-      _snack(tr('No se pudo recibir el audio', 'Could not receive the audio'));
+      _snack(tr('couldNotReceiveTheAudio'));
       return;
     }
     if (path != null) await _importAudio(path);
@@ -247,10 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
         await File(path).delete();
       } catch (_) {}
       _snack(
-        tr(
-          'No se pudo importar el audio. Revisa el espacio libre',
-          'Could not import the audio. Check free space',
-        ),
+        tr('importFailed'),
       );
       return;
     } finally {
@@ -260,10 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (!supported) {
       _snack(
-        tr(
-          'Formato no compatible. Usa ${_formats()}',
-          'Unsupported format. Use ${_formats()}',
-        ),
+        tr('unsupportedFormat', {'formats': _formats()}),
       );
       return;
     }
@@ -315,13 +297,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _delete(SavedTranscript s) => _deleteWithUndo(
     s.transcript.audioPath,
-    tr('Transcripción eliminada', 'Transcript deleted'),
+    tr('transcriptDeleted'),
     () => deleteTranscript(s),
   );
 
   Future<void> _deletePending(PendingAudio a) => _deleteWithUndo(
     a.path,
-    tr('Grabación eliminada', 'Recording deleted'),
+    tr('recordingDeleted'),
     () => File(a.path).delete(),
   );
 
@@ -346,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // must go once it times out.
             persist: false,
             action: SnackBarAction(
-              label: tr('Deshacer', 'Undo'),
+              label: tr('undo'),
               onPressed: () {},
             ),
           ),
@@ -362,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
       await delete();
     } catch (_) {
       _snack(
-        tr('No se pudo eliminar', 'Could not delete'),
+        tr('couldNotDelete'),
         retry: () async {
           await _tryDelete(delete);
           await _refreshHistory();
@@ -377,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final name = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(tr('Cambiar nombre', 'Rename')),
+        title: Text(tr('rename')),
         content: TextField(
           controller: controller,
           autofocus: true,
@@ -387,11 +369,11 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text(tr('Cancelar', 'Cancel')),
+            child: Text(tr('cancel')),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, controller.text),
-            child: Text(tr('Guardar', 'Save')),
+            child: Text(tr('save')),
           ),
         ],
       ),
@@ -408,7 +390,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       await saveTranscript(s.transcript, jsonPath: s.jsonPath);
     } catch (_) {
-      _snack(tr('No se pudo cambiar el nombre', 'Could not rename'));
+      _snack(tr('couldNotRename'));
     }
     await _refreshHistory();
   }
@@ -419,7 +401,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       await renameAudio(a.path, name);
     } catch (_) {
-      _snack(tr('No se pudo cambiar el nombre', 'Could not rename'));
+      _snack(tr('couldNotRename'));
     }
     await _refreshHistory();
   }
@@ -443,15 +425,12 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             IconButton(
               icon: const Icon(Icons.audio_file_outlined),
-              tooltip: tr(
-                'Transcribir un archivo de audio',
-                'Transcribe an audio file',
-              ),
+              tooltip: tr('transcribeAnAudioFile'),
               onPressed: _phase == _Phase.idle ? _pickAudio : null,
             ),
             IconButton(
               icon: const Icon(Icons.settings_outlined),
-              tooltip: tr('Configuración', 'Settings'),
+              tooltip: tr('settings'),
               // An import mid-recording would refresh the lists under the
               // recorder.
               onPressed:
@@ -477,20 +456,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   : emptyState(
                       Theme.of(context),
                       Icons.mic_none,
-                      tr('Aún no hay grabaciones', 'No recordings yet'),
-                      tr(
-                        'Toca el micrófono para grabar o el ícono de arriba '
-                            'para importar y transcribir un audio guardado',
-                        'Tap the mic to record or the icon at the top to '
-                            'import and transcribe a saved audio file',
-                      ),
+                      tr('noRecordingsYet'),
+                      tr('emptyHomeHint'),
                     ))
             : ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
                   if (_pending.isNotEmpty) ...[
                     Text(
-                      tr('Sin transcribir', 'Not transcribed'),
+                      tr('notTranscribed'),
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
@@ -499,7 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                   if (_history.isNotEmpty) ...[
                     Text(
-                      tr('Transcripciones', 'Transcripts'),
+                      tr('transcripts'),
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
@@ -533,7 +507,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // No shadow: it sits in the footer, it floats over nothing.
         child: FloatingActionButton.large(
           onPressed: _startRecording,
-          tooltip: tr('Grabar', 'Record'),
+          tooltip: tr('record'),
           elevation: 0,
           // Primary for record, secondary for stop: both full tone, so
           // they stand out from the surface footer.
@@ -559,7 +533,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Icon(Icons.fiber_manual_record, color: theme.colorScheme.error),
             const SizedBox(width: 8),
             Text(
-              tr('Grabando', 'Recording'),
+              tr('recording'),
               style: theme.textTheme.titleMedium,
             ),
             const Spacer(),
@@ -572,7 +546,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Center(
           child: FloatingActionButton.large(
             onPressed: _stopRecording,
-            tooltip: tr('Terminar grabación', 'Stop recording'),
+            tooltip: tr('stopRecording'),
             elevation: 0,
             backgroundColor: theme.colorScheme.secondary,
             foregroundColor: theme.colorScheme.onSecondary,
@@ -590,7 +564,7 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Text(t.title, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Text(
         '${formatTimestamp(t.durationSeconds)} - '
-        '${t.speakerNames.length} ${t.speakerNames.length == 1 ? tr('persona', 'speaker') : tr('personas', 'speakers')}',
+        tr(t.speakerNames.length == 1 ? 'speakersOne' : 'speakersMany', {'n': t.speakerNames.length}),
       ),
       onTap: _phase == _Phase.idle ? () => _open(s) : null,
       trailing: Row(
@@ -598,13 +572,13 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           IconButton(
             icon: const Icon(Icons.edit_outlined),
-            tooltip: tr('Cambiar nombre', 'Rename'),
+            tooltip: tr('rename'),
             onPressed: _phase == _Phase.idle ? () => _rename(s) : null,
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline),
             color: Theme.of(context).colorScheme.error,
-            tooltip: tr('Eliminar', 'Delete'),
+            tooltip: tr('delete'),
             onPressed: _phase == _Phase.idle ? () => _delete(s) : null,
           ),
         ],
@@ -640,20 +614,20 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           IconButton.filledTonal(
             icon: const Icon(Icons.text_snippet_outlined),
-            tooltip: tr('Transcribir', 'Transcribe'),
+            tooltip: tr('transcribe'),
             onPressed: idle
                 ? () => _openAudio(a.path, a.createdAt, autoTranscribe: true)
                 : null,
           ),
           IconButton(
             icon: const Icon(Icons.edit_outlined),
-            tooltip: tr('Cambiar nombre', 'Rename'),
+            tooltip: tr('rename'),
             onPressed: idle ? () => _renamePending(a) : null,
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline),
             color: Theme.of(context).colorScheme.error,
-            tooltip: tr('Eliminar', 'Delete'),
+            tooltip: tr('delete'),
             onPressed: idle ? () => _deletePending(a) : null,
           ),
         ],

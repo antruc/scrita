@@ -11,7 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   // The expected texts below are the Spanish ones.
-  uiSpanish = true;
+  loadStrings([File('assets/l10n/es.json').readAsStringSync()]);
 
   group('buildTurns', () {
     test('merges nearby segments of the same speaker', () {

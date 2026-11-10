@@ -32,7 +32,7 @@ Future<String?> decodeToWav(String from, String to) async {
     });
   } on PlatformException {
     throw FormatException(
-      tr('No se pudo leer este audio', 'Could not read this audio'),
+      tr('couldNotReadThisAudio'),
     );
   }
 }

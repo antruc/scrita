@@ -34,12 +34,12 @@ Future<bool> confirmIrreversible(
     builder: (ctx) => AlertDialog(
       title: Text(title),
       content: Text(
-        '$content. ${tr('No se puede deshacer', 'This cannot be undone')}',
+        '$content. ${tr('thisCannotBeUndone')}',
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx, false),
-          child: Text(tr('Cancelar', 'Cancel')),
+          child: Text(tr('cancel')),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(ctx, true),
@@ -62,7 +62,7 @@ SnackBar snackBar(String msg, {VoidCallback? retry}) => SnackBar(
   persist: false,
   action: retry == null
       ? null
-      : SnackBarAction(label: tr('Reintentar', 'Retry'), onPressed: retry),
+      : SnackBarAction(label: tr('retry'), onPressed: retry),
 );
 
 /// Centered icon, [title] and [hint] for a screen with nothing to list yet,
@@ -217,7 +217,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       await (_playing ? _player.pause() : _player.resume());
     } catch (_) {
       _snack(
-        tr('No se puede reproducir este audio', 'This audio cannot be played'),
+        tr('thisAudioCannotBePlayed'),
       );
     }
   }
@@ -235,10 +235,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setLocal) => AlertDialog(
           title: Text(
-            tr(
-              '¿Cuántas personas participan?',
-              'How many people are speaking?',
-            ),
+            tr('howManyPeopleAreSpeakingQuestion'),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -259,26 +256,14 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
               const SizedBox(height: 12),
               Text(
                 n == 1
-                    ? tr(
-                        'Una sola voz: todo el texto va a una persona. '
-                            'Para dictados o monólogos',
-                        'One voice: all text goes to one speaker. '
-                            'For dictation or monologues',
-                      )
-                    : tr(
-                        'Elige el número exacto. Si pones de más, aparece una '
-                            'persona que no existe. Si pones de menos, se '
-                            'mezclan voces',
-                        'Pick the exact number. Too many and a person who '
-                            "isn't there appears. Too few and voices get "
-                            'mixed up',
-                      ),
+                    ? tr('oneVoiceHint')
+                    : tr('exactNumberHint'),
                 style: Theme.of(ctx).textTheme.bodySmall,
               ),
               if (estimate > 0) ...[
                 const SizedBox(height: 8),
                 Text(
-                  '${tr('Tiempo estimado', 'Estimated time')}: '
+                  '${tr('estimatedTime')}: '
                   '${formatEta(estimate)}',
                   style: Theme.of(ctx).textTheme.bodySmall,
                 ),
@@ -286,11 +271,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
               if (rate != null && rate < lowQualityRate) ...[
                 const SizedBox(height: 8),
                 Text(
-                  tr(
-                    'Audio de baja calidad. La transcripción podría tener más '
-                        'errores',
-                    'Low quality audio. The transcript may have more mistakes',
-                  ),
+                  tr('lowQualityAudio'),
                   // A warning: error, since tertiary is soft for some seeds.
                   style: TextStyle(color: Theme.of(ctx).colorScheme.error),
                 ),
@@ -298,12 +279,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
               if (_t != null) ...[
                 const SizedBox(height: 8),
                 Text(
-                  tr(
-                    'Se reemplazará el texto actual y sus ediciones. '
-                        'Los nombres de las personas se conservan',
-                    'The current text and its edits will be replaced. '
-                        'Participant names are kept',
-                  ),
+                  tr('retranscribeWarning'),
                   style: TextStyle(color: Theme.of(ctx).colorScheme.error),
                 ),
               ],
@@ -312,11 +288,11 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text(tr('Cancelar', 'Cancel')),
+              child: Text(tr('cancel')),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, n),
-              child: Text(tr('Transcribir', 'Transcribe')),
+              child: Text(tr('transcribe')),
             ),
           ],
         ),
@@ -361,14 +337,11 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     try {
       await BackgroundService.start(
         BackgroundWork.processing,
-        tr('Transcribiendo...', 'Transcribing...'),
+        tr('transcribingEllipsis'),
       );
     } catch (_) {
       _snack(
-        tr(
-          'No se pudo iniciar la transcripción',
-          'Could not start transcription',
-        ),
+        tr('couldNotStartTranscription'),
         retry: _transcribe,
       );
       return;
@@ -376,7 +349,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     setState(() {
       _busy = true;
       _progress = 0;
-      _status = tr('Preparando audio...', 'Preparing audio...');
+      _status = tr('preparingAudioEllipsis');
       _eta = '';
     });
     var notifiedPercent = -1;
@@ -415,18 +388,15 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
             switch (pr.stage) {
               case Stage.loading:
                 _progress = 0;
-                _status = tr('Preparando audio...', 'Preparing audio...');
+                _status = tr('preparingAudioEllipsis');
               case Stage.diarization:
                 _progress = 0.02 + 0.37 * pr.fraction;
                 _status = numSpeakers == 1
-                    ? tr('Escuchando el audio...', 'Listening to the audio...')
-                    : tr(
-                        'Reconociendo las voces...',
-                        'Recognizing the voices...',
-                      );
+                    ? tr('listeningToTheAudioEllipsis')
+                    : tr('recognizingTheVoicesEllipsis');
               case Stage.transcription:
                 _progress = 0.39 + 0.61 * pr.fraction;
-                _status = tr('Transcribiendo...', 'Transcribing...');
+                _status = tr('transcribingEllipsis');
             }
             // Without a prior the live pace is noise for the first 5 %.
             _eta = pipelinePrior > 0 || _progress >= 0.05
@@ -443,7 +413,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
           if (percent != notifiedPercent) {
             notifiedPercent = percent;
             BackgroundService.update(
-              '${tr('Transcribiendo', 'Transcribing')} - $percent %'
+              '${tr('transcribing')} - $percent %'
               '${_eta.isEmpty ? '' : ' - $_eta'}',
             );
           }
@@ -453,10 +423,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       clock.stop();
       if (result.turns.isEmpty) {
         _snack(
-          tr(
-            'No se detectó voz en la grabación',
-            'No speech was detected in the recording',
-          ),
+          tr('noSpeechDetected'),
         );
         return;
       }
@@ -501,10 +468,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
         _snack(e.message);
       } else {
         _snack(
-          tr(
-            'No se pudo transcribir el audio',
-            'Could not transcribe the audio',
-          ),
+          tr('couldNotTranscribeTheAudio'),
           retry: _transcribe,
         );
       }
@@ -521,10 +485,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
         await BackgroundService.stop();
       } else {
         await BackgroundService.finish(
-          tr(
-            'Transcripción terminada. Toca para abrirla',
-            'Transcription finished. Tap to open it',
-          ),
+          tr('transcriptionFinished'),
         );
       }
       if (mounted) setState(() => _busy = false);
@@ -612,10 +573,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     } catch (_) {
       ok = false;
       _snack(
-        tr(
-          'No se pudo guardar el cambio. Revisa el espacio libre',
-          'Could not save the change. Check free space',
-        ),
+        tr('couldNotSaveChange'),
       );
     }
     if (mounted) setState(() {});
@@ -630,7 +588,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(tr('Nombres de las personas', 'Participant names')),
+        title: Text(tr('participantNames')),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -653,11 +611,11 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(tr('Cancelar', 'Cancel')),
+            child: Text(tr('cancel')),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(tr('Guardar', 'Save')),
+            child: Text(tr('save')),
           ),
         ],
       ),
@@ -686,10 +644,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     // The undo snackbar would replace the error one.
     if (!await _persist()) return;
     _showUndo(
-      tr(
-        'Texto asignado a ${t.speakerName(speaker)}',
-        'Text assigned to ${t.speakerName(speaker)}',
-      ),
+      tr('textAssignedTo', {'name': t.speakerName(speaker)}),
       before,
     );
   }
@@ -708,7 +663,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setLocal) => AlertDialog(
           title: Text(
-            '${tr('Párrafo', 'Paragraph')} ${formatTimestamp(turn.start)}',
+            '${tr('paragraph')} ${formatTimestamp(turn.start)}',
           ),
           content: SingleChildScrollView(
             child: Column(
@@ -717,7 +672,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
                 DropdownButtonFormField<int>(
                   initialValue: speaker,
                   decoration: InputDecoration(
-                    labelText: tr('Persona', 'Speaker'),
+                    labelText: tr('speaker'),
                   ),
                   items: [
                     for (var i = 0; i < t.speakerNames.length; i++)
@@ -732,7 +687,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
                   maxLines: null,
                   minLines: 3,
                   decoration: InputDecoration(
-                    labelText: tr('Texto', 'Text'),
+                    labelText: tr('text'),
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -742,11 +697,11 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text(tr('Cancelar', 'Cancel')),
+              child: Text(tr('cancel')),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: Text(tr('Guardar', 'Save')),
+              child: Text(tr('save')),
             ),
           ],
         ),
@@ -774,36 +729,21 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       final confirmed = await (text.isEmpty
           ? confirmIrreversible(
               context,
-              tr('¿Eliminar párrafo?', 'Delete paragraph?'),
+              tr('deleteParagraphQuestion'),
               // The turns around it share a speaker: they merge once this
               // one is gone.
               index > 0 &&
                       index < t.turns.length - 1 &&
                       t.turns[index - 1].speaker == t.turns[index + 1].speaker
-                  ? tr(
-                      'Dejaste el texto vacío, así que se borrará este '
-                          'párrafo. Los párrafos de '
-                          '${t.speakerName(t.turns[index - 1].speaker)} '
-                          'de antes y después se juntarán',
-                      'You left the text empty, so this paragraph will be '
-                          'deleted. The paragraphs of '
-                          '${t.speakerName(t.turns[index - 1].speaker)} '
-                          'before and after it will be joined',
-                    )
-                  : tr(
-                      'Dejaste el texto vacío, así que se borrará este párrafo',
-                      'You left the text empty, so this paragraph will be deleted',
-                    ),
-              tr('Eliminar', 'Delete'),
+                  ? tr('deleteParagraphJoinBody', {'name': t.speakerName(t.turns[index - 1].speaker)})
+                  : tr('deleteParagraphBody'),
+              tr('delete'),
             )
           : confirmIrreversible(
               context,
-              tr('¿Juntar párrafos?', 'Join paragraphs?'),
-              tr(
-                'Se juntará con el párrafo de $name que tiene al lado',
-                'It will be joined with the paragraph of $name next to it',
-              ),
-              tr('Juntar', 'Join'),
+              tr('joinParagraphsQuestion'),
+              tr('joinParagraphsBody', {'name': name}),
+              tr('join'),
             ));
       if (!confirmed) return;
     }
@@ -812,10 +752,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       ..addAll(cleaned);
     if (await _persist() && speakerChanged) {
       _showUndo(
-        tr(
-          'Párrafo asignado a ${t.speakerName(speaker)}',
-          'Paragraph assigned to ${t.speakerName(speaker)}',
-        ),
+        tr('paragraphAssignedTo', {'name': t.speakerName(speaker)}),
         before,
       );
     }
@@ -831,7 +768,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
         SnackBar(
           content: Text(msg),
           action: SnackBarAction(
-            label: tr('Deshacer', 'Undo'),
+            label: tr('undo'),
             onPressed: () {
               t.turns
                 ..clear()
@@ -853,7 +790,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
         ),
       );
     } catch (_) {
-      _snack(tr('No se pudo compartir', 'Could not share'), retry: _share);
+      _snack(tr('couldNotShare'), retry: _share);
     }
   }
 
@@ -864,26 +801,23 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setLocal) => AlertDialog(
-          title: Text(tr('Guardar en Documentos', 'Save to Documents')),
+          title: Text(tr('saveToDocuments')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                tr(
-                  'Se guarda en Documentos/Scrita',
-                  'It is saved to Documents/Scrita',
-                ),
+                tr('savedToDocumentsHint'),
               ),
               CheckboxListTile(
                 value: text,
                 onChanged: (v) => setLocal(() => text = v ?? text),
-                title: Text(tr('Texto', 'Text')),
+                title: Text(tr('text')),
                 contentPadding: EdgeInsets.zero,
               ),
               CheckboxListTile(
                 value: audio,
                 onChanged: (v) => setLocal(() => audio = v ?? audio),
-                title: Text(tr('Audio', 'Audio')),
+                title: Text(tr('audio')),
                 contentPadding: EdgeInsets.zero,
               ),
             ],
@@ -891,11 +825,11 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: Text(tr('Cancelar', 'Cancel')),
+              child: Text(tr('cancel')),
             ),
             FilledButton(
               onPressed: text || audio ? () => Navigator.pop(ctx, true) : null,
-              child: Text(tr('Guardar', 'Save')),
+              child: Text(tr('save')),
             ),
           ],
         ),
@@ -906,7 +840,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     prefs.saveAudio = audio;
     final ext = p.extension(widget.audioPath);
     if (audio && exportAudioExt(widget.audioPath) != ext) {
-      _snack(tr('Guardando el audio...', 'Saving the audio...'));
+      _snack(tr('savingTheAudioEllipsis'));
     }
     var ok = true;
     try {
@@ -919,16 +853,10 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ok
         ? _snack(
-            tr(
-              'Guardado en Documentos › Scrita',
-              'Saved to Documents › Scrita',
-            ),
+            tr('savedToDocumentsScrita'),
           )
         : _snack(
-            tr(
-              'No se pudo guardar en Documentos',
-              'Could not save to Documents',
-            ),
+            tr('couldNotSaveToDocuments'),
             retry: _saveToDocuments,
           );
   }
@@ -936,7 +864,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
   Future<void> _copy() async {
     await Clipboard.setData(ClipboardData(text: _t!.toPlainText()));
     // Android 13+ shows its own notice.
-    if (await sdkInt() < 33) _snack(tr('Texto copiado', 'Text copied'));
+    if (await sdkInt() < 33) _snack(tr('textCopied'));
   }
 
   /// Speaker name and dot. The 500 shades fail 4.5:1 text contrast in light
@@ -986,12 +914,12 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
             if (ready) ...[
               IconButton(
                 icon: const Icon(Icons.people_outline),
-                tooltip: tr('Nombrar personas', 'Name participants'),
+                tooltip: tr('nameParticipants'),
                 onPressed: _renameSpeakers,
               ),
               IconButton(
                 icon: const Icon(Icons.share),
-                tooltip: tr('Compartir texto', 'Share text'),
+                tooltip: tr('shareText'),
                 onPressed: _share,
               ),
               // onSelected runs once the menu is closed, so a dialog it opens
@@ -999,16 +927,16 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
               PopupMenuButton<VoidCallback>(
                 onSelected: (action) => action(),
                 itemBuilder: (_) => [
-                  _menuItem(Icons.copy, tr('Copiar texto', 'Copy text'), _copy),
+                  _menuItem(Icons.copy, tr('copyText'), _copy),
                   _menuItem(
                     Icons.save_alt,
-                    tr('Guardar en Documentos', 'Save to Documents'),
+                    tr('saveToDocuments'),
                     _saveToDocuments,
                   ),
                   if (_hasAudio)
                     _menuItem(
                       Icons.refresh,
-                      tr('Volver a transcribir', 'Transcribe again'),
+                      tr('transcribeAgain'),
                       _transcribe,
                     ),
                 ],
@@ -1025,16 +953,12 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
             ? emptyState(
                 theme,
                 Icons.description_outlined,
-                tr('Aún no hay transcripción', 'No transcript yet'),
-                tr(
-                  'Convierte la grabación en texto con el nombre de cada '
-                      'persona',
-                  'Turn the recording into text with each speaker named',
-                ),
+                tr('noTranscriptYet'),
+                tr('noTranscriptHint'),
                 action: FilledButton.icon(
                   onPressed: _hasAudio && !_busy ? _transcribe : null,
                   icon: const Icon(Icons.text_snippet_outlined),
-                  label: Text(tr('Transcribir', 'Transcribe')),
+                  label: Text(tr('transcribe')),
                 ),
               )
             : _buildTurns(theme),
@@ -1061,7 +985,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
         children: [
           Icon(Icons.error_outline, color: theme.colorScheme.onSurfaceVariant),
           const SizedBox(width: 12),
-          Text(tr('Audio no disponible', 'Audio not available')),
+          Text(tr('audioNotAvailable')),
         ],
       );
     }
@@ -1071,7 +995,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
         IconButton.filled(
           iconSize: 32,
           icon: Icon(_playing ? Icons.pause : Icons.play_arrow),
-          tooltip: _playing ? tr('Pausar', 'Pause') : tr('Reproducir', 'Play'),
+          tooltip: _playing ? tr('pause') : tr('play'),
           onPressed: _togglePlay,
         ),
         Expanded(
@@ -1176,16 +1100,13 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
                           for (var s = 0; s < t.speakerNames.length; s++)
                             if (s != turn.speaker)
                               ContextMenuButtonItem(
-                                label: tr(
-                                  'Asignar a ${t.speakerName(s)}',
-                                  'Assign to ${t.speakerName(s)}',
-                                ),
+                                label: tr('assignTo', {'name': t.speakerName(s)}),
                                 onPressed: () => run(
                                   () => _assignRange(i, sel.start, sel.end, s),
                                 ),
                               ),
                           ContextMenuButtonItem(
-                            label: tr('Editar', 'Edit'),
+                            label: tr('edit'),
                             onPressed: () =>
                                 run(() => _editTurn(i, selection: sel)),
                           ),

@@ -113,7 +113,7 @@ Future<PipelineResult> runPipeline({
 
   final isolate = await Isolate.spawn(
     _entry,
-    _Request(port.sendPort, wavPath, modelDir, numSpeakers, uiSpanish),
+    _Request(port.sendPort, wavPath, modelDir, numSpeakers, uiStrings),
     onError: port.sendPort,
     onExit: port.sendPort,
   );
@@ -135,10 +135,7 @@ Future<PipelineResult> runPipeline({
       // The isolate exited without replying (e.g. out of memory).
       completer.completeError(
         FormatException(
-          tr(
-            'La transcripción se detuvo. Cierra otras apps y vuelve a intentarlo',
-            'Transcription stopped. Close other apps and try again',
-          ),
+          tr('transcriptionStopped'),
         ),
       );
     }
@@ -158,15 +155,15 @@ class _Request {
     this.wavPath,
     this.modelDir,
     this.numSpeakers,
-    this.spanish,
+    this.strings,
   );
   final SendPort port;
   final String wavPath;
   final String modelDir;
   final int numSpeakers;
 
-  /// The isolate starts with fresh globals, so the language travels here.
-  final bool spanish;
+  /// The isolate starts with fresh globals, so the UI texts travel here.
+  final Map<String, String> strings;
 }
 
 class _Failure {
@@ -176,7 +173,7 @@ class _Failure {
 }
 
 Future<void> _entry(_Request req) async {
-  uiSpanish = req.spanish;
+  uiStrings = req.strings;
   try {
     final result = await _process(req, (p) => req.port.send(p));
     req.port.send(result);
@@ -219,7 +216,7 @@ Future<PipelineResult> _process(
   report(const PipelineProgress(Stage.loading, 0));
   final samples = _readWav(req.wavPath);
   if (samples.isEmpty) {
-    throw FormatException(tr('El audio está vacío', 'The audio is empty'));
+    throw FormatException(tr('audioEmpty'));
   }
   final duration = samples.length / models.sampleRate;
   t.loading = lap();
