@@ -123,6 +123,40 @@ Most promising first.
    right language when the audio starts with a clear phrase. Each piece
    could be decoded with the last seconds of the previous one in front, and
    the repeated words dropped by their timestamps. About 20 lines, unproven.
+
+   How it would fit in `drain()` (`lib/pipeline.dart`): `decode(a, b)`
+   starts at `a - leadIn` (about 3 s), the tokens with a timestamp under
+   `leadIn` are dropped, `leadIn` is subtracted from the rest and the text
+   is rebuilt from the tokens left. The token drop is a pure function, so it
+   can have a test without the model.
+
+   What the recordings say (`Downloads/1min.txt`, `Downloads/3min.txt`):
+
+   - The open failure is in reach. In the 1 min M4A the VAD gave one phrase
+     (0.2 s +71.7 s) and `quietCuts` made 4 pieces. The English one
+     (36.7 s +18.5 s) is the third, so the audio before it is in
+     `seg.samples`.
+   - It may work. "en 2021" is decoded 5 times with Spanish in front (1 min
+     WAV, four 3 min runs): each gives a stray "in" and stays in Spanish. It
+     only turns the piece to English when the cut falls right before it.
+   - It would recover "por su elevado éxito reproductivo, especialmente si
+     se suministra artificialmente alimento a", the only text still lost in
+     the four recordings.
+   - The stray "in" stays: it comes after the cut.
+
+   Limits:
+
+   - The decoded audio grows by `leadIn`. 18.5 s + 3 s fits, but a 22 s
+     piece would reach 25 s, in the unstable range. `asrMaxPhrase` would
+     drop to about 19 s.
+   - Only pieces inside a VAD phrase have audio before them. The first piece
+     of a phrase needs the tail of the previous phrase kept. "Especially if"
+     (3 min, 47.8 s) is one of those; the retry already recovers it.
+   - Token timestamps are coarse: a word at the cut may repeat or go
+     missing. `quietCuts` cutting at the quietest point helps.
+   - About 15 % more decoding in continuous reading. The retry halves would
+     need the lead-in too.
+   - One case, one text: if it fixes this piece, others are still unknown.
 4. **Language check on the output.** Compare each piece's language with the
    rest of the transcript and retry the odd one in halves. Needs a language
    detector for 25 languages, and interviews that really mix languages would
