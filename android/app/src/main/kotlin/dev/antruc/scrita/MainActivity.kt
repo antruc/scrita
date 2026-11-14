@@ -357,8 +357,8 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    // AAC-LC at 64 kbps: for speech, close to the original at about 1/12 of
-    // the WAV size (~29 MB per hour of mono).
+    // AAC-LC at 64 kbps per channel: for speech, close to the original at
+    // about 1/12 of the WAV size (~29 MB per hour of mono).
     private val m4aBitRate = 64_000
 
     // Encodes a 16-bit PCM WAV to .m4a. Reads up to the end of the file when
@@ -403,7 +403,7 @@ class MainActivity : FlutterActivity() {
 
                 val format = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_AAC, rate, channels).apply {
                     setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC)
-                    setInteger(MediaFormat.KEY_BIT_RATE, m4aBitRate)
+                    setInteger(MediaFormat.KEY_BIT_RATE, m4aBitRate * channels)
                 }
                 val enc = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_AUDIO_AAC)
                 codec = enc

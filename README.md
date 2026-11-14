@@ -60,7 +60,7 @@ Sure, my name is...
   delete paragraphs, or select words and assign them to another speaker, with
   undo. Play back the original audio while you review
 - **Export:** copy or share the `.txt`, or save it to `Documents/Scrita`
-  together with the audio. The app records 48 kHz WAV; when saved to
+  together with the audio and, optionally, `.srt` subtitles. The app records 48 kHz WAV; when saved to
   Documents it is converted to M4A (default, ~29 MB per hour) or kept as WAV.
   Imported files keep their own format
 - **Backup:** one `.zip` with all audio, transcripts and settings, and a
@@ -311,7 +311,7 @@ In debug and profile builds, each transcription ends with a timing summary
 
 ## Roadmap
 
-- [ ] Export to .docx and .srt besides .txt
+- [ ] Export to .docx besides .txt and .srt
 - [ ] Play a single paragraph's audio while editing it
 
 ## License

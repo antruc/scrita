@@ -333,6 +333,27 @@ const double vadMinSilence = 0.5;
 /// short.
 const double vadMaxSpeech = 20.0;
 
+/// Longest phrase (seconds) decoded in one piece: longer ones are cut at
+/// quiet points first (quietCuts). Measured 2026-11-13 on continuous Spanish
+/// reading with Parakeet v3: fine up to 21.9 s, mixes in English from 23.6 s,
+/// turns to English and drops sentences from 31 s. Lower it if English still
+/// shows up, raise it if cuts land mid-word too often.
+const double asrMaxPhrase = 22.0;
+
+/// How far (seconds) a cut may move from its even position to find a quiet
+/// point.
+const double asrCutSlack = 1.5;
+
+/// A piece of at least [asrRetryMinSeconds] that decodes to fewer words per
+/// second than this lost text (measured 2026-11-13: 2 words from 11.9 s,
+/// against about 2 per second of normal reading). It is decoded again in two
+/// halves, kept only if they give more words. Raise the rate if lost text
+/// goes unnoticed, lower it if slow speech triggers retries.
+const double asrRetryWordRate = 0.5;
+
+/// Must stay above 4 * asrCutSlack, or the halves cannot be cut.
+const double asrRetryMinSeconds = 8.0;
+
 /// VAD that splits the whole recording into phrases before ASR.
 sherpa_onnx.VadModelConfig buildVadConfig(String dir) {
   return sherpa_onnx.VadModelConfig(

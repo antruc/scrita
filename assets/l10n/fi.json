@@ -163,6 +163,7 @@
   "saveToDocuments": "Tallenna Asiakirjat-kansioon",
   "savedToDocumentsHint": "Tallennetaan kansioon Asiakirjat/Scrita",
   "audio": "Ääni",
+  "subtitles": "Tekstitys",
   "savingTheAudioEllipsis": "Tallennetaan ääntä...",
   "savedToDocumentsScrita": "Tallennettu: Asiakirjat › Scrita",
   "couldNotSaveToDocuments": "Tallennus Asiakirjat-kansioon epäonnistui",

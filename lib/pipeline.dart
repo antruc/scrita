@@ -85,6 +85,10 @@ class StageTimings {
   double longest = 0;
   int atCap = 0;
 
+  /// One line per decoded phrase: start, length and how its text begins, to
+  /// tell which phrase produced which text.
+  final phraseLog = <String>[];
+
   /// Phrases decoded to no text, and their audio (seconds).
   int empty = 0;
   double emptyAudio = 0;
@@ -279,51 +283,108 @@ Future<PipelineResult> _process(
         // start counts samples since the VAD was created (never reset here).
         final seg = vad.front();
         vad.pop();
-        final start = seg.start / models.sampleRate;
-        final seconds = seg.samples.length / models.sampleRate;
-        final end = start + seconds;
-        if (seconds < _minPhrase) {
+        final vadSeconds = seg.samples.length / models.sampleRate;
+        if (vadSeconds < _minPhrase) {
           t.skipped++;
           continue;
         }
-        t.phrases++;
-        t.phraseAudio += seconds;
-        if (seconds < 0.5) t.short++;
-        if (seconds >= models.vadMaxSpeech - 0.5) t.atCap++;
-        t.longest = math.max(t.longest, seconds);
+        // These measure VAD phrases, before the cut below.
+        t.phraseAudio += vadSeconds;
+        if (vadSeconds < 0.5) t.short++;
+        if (vadSeconds >= models.vadMaxSpeech - 0.5) t.atCap++;
+        t.longest = math.max(t.longest, vadSeconds);
 
-        final r = timed(
-          () => _decode(recognizer, seg.samples),
+        final slack = (models.asrCutSlack * models.sampleRate).round();
+        // The VAD cap is soft and Parakeet degrades on long phrases (see
+        // asrMaxPhrase), so long ones are decoded in pieces.
+        final bounds = [
+          0,
+          ...quietCuts(
+            seg.samples,
+            (models.asrMaxPhrase * models.sampleRate).round(),
+            slack,
+            models.sampleRate ~/ 10,
+          ),
+          seg.samples.length,
+        ];
+        sherpa_onnx.OfflineRecognizerResult decode(int a, int b) => timed(
+          () => _decode(recognizer, Float32List.sublistView(seg.samples, a, b)),
           (s) => t.decode += s,
         );
-        if (r.tokens.isNotEmpty && r.timestamps.length == r.tokens.length) {
-          t.timestamped++;
-        }
-        final heard = {
-          for (final x in turns)
-            if (math.min(x.end, end) - math.max(x.start, start) >= 0.5)
-              x.speaker,
-        };
-        if (heard.length > 1) t.crossing++;
-        final text = r.text.trim();
-        if (text.isNotEmpty) {
-          final parts = splitPhrase(
-            turns,
-            start,
-            end,
-            text,
-            r.tokens,
-            r.timestamps,
+        int words(sherpa_onnx.OfflineRecognizerResult r) =>
+            RegExp(r'\S+').allMatches(r.text).length;
+        // Second half of a retried piece, decoded and waiting for its turn.
+        sherpa_onnx.OfflineRecognizerResult? half;
+        var retried = false;
+        for (var k = 0; k + 1 < bounds.length; k++) {
+          final a = bounds[k], b = bounds[k + 1];
+          var r = half ?? decode(a, b);
+          if (half != null) {
+            half = null;
+          } else {
+            // Too few words for the audio: the model dropped text (see
+            // asrRetryWordRate). Two halves often decode where the whole
+            // did not.
+            retried = false;
+            final len = (b - a) / models.sampleRate;
+            if (len >= models.asrRetryMinSeconds &&
+                words(r) < len * models.asrRetryWordRate) {
+              final cut = quietCuts(
+                Float32List.sublistView(seg.samples, a, b),
+                (b - a + 1) ~/ 2 + 2 * slack,
+                slack,
+                models.sampleRate ~/ 10,
+              );
+              if (cut.isNotEmpty) {
+                final r1 = decode(a, a + cut.first);
+                final r2 = decode(a + cut.first, b);
+                if (words(r1) + words(r2) > words(r)) {
+                  bounds.insert(k + 1, a + cut.first);
+                  r = r1;
+                  half = r2;
+                  retried = true;
+                }
+              }
+            }
+          }
+          final start = (seg.start + bounds[k]) / models.sampleRate;
+          final end = (seg.start + bounds[k + 1]) / models.sampleRate;
+          final seconds = end - start;
+          t.phrases++;
+          if (r.tokens.isNotEmpty && r.timestamps.length == r.tokens.length) {
+            t.timestamped++;
+          }
+          final heard = {
+            for (final x in turns)
+              if (math.min(x.end, end) - math.max(x.start, start) >= 0.5)
+                x.speaker,
+          };
+          if (heard.length > 1) t.crossing++;
+          final text = r.text.trim();
+          t.phraseLog.add(
+            '${start.toStringAsFixed(1)} s +${seconds.toStringAsFixed(1)} s: '
+            '${text.length > 40 ? '${text.substring(0, 40)}...' : text}'
+            '${retried ? ' (retry)' : ''}',
           );
-          if (parts.length > 1) t.split++;
-          phrases.addAll(parts);
-        } else {
-          t.empty++;
-          t.emptyAudio += seconds;
+          if (text.isNotEmpty) {
+            final parts = splitPhrase(
+              turns,
+              start,
+              end,
+              text,
+              r.tokens,
+              r.timestamps,
+            );
+            if (parts.length > 1) t.split++;
+            phrases.addAll(parts);
+          } else {
+            t.empty++;
+            t.emptyAudio += seconds;
+          }
+          report(
+            PipelineProgress(Stage.transcription, math.min(end / duration, 1)),
+          );
         }
-        report(
-          PipelineProgress(Stage.transcription, math.min(end / duration, 1)),
-        );
       }
     }
 

@@ -564,7 +564,7 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Text(t.title, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Text(
         '${formatTimestamp(t.durationSeconds)} - '
-        tr(t.speakerNames.length == 1 ? 'speakersOne' : 'speakersMany', {'n': t.speakerNames.length}),
+        '${tr(t.speakerNames.length == 1 ? 'speakersOne' : 'speakersMany', {'n': t.speakerNames.length})}',
       ),
       onTap: _phase == _Phase.idle ? () => _open(s) : null,
       trailing: Row(

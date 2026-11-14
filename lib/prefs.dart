@@ -48,9 +48,12 @@ set exportM4a(bool on) => _prefs.setBool('exportM4a', on);
 bool get tutorialSeen => _prefs.getBool('tutorialSeen') ?? false;
 set tutorialSeen(bool on) => _prefs.setBool('tutorialSeen', on);
 
-/// Last choices in the "Save to Documents" dialog, both on if none yet.
+/// Last choices in the "Save to Documents" dialog: text and audio on,
+/// subtitles off if none yet.
 bool get saveText => _prefs.getBool('saveText') ?? true;
 set saveText(bool on) => _prefs.setBool('saveText', on);
+bool get saveSrt => _prefs.getBool('saveSrt') ?? false;
+set saveSrt(bool on) => _prefs.setBool('saveSrt', on);
 bool get saveAudio => _prefs.getBool('saveAudio') ?? true;
 set saveAudio(bool on) => _prefs.setBool('saveAudio', on);
 
@@ -83,6 +86,7 @@ const _types = <String, Type>{
   'exportM4a': bool,
   'tutorialSeen': bool,
   'saveText': bool,
+  'saveSrt': bool,
   'saveAudio': bool,
 };
 

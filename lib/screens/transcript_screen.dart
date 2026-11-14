@@ -509,7 +509,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     String speakers(int i) =>
         i < t.speakerStages.length ? '${t.speakerStages[i]}' : '-';
     final total = t.loading + t.diarization + t.transcription;
-    final text = [
+    final summary = [
       'Scrita timing summary (${kDebugMode ? 'debug build: times are '
                 'several times slower than release' : 'profile build: '
                 'times match release'})',
@@ -541,11 +541,17 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
           'timestamps, ${t.crossing} phrases overlapping 2+ speakers by '
           '0.5 s or more, ${t.split} phrases split between speakers',
     ].join('\n');
+    // Too long for the snackbar: only Copy and the log carry it.
+    final text = [
+      summary,
+      'phrases (start +length: text):',
+      ...t.phraseLog,
+    ].join('\n');
     debugPrint(text);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(text),
+        content: const Text('Debug: timing summary ready'),
         duration: const Duration(seconds: 20),
         showCloseIcon: true,
         action: SnackBarAction(
@@ -719,6 +725,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
         end: turn.end,
         speaker: speaker,
         text: text,
+        spans: turn.spans,
       );
     // Same cleanup as a fresh transcript: an empty turn is dropped and
     // adjacent turns of one speaker merge. A speaker change gets undo
@@ -796,6 +803,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
 
   Future<void> _saveToDocuments() async {
     var text = prefs.saveText;
+    var srt = prefs.saveSrt;
     var audio = prefs.saveAudio;
     final confirmed = await showDialog<bool>(
       context: context,
@@ -815,6 +823,12 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
                 contentPadding: EdgeInsets.zero,
               ),
               CheckboxListTile(
+                value: srt,
+                onChanged: (v) => setLocal(() => srt = v ?? srt),
+                title: Text('${tr('subtitles')} (.srt)'),
+                contentPadding: EdgeInsets.zero,
+              ),
+              CheckboxListTile(
                 value: audio,
                 onChanged: (v) => setLocal(() => audio = v ?? audio),
                 title: Text(tr('audio')),
@@ -828,7 +842,9 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
               child: Text(tr('cancel')),
             ),
             FilledButton(
-              onPressed: text || audio ? () => Navigator.pop(ctx, true) : null,
+              onPressed: text || srt || audio
+                  ? () => Navigator.pop(ctx, true)
+                  : null,
               child: Text(tr('save')),
             ),
           ],
@@ -837,6 +853,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     );
     if (confirmed != true) return;
     prefs.saveText = text;
+    prefs.saveSrt = srt;
     prefs.saveAudio = audio;
     final ext = p.extension(widget.audioPath);
     if (audio && exportAudioExt(widget.audioPath) != ext) {
@@ -844,9 +861,10 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     }
     var ok = true;
     try {
-      await exportToDocuments(_saved!, text: text, audio: audio);
-    } catch (_) {
+      await exportToDocuments(_saved!, text: text, srt: srt, audio: audio);
+    } catch (e) {
       ok = false;
+      debugPrint('Save to Documents failed: $e');
     }
     if (!mounted) return;
     // Replaces "Saving the audio..." instead of queueing behind it.

@@ -129,14 +129,15 @@ Future<List<PendingAudio>> listPendingAudios(
   return out;
 }
 
-/// Copies the .txt if [text] and the audio if [audio] (see [exportAudioExt])
-/// to Documents/Scrita, visible in the file manager. Never overwrites: if the
+/// Copies the .txt if [text], writes the subtitles if [srt] and copies the
+/// audio if [audio] (see [exportAudioExt]) to Documents/Scrita, visible in the file manager. Never overwrites: if the
 /// name exists it appends " (2)", " (3)"... Returns the destination folder.
 // Direct write by path: needs no permissions since Android 11, which is why
 // android/app/build.gradle.kts sets minSdk 30.
 Future<String> exportToDocuments(
   SavedTranscript s, {
   required bool text,
+  required bool srt,
   required bool audio,
 }) async {
   final dir = await documentsDir();
@@ -146,22 +147,46 @@ Future<String> exportToDocuments(
   final ext = exportAudioExt(wav.path);
   final name = freeBase(dir, exportName(s), [
     if (text) '.txt',
+    if (srt) '.srt',
     if (withAudio) ext,
   ]);
 
-  if (text) await File(s.txtPath).copy(p.join(dir, '$name.txt'));
-  if (!withAudio) return dir;
-  if (ext == p.extension(wav.path)) {
-    await wav.copy(p.join(dir, '$name$ext'));
-    return dir;
+  // Files this call creates. If a later one fails they are removed, so a
+  // retry does not leave "name" half saved next to a complete "name (2)".
+  final written = <String>[];
+  String out(String file) {
+    final path = p.join(dir, file);
+    written.add(path);
+    return path;
   }
+
   try {
-    await encodeM4a(wav.path, p.join(dir, '$name$ext'));
-  } on PlatformException {
-    // A WAV the encoder does not take (24-bit, float): save it as it is.
-    await wav.copy(p.join(dir, '${freeBase(dir, name, ['.wav'])}.wav'));
+    if (text) await File(s.txtPath).copy(out('$name.txt'));
+    if (srt) {
+      await File(
+        out('$name.srt'),
+      ).writeAsString(s.transcript.toSrt(), flush: true);
+    }
+    if (!withAudio) return dir;
+    if (ext == p.extension(wav.path)) {
+      await wav.copy(out('$name$ext'));
+      return dir;
+    }
+    try {
+      await encodeM4a(wav.path, out('$name$ext'));
+    } on PlatformException {
+      // A WAV the encoder does not take (24-bit, float): save it as it is.
+      await wav.copy(out('${freeBase(dir, name, ['.wav'])}.wav'));
+    }
+    return dir;
+  } catch (_) {
+    for (final path in written) {
+      try {
+        await File(path).delete();
+      } catch (_) {}
+    }
+    rethrow;
   }
-  return dir;
 }
 
 /// Extension the audio at [path] is saved to Documents with: WAVs follow

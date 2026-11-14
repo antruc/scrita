@@ -167,6 +167,10 @@ Float32List resampleLinear(Float32List input, int fromRate, int toRate) {
   return out;
 }
 
+/// A stretch of a turn's text with its own times: [chars] characters spoken
+/// from [start] to [end] (seconds).
+typedef Span = ({double start, double end, int chars});
+
 /// A speech interval attributed to one speaker.
 class Turn {
   Turn({
@@ -174,6 +178,7 @@ class Turn {
     required this.end,
     required this.speaker,
     this.text = '',
+    this.spans,
   });
 
   final double start; // seconds
@@ -181,13 +186,50 @@ class Turn {
   final int speaker; // 0, 1, 2... in order of appearance
   String text;
 
+  /// The phrases cleanTurns merged into this turn, in order, joined by one
+  /// space in [text]. Null for a single phrase and for older transcripts.
+  final List<Span>? spans;
+
   double get duration => end - start;
+
+  /// [spans] while they still match [text] (an edit can change its length),
+  /// otherwise the whole turn as one span.
+  List<Span> get _spans {
+    final s = spans;
+    if (s != null &&
+        s.isNotEmpty &&
+        s.fold<int>(s.length - 1, (n, x) => n + x.chars) == text.length) {
+      return s;
+    }
+    return [(start: start, end: end, chars: text.length)];
+  }
+
+  /// Time (seconds) of character [i] of [text]: proportional inside its
+  /// span, so a pause between two merged phrases does not shift the rest.
+  // ponytail: proportional inside one phrase (no word times kept), off by a
+  // fraction of a second; store word timestamps if that shows.
+  double timeAt(int i) {
+    var off = 0;
+    for (final s in _spans) {
+      if (i <= off + s.chars) {
+        return s.chars == 0
+            ? s.start
+            : s.start + (s.end - s.start) * math.max(0, i - off) / s.chars;
+      }
+      off += s.chars + 1;
+    }
+    return end;
+  }
 
   Map<String, dynamic> toJson() => {
     'start': start,
     'end': end,
     'speaker': speaker,
     'text': text,
+    if (spans != null)
+      'spans': [
+        for (final s in spans!) [s.start, s.end, s.chars],
+      ],
   };
 
   factory Turn.fromJson(Map<String, dynamic> j) => Turn(
@@ -195,6 +237,15 @@ class Turn {
     end: (j['end'] as num).toDouble(),
     speaker: j['speaker'] as int,
     text: j['text'] as String? ?? '',
+    spans: (j['spans'] as List?)
+        ?.map<Span>(
+          (e) => (
+            start: (e[0] as num).toDouble(),
+            end: (e[1] as num).toDouble(),
+            chars: e[2] as int,
+          ),
+        )
+        .toList(),
   );
 }
 
@@ -262,12 +313,20 @@ List<Turn> buildTurns(
 }
 
 /// After ASR: removes turns with no text and merges consecutive turns of the
-/// same speaker that became adjacent once the empty ones were removed.
+/// same speaker that became adjacent once the empty ones were removed. A
+/// merged turn keeps the times of its parts in [Turn.spans].
 List<Turn> cleanTurns(List<Turn> turns) {
   final out = <Turn>[];
-  for (final t in turns) {
-    final text = t.text.trim();
+  for (final raw in turns) {
+    final text = raw.text.trim();
     if (text.isEmpty) continue;
+    final t = Turn(
+      start: raw.start,
+      end: raw.end,
+      speaker: raw.speaker,
+      text: text,
+      spans: raw.spans,
+    );
     if (out.isNotEmpty && out.last.speaker == t.speaker) {
       final last = out.removeLast();
       out.add(
@@ -276,10 +335,11 @@ List<Turn> cleanTurns(List<Turn> turns) {
           end: t.end,
           speaker: last.speaker,
           text: '${last.text} $text',
+          spans: [...last._spans, ...t._spans],
         ),
       );
     } else {
-      out.add(Turn(start: t.start, end: t.end, speaker: t.speaker, text: text));
+      out.add(t);
     }
   }
   return out;
@@ -309,10 +369,9 @@ int speakerFor(List<Turn> turns, double start, double end) {
 
 /// Gives characters [from]..[to] of turns[index] to [speaker], widened to
 /// whole words: a selection at the end splits the turn in two, one in the
-/// middle in three, the whole text reassigns it. Times are proportional to
-/// the character offsets (the transcript keeps no word times, so a cut can be
-/// off by a second or two). Returns the cleaned list: a part next to a turn
-/// of its speaker merges with it.
+/// middle in three, the whole text reassigns it. Times come from
+/// [Turn.timeAt]. Returns the cleaned list: a part next to a turn of its
+/// speaker merges with it.
 List<Turn> assignRange(
   List<Turn> turns,
   int index,
@@ -329,7 +388,7 @@ List<Turn> assignRange(
   while (to < text.length && !space.hasMatch(text[to])) {
     to++;
   }
-  double at(int i) => t.start + t.duration * i / text.length;
+  double at(int i) => t.timeAt(i);
   return cleanTurns([
     ...turns.sublist(0, index),
     Turn(
@@ -360,6 +419,32 @@ List<Turn> assignRange(
 // ponytail: fixed knob, calibrate by ear. Stray words on the wrong speaker:
 // raise to 1.5 or 2 s. A real "yes" or "uh-huh" of the other speaker lost: lower.
 const double speakerMinRun = 1.0;
+
+/// Sample indices that cut [samples] into even pieces no longer than
+/// [maxLen]. Each cut moves up to [slack] samples from its even position to
+/// the middle of the quietest [win] samples, so it lands in a dip and not
+/// mid-word. Empty when [samples] already fits.
+List<int> quietCuts(Float32List samples, int maxLen, int slack, int win) {
+  if (samples.length <= maxLen) return const [];
+  final n = (samples.length / (maxLen - 2 * slack)).ceil();
+  final cuts = <int>[];
+  for (var k = 1; k < n; k++) {
+    final center = samples.length * k ~/ n;
+    var best = center - slack, bestEnergy = double.infinity;
+    for (var i = center - slack; i + win <= center + slack; i += win) {
+      var energy = 0.0;
+      for (var j = i; j < i + win; j++) {
+        energy += samples[j] * samples[j];
+      }
+      if (energy < bestEnergy) {
+        bestEnergy = energy;
+        best = i;
+      }
+    }
+    cuts.add(best + win ~/ 2);
+  }
+  return cuts;
+}
 
 /// Splits the decoded phrase [start]..[end] (seconds) where the speaker
 /// changes, word by word. [timestamps] are token starts in seconds from
@@ -611,6 +696,24 @@ String formatTimestamp(double seconds) {
   return '${two(s ~/ 3600)}:${two((s % 3600) ~/ 60)}:${two(s % 60)}';
 }
 
+/// Longest subtitle line in characters, the usual limit; a cue has up to two.
+const srtLineChars = 42;
+
+/// Shortest and longest time a cue stays on screen (seconds), and the pause
+/// between two words that starts a new cue.
+// ponytail: fixed knobs, the usual subtitle values; tune by eye on a player.
+const srtMinCue = 1.0;
+const srtMaxCue = 7.0;
+const srtPause = 2.0;
+
+/// SubRip time: HH:MM:SS,mmm.
+String formatSrtTime(double seconds) {
+  final ms = (seconds * 1000).round();
+  String pad(int n, [int width = 2]) => n.toString().padLeft(width, '0');
+  return '${pad(ms ~/ 3600000)}:${pad(ms % 3600000 ~/ 60000)}:'
+      '${pad(ms % 60000 ~/ 1000)},${pad(ms % 1000, 3)}';
+}
+
 /// Seconds left in a run [progress] (0..1) done after [elapsed] seconds.
 /// Blends the remaining part of [prior] (the whole run, estimated from the
 /// saved RTF) with the live estimate from the pace so far: the prior leads
@@ -679,6 +782,66 @@ class Transcript {
       b
         ..writeln('[${formatTimestamp(t.start)}] ${speakerName(t.speaker)}:')
         ..writeln(t.text)
+        ..writeln();
+    }
+    return b.toString();
+  }
+
+  /// SubRip subtitles: each turn cut at word boundaries into cues of up to
+  /// two lines of [srtLineChars], the first one headed by the speaker's name
+  /// (it counts toward the line). A pause longer than [srtPause] starts a new
+  /// cue. Times come from [Turn.timeAt]; a cue stays between [srtMinCue] and
+  /// [srtMaxCue] seconds and never runs into the next one.
+  String toSrt() {
+    final cues = <({double start, double end, String text})>[];
+    for (final t in turns) {
+      // The cue being filled and the offsets of t.text it covers.
+      var lines = <String>[];
+      var from = 0, to = 0;
+      void flush() {
+        if (lines.isEmpty) return;
+        cues.add((
+          start: t.timeAt(from),
+          end: t.timeAt(to),
+          text: lines.join('\n'),
+        ));
+        lines = [];
+      }
+
+      var first = true;
+      for (final m in RegExp(r'\S+').allMatches(t.text)) {
+        final w = first ? '${speakerName(t.speaker)}: ${m[0]}' : m[0]!;
+        first = false;
+        if (lines.isNotEmpty && t.timeAt(m.start) - t.timeAt(to) > srtPause) {
+          flush();
+        }
+        if (lines.isNotEmpty &&
+            lines.last.length + 1 + w.length <= srtLineChars) {
+          lines.last = '${lines.last} $w';
+        } else {
+          if (lines.length == 2) flush();
+          if (lines.isEmpty) from = m.start;
+          lines.add(w);
+        }
+        to = m.end;
+      }
+      flush();
+    }
+
+    final b = StringBuffer();
+    for (var i = 0; i < cues.length; i++) {
+      final c = cues[i];
+      var end = math.min(
+        math.max(c.end, c.start + srtMinCue),
+        c.start + srtMaxCue,
+      );
+      if (i + 1 < cues.length && cues[i + 1].start > c.start) {
+        end = math.min(end, cues[i + 1].start);
+      }
+      b
+        ..writeln(i + 1)
+        ..writeln('${formatSrtTime(c.start)} --> ${formatSrtTime(end)}')
+        ..writeln(c.text)
         ..writeln();
     }
     return b.toString();

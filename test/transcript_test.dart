@@ -146,6 +146,71 @@ void main() {
     expect(back.turns[1].text, 'Hola.');
   });
 
+  test('toSrt keeps each merged phrase at its own time', () {
+    // One speaker with a long pause: cleanTurns merges both into one turn.
+    final t = Transcript(
+      title: 'Prueba',
+      createdAt: DateTime(2026, 10, 9),
+      audioPath: '/x.wav',
+      durationSeconds: 62,
+      turns: cleanTurns([
+        Turn(start: 0, end: 2, speaker: 0, text: 'Hola.'),
+        Turn(start: 60, end: 62, speaker: 0, text: 'Adiós.'),
+      ]),
+    );
+    expect(t.turns.length, 1);
+    const srt =
+        '1\n00:00:00,000 --> 00:00:02,000\nPersona 1: Hola.\n\n'
+        '2\n00:01:00,000 --> 00:01:02,000\nAdiós.\n\n';
+    expect(t.toSrt(), srt);
+    // The phrase times survive saving and reopening.
+    final back = Transcript.fromJson(
+      jsonDecode(t.encode()) as Map<String, dynamic>,
+    );
+    expect(back.toSrt(), srt);
+    // An edit that changes the length falls back to proportional times.
+    back.turns[0].text = 'Hola a todos. Adiós.';
+    expect(back.toSrt(), contains('00:00:00,000 --> 00:00:07,000'));
+  });
+
+  test('toSrt cuts long turns into timed cues at word boundaries', () {
+    expect(formatSrtTime(3725.0406), '01:02:05,041');
+    final t = Transcript(
+      title: 'Prueba',
+      createdAt: DateTime(2026, 10, 9),
+      audioPath: '/x.wav',
+      durationSeconds: 20,
+      turns: [
+        Turn(start: 0, end: 3, speaker: 0, text: 'Buenos días.'),
+        // 40 words of 4 letters in lines of 42: the name and 6 words, then
+        // 8 words per line, two lines per cue.
+        Turn(
+          start: 4,
+          end: 20,
+          speaker: 1,
+          text: List.filled(40, 'hola').join(' '),
+        ),
+        Turn(start: 20, end: 21, speaker: 0, text: ' '),
+      ],
+    );
+    final cues = t.toSrt().trimRight().split('\n\n');
+    expect(cues.length, 4);
+    String words(int n) => List.filled(n, 'hola').join(' ');
+    List<String> times(String cue) => cue.split('\n')[1].split(' --> ');
+    expect(
+      cues[0],
+      '1\n00:00:00,000 --> 00:00:03,000\nPersona 1: Buenos días.',
+    );
+    expect(cues[1], startsWith('2\n00:00:04,000 --> '));
+    expect(cues[1].split('\n').sublist(2), [
+      'Persona 2: ${words(6)}',
+      words(8),
+    ]);
+    // No cue runs into the next one, the last ends at the turn's end.
+    expect(times(cues[1])[1].compareTo(times(cues[2])[0]), lessThanOrEqualTo(0));
+    expect(cues[3], endsWith('--> 00:00:20,000\n${words(8)}\n${words(2)}'));
+  });
+
   test('freeBase does not overwrite files and pairs .txt and .wav', () {
     final dir = Directory.systemTemp.createTempSync().path;
     expect(freeBase(dir, 'e', ['.txt', '.wav']), 'e');
@@ -362,6 +427,14 @@ void main() {
       final path = _wav(dir, _pcm16(List.filled(100, 0)), rate: 8000);
       expect(readWavMono(path, 16000).length, 200);
     });
+  });
+
+  test('quietCuts: even pieces, each cut at the quietest window', () {
+    final s = Float32List(50)..fillRange(0, 50, 1);
+    expect(quietCuts(s, 50, 5, 2), isEmpty);
+    // 3 pieces (50 / (30 - 2 * 5)), cuts searched around 16 and 33.
+    s[13] = s[14] = s[34] = s[35] = 0;
+    expect(quietCuts(s, 30, 5, 2), [14, 35]);
   });
 
   test('speakerFor: most overlap wins, nearest turn when none overlaps', () {
