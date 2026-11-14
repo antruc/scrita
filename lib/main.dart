@@ -200,7 +200,8 @@ class ScritaApp extends StatelessWidget {
 
 /// Material 3 theme from [seed]. The AppBar, and the status bar behind it,
 /// take the footer color and a shadow, and keep both when a list scrolls
-/// under it. Snackbars float, as in the Material 3 spec.
+/// under it. Snackbars float, as in the Material 3 spec, and stay dark in
+/// dark mode.
 ThemeData _theme(Color seed, Brightness brightness) {
   final t = ThemeData(
     colorScheme: ColorScheme.fromSeed(
@@ -209,6 +210,7 @@ ThemeData _theme(Color seed, Brightness brightness) {
       dynamicSchemeVariant: seedVariant(seed),
     ),
   );
+  final c = t.colorScheme;
   return t.copyWith(
     appBarTheme: AppBarTheme(
       backgroundColor: footerColor(t),
@@ -216,10 +218,24 @@ ThemeData _theme(Color seed, Brightness brightness) {
       // tints the color with elevation, so both are set by hand.
       elevation: 2,
       scrolledUnderElevation: 2,
-      shadowColor: t.colorScheme.shadow,
+      shadowColor: c.shadow,
       surfaceTintColor: Colors.transparent,
     ),
-    snackBarTheme: const SnackBarThemeData(behavior: SnackBarBehavior.floating),
+    // Dark only: M3's near-white inverseSurface glares on a dark screen. The
+    // outline border separates the snackbar from the footer, one tone below.
+    snackBarTheme: brightness == Brightness.dark
+        ? SnackBarThemeData(
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: c.surfaceContainerHighest,
+            contentTextStyle: TextStyle(color: c.onSurface),
+            actionTextColor: c.primary,
+            closeIconColor: c.onSurface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+              side: BorderSide(color: c.outline),
+            ),
+          )
+        : const SnackBarThemeData(behavior: SnackBarBehavior.floating),
   );
 }
 
