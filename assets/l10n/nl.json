@@ -104,7 +104,7 @@
   "system": "Systeem",
   "light": "Licht",
   "dark": "Donker",
-  "privacyText": "Scrita verzamelt, verstuurt of deelt geen gegevens. Er zijn geen accounts, advertenties of analyses.\n\nInternet: wordt maar één keer gebruikt, om het spraakmodel van GitHub te downloaden. Zoals bij elke download ziet GitHub je IP-adres. Niets van wat je opneemt wordt verstuurd: het transcriberen gebeurt op je telefoon.\n\nMicrofoon: wordt alleen gebruikt terwijl je opneemt. Opnamen, transcripten en instellingen worden bewaard in de privéopslag van de app, op je telefoon.\n\nMeldingen: tonen de voortgang van een lopende opname of transcriptie.\n\nBestanden verlaten de app alleen wanneer jij dat kiest: bij opslaan in Documenten, delen of een back-up exporteren. Vanaf dat moment hangt hun privacy af van waar je ze bewaart en met wie je ze deelt.\n\nAls je de app verwijdert, worden alle gegevens gewist, behalve wat je in Documenten hebt opgeslagen of hebt geëxporteerd.",
+  "privacyText": "Scrita verzamelt, verstuurt of deelt geen gegevens. Er zijn geen accounts, advertenties of analyses.\n\nInternet: wordt maar één keer gebruikt, om het spraakmodel van GitHub te downloaden. Zoals bij elke download ziet GitHub je IP-adres. Niets van wat je opneemt wordt verstuurd: het transcriberen gebeurt op je telefoon.\n\nMicrofoon: wordt alleen gebruikt terwijl je opneemt. Opnamen, transcripten en instellingen worden bewaard in de privéopslag van de app, op je telefoon.\n\nLocatie: optioneel en standaard uit. Als je dit aanzet in Instellingen, leest Scrita je locatie wanneer je een opname start of stopt en bewaart de coördinaten bij de opname, op je telefoon. Ze staan in de tekst van het transcript en gaan dus mee wanneer je die deelt of opslaat.\n\nMeldingen: tonen de voortgang van een lopende opname of transcriptie.\n\nBestanden verlaten de app alleen wanneer jij dat kiest: bij opslaan in Documenten, delen of een back-up exporteren. Vanaf dat moment hangt hun privacy af van waar je ze bewaart en met wie je ze deelt.\n\nAls je de app verwijdert, worden alle gegevens gewist, behalve wat je in Documenten hebt opgeslagen of hebt geëxporteerd.",
   "theme": "Thema",
   "backUp": "Back-up maken",
   "recordingsAndSettings": "Opnamen en instellingen",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Dit kan niet ongedaan worden gemaakt",
   "estimatedTime": "Geschatte tijd",
   "transcribing": "Transcriberen",
-  "paragraph": "Alinea"
+  "paragraph": "Alinea",
+  "location": "Locatie",
+  "saveLocation": "Locatie opslaan",
+  "saveLocationHint": "Waar is opgenomen",
+  "locationPermissionNeeded": "Scrita heeft de locatietoestemming nodig om op te slaan waar je opneemt. Zet die aan in de instellingen",
+  "openInMap": "Openen in kaart",
+  "noMapsApp": "Geen kaarten-app gevonden",
+  "tutorialLocationTitle": "Bewaar de plek (optioneel)",
+  "tutorialLocationBody": "Scrita kan aan het transcript toevoegen waar je hebt opgenomen, met een knop om de plek op de kaart te openen. Dit staat uit tot je het aanzet in Instellingen"
 }

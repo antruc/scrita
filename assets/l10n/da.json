@@ -104,7 +104,7 @@
   "system": "System",
   "light": "Lyst",
   "dark": "Mørkt",
-  "privacyText": "Scrita indsamler, sender og deler ingen data. Der er ingen konti, reklamer eller analyser.\n\nInternet: bruges kun én gang, til at downloade stemmemodellen fra GitHub. Som ved enhver download kan GitHub se din IP-adresse. Intet af det, du optager, bliver sendt: transskriptionen sker på din telefon.\n\nMikrofon: bruges kun, mens du optager. Optagelser, transskriptioner og indstillinger gemmes i appens private lager på din telefon.\n\nNotifikationer: viser status for en igangværende optagelse eller transskription.\n\nFiler forlader kun appen, når du selv vælger det: når du gemmer i Dokumenter, deler eller eksporterer en sikkerhedskopi. Derefter afhænger deres privatliv af, hvor du opbevarer dem, og hvem du deler dem med.\n\nHvis du afinstallerer appen, slettes alle dens data, undtagen det, du har gemt i Dokumenter eller eksporteret.",
+  "privacyText": "Scrita indsamler, sender og deler ingen data. Der er ingen konti, reklamer eller analyser.\n\nInternet: bruges kun én gang, til at downloade stemmemodellen fra GitHub. Som ved enhver download kan GitHub se din IP-adresse. Intet af det, du optager, bliver sendt: transskriptionen sker på din telefon.\n\nMikrofon: bruges kun, mens du optager. Optagelser, transskriptioner og indstillinger gemmes i appens private lager på din telefon.\n\nPlacering: valgfri og slået fra som standard. Hvis du slår den til i Indstillinger, læser Scrita din placering, når du starter eller stopper en optagelse, og gemmer koordinaterne sammen med den på din telefon. De står i transskriptionens tekst og følger derfor med, når du deler eller gemmer den.\n\nNotifikationer: viser status for en igangværende optagelse eller transskription.\n\nFiler forlader kun appen, når du selv vælger det: når du gemmer i Dokumenter, deler eller eksporterer en sikkerhedskopi. Derefter afhænger deres privatliv af, hvor du opbevarer dem, og hvem du deler dem med.\n\nHvis du afinstallerer appen, slettes alle dens data, undtagen det, du har gemt i Dokumenter eller eksporteret.",
   "theme": "Tema",
   "backUp": "Sikkerhedskopiér",
   "recordingsAndSettings": "Optagelser og indstillinger",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Dette kan ikke fortrydes",
   "estimatedTime": "Anslået tid",
   "transcribing": "Transskriberer",
-  "paragraph": "Afsnit"
+  "paragraph": "Afsnit",
+  "location": "Placering",
+  "saveLocation": "Gem placering",
+  "saveLocationHint": "Hvor der blev optaget",
+  "locationPermissionNeeded": "Scrita skal bruge placeringstilladelsen for at gemme, hvor du optager. Slå den til i indstillingerne",
+  "openInMap": "Åbn i kort",
+  "noMapsApp": "Ingen kort-app fundet",
+  "tutorialLocationTitle": "Gem stedet (valgfrit)",
+  "tutorialLocationBody": "Scrita kan føje stedet, hvor du optog, til transskriptionen med en knap, der åbner det på et kort. Det er slået fra, indtil du slår det til i Indstillinger"
 }

@@ -153,6 +153,8 @@ class _HomeScreenState extends State<HomeScreen> {
       );
       return;
     }
+    // Not awaited: a fix can take half a minute.
+    _saveLocation(_recorder.path);
     _levelSub = _recorder.level.listen((l) => setState(() => _level = l));
     _ticker = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {});
@@ -178,12 +180,28 @@ class _HomeScreenState extends State<HomeScreen> {
       await BackgroundService.stop();
       setState(() => _phase = _Phase.idle);
     }
+    // Again: Android withholds the location if the app went to the background
+    // before the first fix. The app is visible now.
+    _saveLocation(path);
     _snack(
       path == null
           ? tr('couldNotSaveTheRecording')
           : tr('audioSavedToNotTranscribed'),
     );
     await _refreshHistory();
+  }
+
+  /// Writes where the phone is next to [audio], if the setting is on and it
+  /// has no location yet. Never fails: a recording without one is fine.
+  // ponytail: a transcript started before the fix arrives gets no location;
+  // transcribing again picks it up.
+  Future<void> _saveLocation(String? audio) async {
+    if (audio == null || !prefs.saveLocation) return;
+    try {
+      if (await File(gpsPath(audio)).exists()) return;
+      final l = await currentLocation();
+      if (l != null) await writeGps(audio, l);
+    } catch (_) {}
   }
 
   // FileType.audio, not a list of extensions: Android filters by MIME type
@@ -304,7 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _deletePending(PendingAudio a) => _deleteWithUndo(
     a.path,
     tr('recordingDeleted'),
-    () => File(a.path).delete(),
+    () => deleteAudio(a.path),
   );
 
   /// Hides the row at once and deletes for real when the undo snackbar

@@ -104,7 +104,7 @@
   "system": "Sistema",
   "light": "Chiaro",
   "dark": "Scuro",
-  "privacyText": "Scrita non raccoglie, non invia e non condivide alcun dato. Non ha account, pubblicità né analisi.\n\nInternet: si usa una sola volta, per scaricare il modello vocale da GitHub. Come per qualsiasi download, GitHub vede il tuo indirizzo IP. Nulla di ciò che registri viene inviato: la trascrizione avviene sul tuo telefono.\n\nMicrofono: si usa solo mentre registri. Le registrazioni, le trascrizioni e le impostazioni vengono salvate nello spazio privato dell'app, sul tuo telefono.\n\nNotifiche: mostrano l'avanzamento di una registrazione o di una trascrizione in corso.\n\nI file escono dall'app solo quando lo decidi tu: salvando in Documenti, condividendo o esportando un backup. Da lì la loro riservatezza dipende da dove li conservi o con chi li condividi.\n\nDisinstallare l'app cancella tutti i suoi dati, tranne ciò che hai salvato in Documenti o esportato.",
+  "privacyText": "Scrita non raccoglie, non invia e non condivide alcun dato. Non ha account, pubblicità né analisi.\n\nInternet: si usa una sola volta, per scaricare il modello vocale da GitHub. Come per qualsiasi download, GitHub vede il tuo indirizzo IP. Nulla di ciò che registri viene inviato: la trascrizione avviene sul tuo telefono.\n\nMicrofono: si usa solo mentre registri. Le registrazioni, le trascrizioni e le impostazioni vengono salvate nello spazio privato dell'app, sul tuo telefono.\n\nPosizione: facoltativa e disattivata per impostazione predefinita. Se la attivi nelle Impostazioni, Scrita legge la tua posizione quando inizi o termini una registrazione e salva le coordinate insieme a essa, sul tuo telefono. Vengono scritte nel testo della trascrizione, quindi lo accompagnano quando lo condividi o lo salvi.\n\nNotifiche: mostrano l'avanzamento di una registrazione o di una trascrizione in corso.\n\nI file escono dall'app solo quando lo decidi tu: salvando in Documenti, condividendo o esportando un backup. Da lì la loro riservatezza dipende da dove li conservi o con chi li condividi.\n\nDisinstallare l'app cancella tutti i suoi dati, tranne ciò che hai salvato in Documenti o esportato.",
   "theme": "Tema",
   "backUp": "Esegui backup",
   "recordingsAndSettings": "Registrazioni e impostazioni",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "L'operazione non può essere annullata",
   "estimatedTime": "Tempo stimato",
   "transcribing": "Trascrizione",
-  "paragraph": "Paragrafo"
+  "paragraph": "Paragrafo",
+  "location": "Posizione",
+  "saveLocation": "Salva posizione",
+  "saveLocationHint": "Dove è stato registrato",
+  "locationPermissionNeeded": "Scrita ha bisogno dell'autorizzazione alla posizione per salvare dove registri. Attivala nelle impostazioni",
+  "openInMap": "Apri nella mappa",
+  "noMapsApp": "Nessuna app di mappe trovata",
+  "tutorialLocationTitle": "Salva il luogo (facoltativo)",
+  "tutorialLocationBody": "Scrita può aggiungere alla trascrizione il luogo della registrazione, con un pulsante per aprirlo nella mappa. È disattivato finché non lo attivi nelle Impostazioni"
 }

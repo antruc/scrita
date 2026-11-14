@@ -104,7 +104,7 @@
   "system": "System",
   "light": "Light",
   "dark": "Dark",
-  "privacyText": "Scrita does not collect, send or share any data. It has no accounts, ads or analytics.\n\nInternet: used only once, to download the voice model from GitHub. As with any download, GitHub sees your IP address. Nothing you record is sent: transcription happens on your phone.\n\nMicrophone: used only while you record. Recordings, transcripts and settings are stored in the app's private storage, on your phone.\n\nNotifications: show the progress of a recording or transcription in progress.\n\nFiles leave the app only when you choose to: saving to Documents, sharing or exporting a backup. From there, their privacy depends on where you keep them or who you share them with.\n\nUninstalling the app deletes all its data, except what you saved to Documents or exported.",
+  "privacyText": "Scrita does not collect, send or share any data. It has no accounts, ads or analytics.\n\nInternet: used only once, to download the voice model from GitHub. As with any download, GitHub sees your IP address. Nothing you record is sent: transcription happens on your phone.\n\nMicrophone: used only while you record. Recordings, transcripts and settings are stored in the app's private storage, on your phone.\n\nLocation: optional and off by default. If you turn it on in Settings, Scrita reads your location when you start or stop a recording and stores the coordinates with it, on your phone. They are written in the transcript's text, so they go with it when you share or save it.\n\nNotifications: show the progress of a recording or transcription in progress.\n\nFiles leave the app only when you choose to: saving to Documents, sharing or exporting a backup. From there, their privacy depends on where you keep them or who you share them with.\n\nUninstalling the app deletes all its data, except what you saved to Documents or exported.",
   "theme": "Theme",
   "backUp": "Back up",
   "recordingsAndSettings": "Recordings and settings",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "This cannot be undone",
   "estimatedTime": "Estimated time",
   "transcribing": "Transcribing",
-  "paragraph": "Paragraph"
+  "paragraph": "Paragraph",
+  "location": "Location",
+  "saveLocation": "Save location",
+  "saveLocationHint": "Where it was recorded",
+  "locationPermissionNeeded": "Scrita needs the location permission to save where you record. Turn it on in settings",
+  "openInMap": "Open in map",
+  "noMapsApp": "No maps app found",
+  "tutorialLocationTitle": "Save the place (optional)",
+  "tutorialLocationBody": "Scrita can add where you recorded to the transcript, with a button to open it in a map. It is off until you turn it on in Settings"
 }

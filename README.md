@@ -63,6 +63,9 @@ Sure, my name is...
   together with the audio and, optionally, `.srt` subtitles. The app records 48 kHz WAV; when saved to
   Documents it is converted to M4A (default, ~29 MB per hour) or kept as WAV.
   Imported files keep their own format
+- **Location (optional):** off by default. Turned on in Settings, it saves
+  the coordinates of where each recording was made, writes them in the
+  `.txt` header and adds a button that opens the place in a maps app
 - **Backup:** one `.zip` with all audio, transcripts and settings, and a
   restore option for moving to a new phone
 - **Customizable:** recording modes (clean voice, noise reduction, group,

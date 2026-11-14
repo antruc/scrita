@@ -104,7 +104,7 @@
   "system": "Systemowy",
   "light": "Jasny",
   "dark": "Ciemny",
-  "privacyText": "Scrita nie zbiera, nie wysyła ani nie udostępnia żadnych danych. Nie ma kont, reklam ani analityki.\n\nInternet: używany tylko raz, do pobrania modelu mowy z GitHuba. Jak przy każdym pobieraniu, GitHub widzi Twój adres IP. Nic z tego, co nagrywasz, nie jest wysyłane: transkrypcja odbywa się na Twoim telefonie.\n\nMikrofon: używany tylko podczas nagrywania. Nagrania, transkrypcje i ustawienia są przechowywane w prywatnej pamięci aplikacji, na Twoim telefonie.\n\nPowiadomienia: pokazują postęp trwającego nagrywania lub transkrypcji.\n\nPliki opuszczają aplikację tylko wtedy, gdy o tym zdecydujesz: przy zapisie w Dokumentach, udostępnianiu lub eksporcie kopii zapasowej. Od tej chwili ich prywatność zależy od tego, gdzie je przechowujesz i komu je udostępniasz.\n\nOdinstalowanie aplikacji usuwa wszystkie jej dane, oprócz tego, co zostało zapisane w Dokumentach lub wyeksportowane.",
+  "privacyText": "Scrita nie zbiera, nie wysyła ani nie udostępnia żadnych danych. Nie ma kont, reklam ani analityki.\n\nInternet: używany tylko raz, do pobrania modelu mowy z GitHuba. Jak przy każdym pobieraniu, GitHub widzi Twój adres IP. Nic z tego, co nagrywasz, nie jest wysyłane: transkrypcja odbywa się na Twoim telefonie.\n\nMikrofon: używany tylko podczas nagrywania. Nagrania, transkrypcje i ustawienia są przechowywane w prywatnej pamięci aplikacji, na Twoim telefonie.\n\nLokalizacja: opcjonalna i domyślnie wyłączona. Jeśli włączysz ją w Ustawieniach, Scrita odczytuje Twoją lokalizację, gdy zaczynasz lub kończysz nagrywanie, i przechowuje współrzędne razem z nagraniem, na Twoim telefonie. Są zapisywane w tekście transkrypcji, więc trafiają razem z nim tam, gdzie go udostępniasz lub zapisujesz.\n\nPowiadomienia: pokazują postęp trwającego nagrywania lub transkrypcji.\n\nPliki opuszczają aplikację tylko wtedy, gdy o tym zdecydujesz: przy zapisie w Dokumentach, udostępnianiu lub eksporcie kopii zapasowej. Od tej chwili ich prywatność zależy od tego, gdzie je przechowujesz i komu je udostępniasz.\n\nOdinstalowanie aplikacji usuwa wszystkie jej dane, oprócz tego, co zostało zapisane w Dokumentach lub wyeksportowane.",
   "theme": "Motyw",
   "backUp": "Utwórz kopię",
   "recordingsAndSettings": "Nagrania i ustawienia",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Tej operacji nie można cofnąć",
   "estimatedTime": "Szacowany czas",
   "transcribing": "Transkrypcja",
-  "paragraph": "Akapit"
+  "paragraph": "Akapit",
+  "location": "Lokalizacja",
+  "saveLocation": "Zapisuj lokalizację",
+  "saveLocationHint": "Gdzie nagrano",
+  "locationPermissionNeeded": "Scrita potrzebuje uprawnienia do lokalizacji, aby zapisać miejsce nagrania. Włącz je w ustawieniach",
+  "openInMap": "Otwórz na mapie",
+  "noMapsApp": "Nie znaleziono aplikacji z mapami",
+  "tutorialLocationTitle": "Zapisz miejsce (opcjonalnie)",
+  "tutorialLocationBody": "Scrita może dodać do transkrypcji miejsce nagrania, z przyciskiem otwierającym je na mapie. Jest to wyłączone, dopóki nie włączysz tego w Ustawieniach"
 }

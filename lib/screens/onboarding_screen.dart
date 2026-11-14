@@ -15,7 +15,16 @@ import '../main.dart' show appFooter;
 import '../models.dart' as models;
 import '../recorder.dart';
 
-enum _Kind { permissions, download, record, speakers, review, assign, save }
+enum _Kind {
+  permissions,
+  download,
+  record,
+  speakers,
+  review,
+  assign,
+  location,
+  save,
+}
 
 class OnboardingScreen extends StatefulWidget {
   /// [modelDir] set: the model is missing there and gets downloaded.
@@ -48,6 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _Kind.speakers,
       _Kind.review,
       _Kind.assign,
+      _Kind.location,
       _Kind.save,
     ],
   ];
@@ -416,6 +426,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       const _AssignArt(),
       tr('fixWhosSpeaking'),
       tr('tutorialFixBody'),
+    ),
+    // Only explained here: Settings asks for the permission when turned on.
+    _Kind.location => _slide(
+      theme,
+      _circle(theme, Icons.place_outlined),
+      tr('tutorialLocationTitle'),
+      tr('tutorialLocationBody'),
     ),
     _Kind.save => _slide(
       theme,

@@ -104,7 +104,7 @@
   "system": "Sustav",
   "light": "Svijetla",
   "dark": "Tamna",
-  "privacyText": "Scrita ne prikuplja, ne šalje i ne dijeli nikakve podatke. Nema računa, oglasa ni analitike.\n\nInternet: koristi se samo jednom, za preuzimanje glasovnog modela s GitHuba. Kao i pri svakom preuzimanju, GitHub vidi vašu IP adresu. Ništa od onoga što snimite ne šalje se: transkripcija se odvija na vašem telefonu.\n\nMikrofon: koristi se samo dok snimate. Snimke, transkripti i postavke čuvaju se u privatnoj pohrani aplikacije, na vašem telefonu.\n\nObavijesti: prikazuju napredak snimanja ili transkripcije u tijeku.\n\nDatoteke napuštaju aplikaciju samo kada vi to odlučite: pri spremanju u Dokumente, dijeljenju ili izvozu sigurnosne kopije. Nakon toga njihova privatnost ovisi o tome gdje ih čuvate i s kim ih dijelite.\n\nDeinstaliranjem aplikacije brišu se svi njezini podaci, osim onoga što ste spremili u Dokumente ili izvezli.",
+  "privacyText": "Scrita ne prikuplja, ne šalje i ne dijeli nikakve podatke. Nema računa, oglasa ni analitike.\n\nInternet: koristi se samo jednom, za preuzimanje glasovnog modela s GitHuba. Kao i pri svakom preuzimanju, GitHub vidi vašu IP adresu. Ništa od onoga što snimite ne šalje se: transkripcija se odvija na vašem telefonu.\n\nMikrofon: koristi se samo dok snimate. Snimke, transkripti i postavke čuvaju se u privatnoj pohrani aplikacije, na vašem telefonu.\n\nLokacija: neobavezna i prema zadanim postavkama isključena. Ako je uključite u Postavkama, Scrita očitava vašu lokaciju kad započnete ili zaustavite snimanje i sprema koordinate uz snimku, na vašem telefonu. Zapisuju se u tekst transkripta pa idu s njim kad ga podijelite ili spremite.\n\nObavijesti: prikazuju napredak snimanja ili transkripcije u tijeku.\n\nDatoteke napuštaju aplikaciju samo kada vi to odlučite: pri spremanju u Dokumente, dijeljenju ili izvozu sigurnosne kopije. Nakon toga njihova privatnost ovisi o tome gdje ih čuvate i s kim ih dijelite.\n\nDeinstaliranjem aplikacije brišu se svi njezini podaci, osim onoga što ste spremili u Dokumente ili izvezli.",
   "theme": "Tema",
   "backUp": "Izradi kopiju",
   "recordingsAndSettings": "Snimke i postavke",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Ovo se ne može poništiti",
   "estimatedTime": "Procijenjeno vrijeme",
   "transcribing": "Transkripcija",
-  "paragraph": "Odlomak"
+  "paragraph": "Odlomak",
+  "location": "Lokacija",
+  "saveLocation": "Spremi lokaciju",
+  "saveLocationHint": "Gdje je snimljeno",
+  "locationPermissionNeeded": "Scrita treba dopuštenje za lokaciju da bi spremila gdje snimate. Uključite ga u postavkama",
+  "openInMap": "Otvori na karti",
+  "noMapsApp": "Nije pronađena aplikacija za karte",
+  "tutorialLocationTitle": "Spremite mjesto (neobavezno)",
+  "tutorialLocationBody": "Scrita može transkriptu dodati mjesto na kojem ste snimali, s gumbom za otvaranje na karti. Isključeno je dok to ne uključite u Postavkama"
 }

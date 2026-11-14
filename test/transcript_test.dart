@@ -144,6 +144,42 @@ void main() {
     );
     expect(back.speakerNames, ['Entrevistador', 'Persona 2']);
     expect(back.turns[1].text, 'Hola.');
+    // No location: no header line, and older .json files still open.
+    expect(txt, isNot(contains('Ubicación')));
+    expect(back.location, isNull);
+  });
+
+  test('location goes to the header, the JSON and the .gps file', () async {
+    final t = Transcript(
+      title: 'Prueba',
+      createdAt: DateTime(2026, 10, 9),
+      audioPath: '/x.wav',
+      durationSeconds: 1,
+      turns: [Turn(start: 0, end: 1, speaker: 0, text: 'Hola.')],
+      location: (19.4326077, -99.133208),
+    );
+    expect(
+      t.toPlainText(),
+      contains('Participantes: Persona 1\nUbicación: 19.43261, -99.13321\n\n'),
+    );
+    final back = Transcript.fromJson(
+      jsonDecode(t.encode()) as Map<String, dynamic>,
+    );
+    expect(back.location, (19.4326077, -99.133208));
+
+    // The .gps file follows its audio through a rename and a delete.
+    final dir = await Directory.systemTemp.createTemp('scrita_gps_test');
+    addTearDown(() => dir.delete(recursive: true));
+    final wav = p.join(dir.path, 'scrita_2026.wav');
+    await File(wav).writeAsBytes([0]);
+    expect(await readGps(wav), isNull);
+    await writeGps(wav, (-33.45, 70.66));
+    expect(await readGps(wav), (-33.45, 70.66));
+    final to = await renameAudio(wav, 'Entrevista');
+    expect(await readGps(to), (-33.45, 70.66));
+    expect(File(gpsPath(wav)).existsSync(), isFalse);
+    await deleteAudio(to);
+    expect(dir.listSync(), isEmpty);
   });
 
   test('toSrt keeps each merged phrase at its own time', () {

@@ -104,7 +104,7 @@
   "system": "System",
   "light": "Ljust",
   "dark": "Mörkt",
-  "privacyText": "Scrita samlar inte in, skickar inte och delar inte några uppgifter. Det finns inga konton, ingen reklam och ingen analys.\n\nInternet: används bara en gång, för att ladda ner röstmodellen från GitHub. Som vid alla nedladdningar ser GitHub din IP-adress. Inget av det du spelar in skickas: transkriberingen sker på din telefon.\n\nMikrofon: används bara medan du spelar in. Inspelningar, transkript och inställningar sparas i appens privata lagring på din telefon.\n\nAviseringar: visar förloppet för en pågående inspelning eller transkribering.\n\nFiler lämnar appen bara när du väljer det: när du sparar i Dokument, delar eller exporterar en säkerhetskopia. Därefter beror integriteten på var du förvarar dem och vem du delar dem med.\n\nOm du avinstallerar appen raderas all dess data, utom det du har sparat i Dokument eller exporterat.",
+  "privacyText": "Scrita samlar inte in, skickar inte och delar inte några uppgifter. Det finns inga konton, ingen reklam och ingen analys.\n\nInternet: används bara en gång, för att ladda ner röstmodellen från GitHub. Som vid alla nedladdningar ser GitHub din IP-adress. Inget av det du spelar in skickas: transkriberingen sker på din telefon.\n\nMikrofon: används bara medan du spelar in. Inspelningar, transkript och inställningar sparas i appens privata lagring på din telefon.\n\nPlats: valfri och avstängd som standard. Om du aktiverar den i Inställningar läser Scrita din plats när du startar eller avslutar en inspelning och sparar koordinaterna tillsammans med den, på din telefon. De skrivs i transkriptets text och följer därför med när du delar eller sparar den.\n\nAviseringar: visar förloppet för en pågående inspelning eller transkribering.\n\nFiler lämnar appen bara när du väljer det: när du sparar i Dokument, delar eller exporterar en säkerhetskopia. Därefter beror integriteten på var du förvarar dem och vem du delar dem med.\n\nOm du avinstallerar appen raderas all dess data, utom det du har sparat i Dokument eller exporterat.",
   "theme": "Tema",
   "backUp": "Säkerhetskopiera",
   "recordingsAndSettings": "Inspelningar och inställningar",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Det går inte att ångra",
   "estimatedTime": "Beräknad tid",
   "transcribing": "Transkriberar",
-  "paragraph": "Stycke"
+  "paragraph": "Stycke",
+  "location": "Plats",
+  "saveLocation": "Spara plats",
+  "saveLocationHint": "Var det spelades in",
+  "locationPermissionNeeded": "Scrita behöver platsbehörigheten för att spara var du spelar in. Aktivera den i inställningarna",
+  "openInMap": "Öppna i karta",
+  "noMapsApp": "Ingen kartapp hittades",
+  "tutorialLocationTitle": "Spara platsen (valfritt)",
+  "tutorialLocationBody": "Scrita kan lägga till var du spelade in i transkriptet, med en knapp som öppnar platsen i en karta. Det är avstängt tills du aktiverar det i Inställningar"
 }

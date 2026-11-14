@@ -7,14 +7,16 @@ import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart' show AndroidAudioSource;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../audio.dart' show openAppSettings, requestLocationPermission;
 import '../backup.dart';
 import '../l10n.dart';
 import '../main.dart' show appTheme, rowCard, setTheme, wallpaperSeed;
-import '../prefs.dart' show audioSource, exportM4a, materialYou, seedColor;
+import '../prefs.dart'
+    show audioSource, exportM4a, materialYou, saveLocation, seedColor;
 import 'onboarding_screen.dart';
 
 // ponytail: duplicates pubspec's version name; package_info_plus if it drifts.
-const _appVersion = '1.0.0';
+const _appVersion = '1.1.0';
 
 /// Seeds offered as palettes. Material 3 derives light and dark schemes
 /// from each one.
@@ -78,142 +80,149 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(tr('settings'))),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          const _RecordingModeTile(),
-          const _AudioFormatTile(),
-          ListTile(
-            leading: const Icon(Icons.palette_outlined),
-            title: Text(tr('theme')),
-            subtitle: ValueListenableBuilder(
-              valueListenable: appTheme,
-              builder: (_, t, _) => Text(_modeName(t.$1)),
+      // The app draws edge to edge and a ListView with its own padding does
+      // not add the system insets: without SafeArea the last rows end up
+      // under the navigation bar.
+      body: SafeArea(
+        top: false,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            const _RecordingModeTile(),
+            const _AudioFormatTile(),
+            const _LocationTile(),
+            ListTile(
+              leading: const Icon(Icons.palette_outlined),
+              title: Text(tr('theme')),
+              subtitle: ValueListenableBuilder(
+                valueListenable: appTheme,
+                builder: (_, t, _) => Text(_modeName(t.$1)),
+              ),
+              onTap: () => showDialog<void>(
+                context: context,
+                builder: (_) => const _ThemeDialog(),
+              ),
             ),
-            onTap: () => showDialog<void>(
-              context: context,
-              builder: (_) => const _ThemeDialog(),
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.file_upload_outlined),
-            title: Text(tr('backUp')),
-            subtitle: Text(
-              tr('recordingsAndSettings'),
-            ),
-            onTap: () async {
-              if (!await _confirmExport(context) || !context.mounted) return;
-              await _run(
-                context,
-                tr('backupFailed'),
-                () async {
-                  await exportBackup();
-                  return tr('backupSaved');
-                },
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.file_download_outlined),
-            title: Text(tr('restoreBackup')),
-            subtitle: Text(tr('fromAFile')),
-            onTap: () async {
-              final picked = (await FilePicker.pickFile(
-                type: FileType.custom,
-                allowedExtensions: ['zip'],
-              ))?.path;
-              if (picked == null || !context.mounted) return;
-              await _run(
-                context,
-                tr('couldNotRestoreTheBackup'),
-                () async {
-                  try {
-                    await importBackup(picked);
-                    return tr('backupRestored');
-                  } finally {
-                    // file_picker's cache copy can be as big as the backup.
-                    if (p.isWithin(
-                      (await getTemporaryDirectory()).path,
-                      picked,
-                    )) {
-                      await File(picked).delete();
-                    }
-                  }
-                },
-              );
-              // Apply the restored theme now, not at next launch.
-              setTheme();
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.school_outlined),
-            title: Text(tr('viewTutorial')),
-            subtitle: Text(tr('howToUseScrita')),
-            onTap: () => Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (_) => const OnboardingScreen())),
-          ),
-          ListTile(
-            leading: const Icon(Icons.code),
-            title: const Text('GitHub'),
-            subtitle: const Text('antruc/scrita'),
-            onTap: () => launchUrl(
-              Uri.parse('https://github.com/antruc/scrita'),
-              mode: LaunchMode.externalApplication,
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: Text(tr('about')),
-            subtitle: Text('${tr('version')} $_appVersion'),
-            // Own dialog, not showAboutDialog: that one indents the text for an
-            // icon slot and leaves an empty legalese line at the bottom.
-            onTap: () => showDialog<void>(
-              context: context,
-              builder: (ctx) {
-                final l = MaterialLocalizations.of(ctx);
-                return AlertDialog(
-                  title: const Text('Scrita'),
-                  content: Text(
-                    '${tr('version')} $_appVersion\n'
-                    'GPL-3.0-or-later',
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => showLicensePage(
-                        context: ctx,
-                        applicationName: 'Scrita',
-                        applicationVersion: _appVersion,
-                      ),
-                      child: Text(l.viewLicensesButtonLabel),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(ctx),
-                      child: Text(l.closeButtonLabel),
-                    ),
-                  ],
+            ListTile(
+              leading: const Icon(Icons.file_upload_outlined),
+              title: Text(tr('backUp')),
+              subtitle: Text(
+                tr('recordingsAndSettings'),
+              ),
+              onTap: () async {
+                if (!await _confirmExport(context) || !context.mounted) return;
+                await _run(
+                  context,
+                  tr('backupFailed'),
+                  () async {
+                    await exportBackup();
+                    return tr('backupSaved');
+                  },
                 );
               },
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.privacy_tip_outlined),
-            title: Text(tr('privacy')),
-            onTap: () => showDialog<void>(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                title: Text(tr('privacyPolicy')),
-                content: SingleChildScrollView(child: Text(_privacy)),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(ctx),
-                    child: Text(MaterialLocalizations.of(ctx).closeButtonLabel),
-                  ),
-                ],
+            ListTile(
+              leading: const Icon(Icons.file_download_outlined),
+              title: Text(tr('restoreBackup')),
+              subtitle: Text(tr('fromAFile')),
+              onTap: () async {
+                final picked = (await FilePicker.pickFile(
+                  type: FileType.custom,
+                  allowedExtensions: ['zip'],
+                ))?.path;
+                if (picked == null || !context.mounted) return;
+                await _run(
+                  context,
+                  tr('couldNotRestoreTheBackup'),
+                  () async {
+                    try {
+                      await importBackup(picked);
+                      return tr('backupRestored');
+                    } finally {
+                      // file_picker's cache copy can be as big as the backup.
+                      if (p.isWithin(
+                        (await getTemporaryDirectory()).path,
+                        picked,
+                      )) {
+                        await File(picked).delete();
+                      }
+                    }
+                  },
+                );
+                // Apply the restored theme now, not at next launch.
+                setTheme();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.school_outlined),
+              title: Text(tr('viewTutorial')),
+              subtitle: Text(tr('howToUseScrita')),
+              onTap: () => Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => const OnboardingScreen())),
+            ),
+            ListTile(
+              leading: const Icon(Icons.code),
+              title: const Text('GitHub'),
+              subtitle: const Text('antruc/scrita'),
+              onTap: () => launchUrl(
+                Uri.parse('https://github.com/antruc/scrita'),
+                mode: LaunchMode.externalApplication,
               ),
             ),
-          ),
-        ].map(rowCard).toList(),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: Text(tr('about')),
+              subtitle: Text('${tr('version')} $_appVersion'),
+              // Own dialog, not showAboutDialog: that one indents the text for an
+              // icon slot and leaves an empty legalese line at the bottom.
+              onTap: () => showDialog<void>(
+                context: context,
+                builder: (ctx) {
+                  final l = MaterialLocalizations.of(ctx);
+                  return AlertDialog(
+                    title: const Text('Scrita'),
+                    content: Text(
+                      '${tr('version')} $_appVersion\n'
+                      'GPL-3.0-or-later',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => showLicensePage(
+                          context: ctx,
+                          applicationName: 'Scrita',
+                          applicationVersion: _appVersion,
+                        ),
+                        child: Text(l.viewLicensesButtonLabel),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx),
+                        child: Text(l.closeButtonLabel),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.privacy_tip_outlined),
+              title: Text(tr('privacy')),
+              onTap: () => showDialog<void>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: Text(tr('privacyPolicy')),
+                  content: SingleChildScrollView(child: Text(_privacy)),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      child: Text(MaterialLocalizations.of(ctx).closeButtonLabel),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ].map(rowCard).toList(),
+        ),
       ),
     );
   }
@@ -328,6 +337,44 @@ class _AudioFormatTileState extends State<_AudioFormatTile> {
           ),
         );
         if (m4a != null) setState(() => exportM4a = m4a);
+      },
+    );
+  }
+}
+
+/// Optional: save where each recording is made. Turning it on asks for the
+/// location permission; without it the switch stays off.
+class _LocationTile extends StatefulWidget {
+  const _LocationTile();
+
+  @override
+  State<_LocationTile> createState() => _LocationTileState();
+}
+
+class _LocationTileState extends State<_LocationTile> {
+  @override
+  Widget build(BuildContext context) {
+    return SwitchListTile(
+      secondary: const Icon(Icons.place_outlined),
+      title: Text(tr('saveLocation')),
+      subtitle: Text(tr('saveLocationHint')),
+      value: saveLocation,
+      onChanged: (on) async {
+        if (on && !await requestLocationPermission()) {
+          if (!context.mounted) return;
+          // Once denied, Android stops asking: only its settings can grant it.
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(tr('locationPermissionNeeded')),
+              action: SnackBarAction(
+                label: tr('openSettings'),
+                onPressed: openAppSettings,
+              ),
+            ),
+          );
+          return;
+        }
+        if (mounted) setState(() => saveLocation = on);
       },
     );
   }

@@ -44,6 +44,12 @@ set materialYou(bool on) => _prefs.setBool('materialYou', on);
 bool get exportM4a => _prefs.getBool('exportM4a') ?? true;
 set exportM4a(bool on) => _prefs.setBool('exportM4a', on);
 
+/// Save where each recording is made. Off if none yet. Not in [_types] on
+/// purpose: the permission is granted per phone, so a restored backup must
+/// not turn it on.
+bool get saveLocation => _prefs.getBool('saveLocation') ?? false;
+set saveLocation(bool on) => _prefs.setBool('saveLocation', on);
+
 /// The first-launch tutorial was shown (finished or skipped). Off if none yet.
 bool get tutorialSeen => _prefs.getBool('tutorialSeen') ?? false;
 set tutorialSeen(bool on) => _prefs.setBool('tutorialSeen', on);

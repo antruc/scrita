@@ -104,7 +104,7 @@
   "system": "Süsteem",
   "light": "Hele",
   "dark": "Tume",
-  "privacyText": "Scrita ei kogu, saada ega jaga mingeid andmeid. Sellel pole kontosid, reklaame ega analüütikat.\n\nInternet: kasutatakse ainult üks kord, kõnemudeli allalaadimiseks GitHubist. Nagu iga allalaadimise puhul, näeb GitHub sinu IP-aadressi. Midagi salvestatust ei saadeta: transkribeerimine toimub sinu telefonis.\n\nMikrofon: kasutatakse ainult salvestamise ajal. Salvestised, transkriptsioonid ja seaded hoitakse rakenduse privaatses salvestusruumis sinu telefonis.\n\nTeavitused: näitavad käimasoleva salvestamise või transkribeerimise edenemist.\n\nFailid lahkuvad rakendusest ainult siis, kui sina nii otsustad: kausta Dokumendid salvestamisel, jagamisel või varukoopia eksportimisel. Sealt edasi sõltub nende privaatsus sellest, kus sa neid hoiad ja kellega jagad.\n\nRakenduse eemaldamine kustutab kõik selle andmed, välja arvatud see, mille salvestasid kausta Dokumendid või eksportisid.",
+  "privacyText": "Scrita ei kogu, saada ega jaga mingeid andmeid. Sellel pole kontosid, reklaame ega analüütikat.\n\nInternet: kasutatakse ainult üks kord, kõnemudeli allalaadimiseks GitHubist. Nagu iga allalaadimise puhul, näeb GitHub sinu IP-aadressi. Midagi salvestatust ei saadeta: transkribeerimine toimub sinu telefonis.\n\nMikrofon: kasutatakse ainult salvestamise ajal. Salvestised, transkriptsioonid ja seaded hoitakse rakenduse privaatses salvestusruumis sinu telefonis.\n\nAsukoht: valikuline ja vaikimisi välja lülitatud. Kui lülitad selle Seadetes sisse, loeb Scrita sinu asukohta salvestamise alustamisel või lõpetamisel ja hoiab koordinaate koos salvestisega sinu telefonis. Need kirjutatakse transkriptsiooni teksti, nii et need lähevad kaasa, kui teksti jagad või salvestad.\n\nTeavitused: näitavad käimasoleva salvestamise või transkribeerimise edenemist.\n\nFailid lahkuvad rakendusest ainult siis, kui sina nii otsustad: kausta Dokumendid salvestamisel, jagamisel või varukoopia eksportimisel. Sealt edasi sõltub nende privaatsus sellest, kus sa neid hoiad ja kellega jagad.\n\nRakenduse eemaldamine kustutab kõik selle andmed, välja arvatud see, mille salvestasid kausta Dokumendid või eksportisid.",
   "theme": "Teema",
   "backUp": "Varunda",
   "recordingsAndSettings": "Salvestised ja seaded",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Seda ei saa tagasi võtta",
   "estimatedTime": "Hinnanguline aeg",
   "transcribing": "Transkribeerimine",
-  "paragraph": "Lõik"
+  "paragraph": "Lõik",
+  "location": "Asukoht",
+  "saveLocation": "Salvesta asukoht",
+  "saveLocationHint": "Kus salvestati",
+  "locationPermissionNeeded": "Scrita vajab asukohaluba, et salvestada, kus sa salvestad. Lülita see seadetes sisse",
+  "openInMap": "Ava kaardil",
+  "noMapsApp": "Kaardirakendust ei leitud",
+  "tutorialLocationTitle": "Salvesta koht (valikuline)",
+  "tutorialLocationBody": "Scrita saab lisada transkriptsioonile koha, kus salvestasid, koos nupuga selle avamiseks kaardil. See on välja lülitatud, kuni lülitad selle Seadetes sisse"
 }

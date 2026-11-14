@@ -19,6 +19,9 @@ class InterviewRecorder {
   String? _path;
   DateTime? _startedAt;
 
+  /// The WAV being written, null before the first start.
+  String? get path => _path;
+
   Duration get elapsed => _startedAt == null
       ? Duration.zero
       : DateTime.now().difference(_startedAt!);

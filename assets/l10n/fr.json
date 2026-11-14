@@ -104,7 +104,7 @@
   "system": "Système",
   "light": "Clair",
   "dark": "Sombre",
-  "privacyText": "Scrita ne collecte, n'envoie et ne partage aucune donnée. Elle n'a ni comptes, ni publicités, ni outils d'analyse.\n\nInternet : utilisé une seule fois, pour télécharger le modèle vocal depuis GitHub. Comme pour tout téléchargement, GitHub voit votre adresse IP. Rien de ce que vous enregistrez n'est envoyé : la transcription se fait sur votre téléphone.\n\nMicro : utilisé seulement pendant que vous enregistrez. Les enregistrements, les transcriptions et les réglages sont conservés dans le stockage privé de l'application, sur votre téléphone.\n\nNotifications : elles montrent la progression d'un enregistrement ou d'une transcription en cours.\n\nLes fichiers ne quittent l'application que lorsque vous le décidez : en enregistrant dans Documents, en partageant ou en exportant une sauvegarde. Ensuite, leur confidentialité dépend de l'endroit où vous les conservez et des personnes avec qui vous les partagez.\n\nDésinstaller l'application supprime toutes ses données, sauf ce que vous avez enregistré dans Documents ou exporté.",
+  "privacyText": "Scrita ne collecte, n'envoie et ne partage aucune donnée. Elle n'a ni comptes, ni publicités, ni outils d'analyse.\n\nInternet : utilisé une seule fois, pour télécharger le modèle vocal depuis GitHub. Comme pour tout téléchargement, GitHub voit votre adresse IP. Rien de ce que vous enregistrez n'est envoyé : la transcription se fait sur votre téléphone.\n\nMicro : utilisé seulement pendant que vous enregistrez. Les enregistrements, les transcriptions et les réglages sont conservés dans le stockage privé de l'application, sur votre téléphone.\n\nPosition : facultative et désactivée par défaut. Si vous l'activez dans les Paramètres, Scrita lit votre position au début ou à la fin d'un enregistrement et conserve les coordonnées avec lui, sur votre téléphone. Elles sont écrites dans le texte de la transcription et l'accompagnent donc quand vous le partagez ou l'enregistrez.\n\nNotifications : elles montrent la progression d'un enregistrement ou d'une transcription en cours.\n\nLes fichiers ne quittent l'application que lorsque vous le décidez : en enregistrant dans Documents, en partageant ou en exportant une sauvegarde. Ensuite, leur confidentialité dépend de l'endroit où vous les conservez et des personnes avec qui vous les partagez.\n\nDésinstaller l'application supprime toutes ses données, sauf ce que vous avez enregistré dans Documents ou exporté.",
   "theme": "Thème",
   "backUp": "Sauvegarder",
   "recordingsAndSettings": "Enregistrements et réglages",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Cette action est irréversible",
   "estimatedTime": "Temps estimé",
   "transcribing": "Transcription",
-  "paragraph": "Paragraphe"
+  "paragraph": "Paragraphe",
+  "location": "Position",
+  "saveLocation": "Enregistrer la position",
+  "saveLocationHint": "Lieu d'enregistrement",
+  "locationPermissionNeeded": "Scrita a besoin de l'autorisation de localisation pour enregistrer le lieu. Activez-la dans les paramètres",
+  "openInMap": "Ouvrir dans la carte",
+  "noMapsApp": "Aucune application de cartes trouvée",
+  "tutorialLocationTitle": "Enregistrez le lieu (facultatif)",
+  "tutorialLocationBody": "Scrita peut ajouter à la transcription le lieu de l'enregistrement, avec un bouton pour l'ouvrir dans une carte. C'est désactivé tant que vous ne l'activez pas dans les Paramètres"
 }

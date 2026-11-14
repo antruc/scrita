@@ -2,6 +2,11 @@
     <!-- Recording -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
+    <!-- Optional, off by default (Settings): where a recording was made.
+         Read only with the app visible, so no background location. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <!-- Only to download the voice model once (lib/models.dart) -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Wi-Fi or mobile data, to warn before a big download. No prompt. -->

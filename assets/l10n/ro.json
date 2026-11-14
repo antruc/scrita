@@ -104,7 +104,7 @@
   "system": "Sistem",
   "light": "Luminoasă",
   "dark": "Întunecată",
-  "privacyText": "Scrita nu colectează, nu trimite și nu partajează niciun fel de date. Nu are conturi, reclame sau instrumente de analiză.\n\nInternet: se folosește o singură dată, pentru a descărca modelul vocal de pe GitHub. Ca la orice descărcare, GitHub îți vede adresa IP. Nimic din ce înregistrezi nu este trimis: transcrierea se face pe telefonul tău.\n\nMicrofon: se folosește doar cât timp înregistrezi. Înregistrările, transcrierile și setările se păstrează în spațiul de stocare privat al aplicației, pe telefonul tău.\n\nNotificări: arată progresul unei înregistrări sau transcrieri în curs.\n\nFișierele părăsesc aplicația doar când decizi tu: la salvarea în Documente, la distribuire sau la exportul unei copii de rezervă. De acolo, confidențialitatea lor depinde de locul în care le păstrezi și de persoanele cărora le trimiți.\n\nDezinstalarea aplicației șterge toate datele ei, cu excepția celor salvate în Documente sau exportate.",
+  "privacyText": "Scrita nu colectează, nu trimite și nu partajează niciun fel de date. Nu are conturi, reclame sau instrumente de analiză.\n\nInternet: se folosește o singură dată, pentru a descărca modelul vocal de pe GitHub. Ca la orice descărcare, GitHub îți vede adresa IP. Nimic din ce înregistrezi nu este trimis: transcrierea se face pe telefonul tău.\n\nMicrofon: se folosește doar cât timp înregistrezi. Înregistrările, transcrierile și setările se păstrează în spațiul de stocare privat al aplicației, pe telefonul tău.\n\nLocație: opțională și dezactivată în mod implicit. Dacă o activezi din Setări, Scrita îți citește locația când începi sau oprești o înregistrare și păstrează coordonatele împreună cu ea, pe telefonul tău. Sunt scrise în textul transcrierii, așa că merg odată cu el când îl distribui sau îl salvezi.\n\nNotificări: arată progresul unei înregistrări sau transcrieri în curs.\n\nFișierele părăsesc aplicația doar când decizi tu: la salvarea în Documente, la distribuire sau la exportul unei copii de rezervă. De acolo, confidențialitatea lor depinde de locul în care le păstrezi și de persoanele cărora le trimiți.\n\nDezinstalarea aplicației șterge toate datele ei, cu excepția celor salvate în Documente sau exportate.",
   "theme": "Temă",
   "backUp": "Fă o copie",
   "recordingsAndSettings": "Înregistrări și setări",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Această acțiune nu poate fi anulată",
   "estimatedTime": "Timp estimat",
   "transcribing": "Se transcrie",
-  "paragraph": "Paragraf"
+  "paragraph": "Paragraf",
+  "location": "Locație",
+  "saveLocation": "Salvează locația",
+  "saveLocationHint": "Unde s-a înregistrat",
+  "locationPermissionNeeded": "Scrita are nevoie de permisiunea de localizare pentru a salva unde înregistrezi. Activeaz-o din setări",
+  "openInMap": "Deschide pe hartă",
+  "noMapsApp": "Nu s-a găsit nicio aplicație de hărți",
+  "tutorialLocationTitle": "Salvează locul (opțional)",
+  "tutorialLocationBody": "Scrita poate adăuga la transcriere locul în care ai înregistrat, cu un buton care îl deschide pe hartă. Este dezactivat până când îl activezi din Setări"
 }

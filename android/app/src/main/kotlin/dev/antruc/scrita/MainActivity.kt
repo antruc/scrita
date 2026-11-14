@@ -1,6 +1,10 @@
 package dev.antruc.scrita
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.media.AudioFormat
 import android.media.MediaCodec
 import android.media.MediaCodecInfo
@@ -29,6 +33,9 @@ import java.nio.ByteOrder
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
+// Any number: tells this permission request from the plugins' own.
+private const val LOCATION_REQUEST = 7301
+
 // Audio work with Android's own codecs (no extra dependency):
 // - decode: opus, ogg, m4a... to a 16-bit mono WAV that lib/transcript.dart
 //   reads. The original file stays as it is.
@@ -39,8 +46,10 @@ import java.util.concurrent.TimeUnit
 // - openSettings: the app's page in Android settings, to grant the mic.
 // - sdkInt: Android API level; 33+ shows its own "copied" notice.
 // - freeBytes, network: checked before downloading the voice model.
+// - requestLocation, location: where a recording is made (optional setting).
 class MainActivity : FlutterActivity() {
     @Volatile private var shared: Uri? = null
+    @Volatile private var locationAsked: MethodChannel.Result? = null
     private var channel: MethodChannel? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -67,6 +76,8 @@ class MainActivity : FlutterActivity() {
                         "sdkInt" -> result.success(Build.VERSION.SDK_INT)
                         "freeBytes" -> result.success(StatFs(call.arguments as String).availableBytes)
                         "network" -> result.success(network())
+                        "requestLocation" -> requestLocation(result)
+                        "location" -> location(result)
                         "openSettings" -> {
                             startActivity(Intent(
                                 Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -82,6 +93,55 @@ class MainActivity : FlutterActivity() {
             }
         }
         keepShared(intent)
+    }
+
+    private fun granted(permission: String) =
+        checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+
+    // Replies true once the user allows precise or approximate location.
+    private fun requestLocation(result: MethodChannel.Result) {
+        if (granted(Manifest.permission.ACCESS_FINE_LOCATION) ||
+            granted(Manifest.permission.ACCESS_COARSE_LOCATION)
+        ) return result.success(true)
+        // One dialog at a time: a second call while it shows is a no.
+        if (locationAsked != null) return result.success(false)
+        locationAsked = result
+        runOnUiThread {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                ),
+                LOCATION_REQUEST,
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(code: Int, permissions: Array<String>, results: IntArray) {
+        super.onRequestPermissionsResult(code, permissions, results)
+        if (code != LOCATION_REQUEST) return
+        locationAsked?.success(results.any { it == PackageManager.PERMISSION_GRANTED })
+        locationAsked = null
+    }
+
+    // Replies [latitude, longitude], or null: no permission, location off, or
+    // no fix before Android's own timeout (about 30 s). Android only delivers
+    // it while the app is visible.
+    @SuppressLint("MissingPermission") // checked by hand just below
+    private fun location(result: MethodChannel.Result) {
+        val fine = granted(Manifest.permission.ACCESS_FINE_LOCATION)
+        if (!fine && !granted(Manifest.permission.ACCESS_COARSE_LOCATION)) return result.success(null)
+        val lm = getSystemService(LocationManager::class.java)
+        // Fused (Android 12+) picks GPS or network by itself. GPS needs the
+        // precise permission.
+        val provider = listOfNotNull(
+            if (Build.VERSION.SDK_INT >= 31) LocationManager.FUSED_PROVIDER else null,
+            if (fine) LocationManager.GPS_PROVIDER else null,
+            LocationManager.NETWORK_PROVIDER,
+        ).firstOrNull { lm.isProviderEnabled(it) } ?: return result.success(null)
+        lm.getCurrentLocation(provider, null, mainExecutor) { l ->
+            result.success(l?.let { listOf(it.latitude, it.longitude) })
+        }
     }
 
     // launchMode singleTask: a share while the app is open lands here.

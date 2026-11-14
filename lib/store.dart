@@ -237,6 +237,32 @@ String freeBase(String dir, String base, List<String> exts) {
   return name;
 }
 
+/// Where the recording [audio] was made: "lat,lon" in a file next to it,
+/// written while recording. The transcript's .json copies it when it is
+/// created. Named after the whole file name: foo.wav and an imported foo.m4a
+/// must not share one.
+String gpsPath(String audio) => '$audio.gps';
+
+Future<void> writeGps(String audio, (double, double) l) =>
+    File(gpsPath(audio)).writeAsString('${l.$1},${l.$2}', flush: true);
+
+/// Null if [audio] has no location or its file is unreadable.
+Future<(double, double)?> readGps(String audio) async {
+  try {
+    final parts = (await File(gpsPath(audio)).readAsString()).split(',');
+    return (double.parse(parts[0]), double.parse(parts[1]));
+  } catch (_) {
+    return null;
+  }
+}
+
+/// Deletes an audio with no transcript and its location.
+Future<void> deleteAudio(String path) async {
+  await File(path).delete();
+  final gps = File(gpsPath(path));
+  if (await gps.exists()) await gps.delete();
+}
+
 /// Display name of an audio with no transcript: the file name, or
 /// `Scrita <date>` for the recorder's own timestamped files.
 String audioTitle(String path, DateTime createdAt) {
@@ -253,6 +279,8 @@ Future<String> renameAudio(String path, String name) async {
   final ext = p.extension(path);
   final to = p.join(dir, '${freeBase(dir, clean, [ext])}$ext');
   await File(path).rename(to);
+  final gps = File(gpsPath(path));
+  if (await gps.exists()) await gps.rename(gpsPath(to));
   return to;
 }
 
@@ -264,7 +292,10 @@ Future<void> deleteTranscript(SavedTranscript s, {String? dir}) async {
     s.txtPath,
     // Recorded and imported audios both live in the recordings folder;
     // never delete an audio outside it.
-    if (p.isWithin(dir ?? await recordingsDir(), audio)) audio,
+    if (p.isWithin(dir ?? await recordingsDir(), audio)) ...[
+      audio,
+      gpsPath(audio),
+    ],
   ]) {
     final f = File(path);
     if (await f.exists()) await f.delete();

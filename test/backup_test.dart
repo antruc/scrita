@@ -24,6 +24,7 @@ void main() {
       await File(p.join(src.path, 'a.wav')).writeAsBytes([1, 2, 3]);
       final pending = File(p.join(src.path, 'b.wav'));
       await pending.writeAsBytes([4, 5]);
+      await File('${pending.path}.gps').writeAsString('1.5,-2.5');
       final date = DateTime(2025, 3, 4, 5, 6, 7);
       await pending.setLastModified(date);
       await File(p.join(src.path, 'ignored.tmp')).writeAsString('x');
@@ -35,7 +36,7 @@ void main() {
       });
 
       final r = await readBackup(zip, dst.path);
-      expect(r.added, 4);
+      expect(r.added, 5);
       expect(r.prefs, {'audioSource': 'mic', 'lastSpeakers': 3});
       final j =
           jsonDecode(await File(p.join(dst.path, 'a.json')).readAsString())
@@ -43,6 +44,10 @@ void main() {
       expect(j['audioPath'], p.join(dst.path, 'a.wav'));
       expect(await File(p.join(dst.path, 'a.wav')).readAsBytes(), [1, 2, 3]);
       expect(await File(p.join(dst.path, 'b.wav')).lastModified(), date);
+      expect(
+        await File(p.join(dst.path, 'b.wav.gps')).readAsString(),
+        '1.5,-2.5',
+      );
       expect(File(p.join(dst.path, 'ignored.tmp')).existsSync(), isFalse);
 
       // Restoring again adds nothing and keeps local edits.

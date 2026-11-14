@@ -104,7 +104,7 @@
   "system": "Sistema",
   "light": "Šviesi",
   "dark": "Tamsi",
-  "privacyText": "„Scrita“ nerenka, nesiunčia ir nebendrina jokių duomenų. Joje nėra paskyrų, reklamų ar analitikos.\n\nInternetas: naudojamas tik vieną kartą, balso modeliui atsisiųsti iš „GitHub“. Kaip ir per bet kurį atsisiuntimą, „GitHub“ mato jūsų IP adresą. Niekas iš to, ką įrašote, nėra siunčiama: transkribavimas vyksta jūsų telefone.\n\nMikrofonas: naudojamas tik kol įrašote. Įrašai, transkripcijos ir nustatymai saugomi privačioje programėlės saugykloje jūsų telefone.\n\nPranešimai: rodo vykstančio įrašymo arba transkribavimo eigą.\n\nFailai palieka programėlę tik tada, kai nusprendžiate jūs: išsaugodami aplanke Dokumentai, bendrindami arba eksportuodami atsarginę kopiją. Nuo tada jų privatumas priklauso nuo to, kur juos laikote ir su kuo bendrinate.\n\nPašalinus programėlę ištrinami visi jos duomenys, išskyrus tai, ką išsaugojote aplanke Dokumentai arba eksportavote.",
+  "privacyText": "„Scrita“ nerenka, nesiunčia ir nebendrina jokių duomenų. Joje nėra paskyrų, reklamų ar analitikos.\n\nInternetas: naudojamas tik vieną kartą, balso modeliui atsisiųsti iš „GitHub“. Kaip ir per bet kurį atsisiuntimą, „GitHub“ mato jūsų IP adresą. Niekas iš to, ką įrašote, nėra siunčiama: transkribavimas vyksta jūsų telefone.\n\nMikrofonas: naudojamas tik kol įrašote. Įrašai, transkripcijos ir nustatymai saugomi privačioje programėlės saugykloje jūsų telefone.\n\nVieta: neprivaloma ir pagal numatytuosius nustatymus išjungta. Jei ją įjungsite Nustatymuose, „Scrita“ nuskaito jūsų vietą, kai pradedate arba baigiate įrašą, ir saugo koordinates kartu su juo jūsų telefone. Jos įrašomos į transkripcijos tekstą, todėl keliauja kartu su juo, kai jį bendrinate ar išsaugote.\n\nPranešimai: rodo vykstančio įrašymo arba transkribavimo eigą.\n\nFailai palieka programėlę tik tada, kai nusprendžiate jūs: išsaugodami aplanke Dokumentai, bendrindami arba eksportuodami atsarginę kopiją. Nuo tada jų privatumas priklauso nuo to, kur juos laikote ir su kuo bendrinate.\n\nPašalinus programėlę ištrinami visi jos duomenys, išskyrus tai, ką išsaugojote aplanke Dokumentai arba eksportavote.",
   "theme": "Tema",
   "backUp": "Kurti kopiją",
   "recordingsAndSettings": "Įrašai ir nustatymai",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Šio veiksmo anuliuoti negalima",
   "estimatedTime": "Numatomas laikas",
   "transcribing": "Transkribuojama",
-  "paragraph": "Pastraipa"
+  "paragraph": "Pastraipa",
+  "location": "Vieta",
+  "saveLocation": "Išsaugoti vietą",
+  "saveLocationHint": "Kur įrašyta",
+  "locationPermissionNeeded": "Kad išsaugotų, kur įrašote, „Scrita“ reikia vietos leidimo. Įjunkite jį nustatymuose",
+  "openInMap": "Atidaryti žemėlapyje",
+  "noMapsApp": "Nerasta žemėlapių programėlė",
+  "tutorialLocationTitle": "Išsaugokite vietą (neprivaloma)",
+  "tutorialLocationBody": "„Scrita“ gali prie transkripcijos pridėti vietą, kurioje įrašėte, ir mygtuką jai atidaryti žemėlapyje. Tai išjungta, kol neįjungsite Nustatymuose"
 }

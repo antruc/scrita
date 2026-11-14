@@ -104,7 +104,7 @@
   "system": "Rendszer",
   "light": "Világos",
   "dark": "Sötét",
-  "privacyText": "A Scrita semmilyen adatot nem gyűjt, nem küld és nem oszt meg. Nincsenek benne fiókok, hirdetések vagy analitika.\n\nInternet: csak egyszer használja, a hangmodell letöltéséhez a GitHubról. Mint minden letöltésnél, a GitHub látja az IP-címedet. Semmi nem kerül elküldésre abból, amit felveszel: az átírás a telefonodon történik.\n\nMikrofon: csak felvétel közben használja. A felvételek, az átiratok és a beállítások az alkalmazás privát tárhelyén, a telefonodon tárolódnak.\n\nÉrtesítések: a folyamatban lévő felvétel vagy átírás állását mutatják.\n\nA fájlok csak akkor hagyják el az alkalmazást, amikor te úgy döntesz: a Dokumentumok mappába mentéskor, megosztáskor vagy biztonsági mentés exportálásakor. Onnantól az adatvédelmük attól függ, hol tárolod őket, és kivel osztod meg.\n\nAz alkalmazás eltávolítása minden adatát törli, kivéve azt, amit a Dokumentumok mappába mentettél vagy exportáltál.",
+  "privacyText": "A Scrita semmilyen adatot nem gyűjt, nem küld és nem oszt meg. Nincsenek benne fiókok, hirdetések vagy analitika.\n\nInternet: csak egyszer használja, a hangmodell letöltéséhez a GitHubról. Mint minden letöltésnél, a GitHub látja az IP-címedet. Semmi nem kerül elküldésre abból, amit felveszel: az átírás a telefonodon történik.\n\nMikrofon: csak felvétel közben használja. A felvételek, az átiratok és a beállítások az alkalmazás privát tárhelyén, a telefonodon tárolódnak.\n\nHelyszín: nem kötelező, és alapból ki van kapcsolva. Ha bekapcsolod a Beállításokban, a Scrita a felvétel indításakor vagy leállításakor lekéri a helyzetedet, és a koordinátákat a felvétellel együtt a telefonodon tárolja. Bekerülnek az átirat szövegébe, így vele együtt mennek, amikor megosztod vagy elmented.\n\nÉrtesítések: a folyamatban lévő felvétel vagy átírás állását mutatják.\n\nA fájlok csak akkor hagyják el az alkalmazást, amikor te úgy döntesz: a Dokumentumok mappába mentéskor, megosztáskor vagy biztonsági mentés exportálásakor. Onnantól az adatvédelmük attól függ, hol tárolod őket, és kivel osztod meg.\n\nAz alkalmazás eltávolítása minden adatát törli, kivéve azt, amit a Dokumentumok mappába mentettél vagy exportáltál.",
   "theme": "Téma",
   "backUp": "Biztonsági mentés",
   "recordingsAndSettings": "Felvételek és beállítások",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Ez nem vonható vissza",
   "estimatedTime": "Becsült idő",
   "transcribing": "Átírás",
-  "paragraph": "Bekezdés"
+  "paragraph": "Bekezdés",
+  "location": "Helyszín",
+  "saveLocation": "Helyszín mentése",
+  "saveLocationHint": "Hol készült",
+  "locationPermissionNeeded": "A Scritának helyhozzáférési engedélyre van szüksége, hogy elmentse, hol készítesz felvételt. Kapcsold be a beállításokban",
+  "openInMap": "Megnyitás térképen",
+  "noMapsApp": "Nem található térképalkalmazás",
+  "tutorialLocationTitle": "Mentsd el a helyszínt (nem kötelező)",
+  "tutorialLocationBody": "A Scrita hozzá tudja adni az átirathoz, hol készült a felvétel, egy gombbal, amely megnyitja a térképen. Ki van kapcsolva, amíg be nem kapcsolod a Beállításokban"
 }

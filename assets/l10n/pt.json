@@ -104,7 +104,7 @@
   "system": "Sistema",
   "light": "Claro",
   "dark": "Escuro",
-  "privacyText": "O Scrita não recolhe, não envia e não partilha quaisquer dados. Não tem contas, anúncios nem análises.\n\nInternet: usa-se uma única vez, para transferir o modelo de voz do GitHub. Como em qualquer transferência, o GitHub vê o seu endereço IP. Nada do que grava é enviado: a transcrição é feita no seu telemóvel.\n\nMicrofone: usa-se apenas enquanto grava. As gravações, as transcrições e as definições ficam guardadas no armazenamento privado da app, no seu telemóvel.\n\nNotificações: mostram o progresso de uma gravação ou transcrição em curso.\n\nOs ficheiros só saem da app quando o decidir: ao guardar em Documentos, ao partilhar ou ao exportar uma cópia. A partir daí, a sua privacidade depende de onde os guarda ou com quem os partilha.\n\nDesinstalar a app apaga todos os seus dados, exceto o que tiver guardado em Documentos ou exportado.",
+  "privacyText": "O Scrita não recolhe, não envia e não partilha quaisquer dados. Não tem contas, anúncios nem análises.\n\nInternet: usa-se uma única vez, para transferir o modelo de voz do GitHub. Como em qualquer transferência, o GitHub vê o seu endereço IP. Nada do que grava é enviado: a transcrição é feita no seu telemóvel.\n\nMicrofone: usa-se apenas enquanto grava. As gravações, as transcrições e as definições ficam guardadas no armazenamento privado da app, no seu telemóvel.\n\nLocalização: opcional e desativada por predefinição. Se a ativar nas Definições, o Scrita lê a sua localização ao iniciar ou terminar uma gravação e guarda as coordenadas junto dela, no seu telemóvel. São escritas no texto da transcrição, por isso acompanham-no quando o partilha ou guarda.\n\nNotificações: mostram o progresso de uma gravação ou transcrição em curso.\n\nOs ficheiros só saem da app quando o decidir: ao guardar em Documentos, ao partilhar ou ao exportar uma cópia. A partir daí, a sua privacidade depende de onde os guarda ou com quem os partilha.\n\nDesinstalar a app apaga todos os seus dados, exceto o que tiver guardado em Documentos ou exportado.",
   "theme": "Tema",
   "backUp": "Fazer cópia",
   "recordingsAndSettings": "Gravações e definições",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Não é possível anular esta ação",
   "estimatedTime": "Tempo estimado",
   "transcribing": "A transcrever",
-  "paragraph": "Parágrafo"
+  "paragraph": "Parágrafo",
+  "location": "Localização",
+  "saveLocation": "Guardar localização",
+  "saveLocationHint": "Onde foi gravado",
+  "locationPermissionNeeded": "O Scrita precisa da permissão de localização para guardar onde grava. Ative-a nas definições",
+  "openInMap": "Abrir no mapa",
+  "noMapsApp": "Nenhuma app de mapas encontrada",
+  "tutorialLocationTitle": "Guarde o local (opcional)",
+  "tutorialLocationBody": "O Scrita pode acrescentar à transcrição o local onde gravou, com um botão para o abrir no mapa. Está desativado até o ativar nas Definições"
 }

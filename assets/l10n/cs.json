@@ -104,7 +104,7 @@
   "system": "Systém",
   "light": "Světlý",
   "dark": "Tmavý",
-  "privacyText": "Scrita neshromažďuje, neodesílá ani nesdílí žádná data. Nemá účty, reklamy ani analytiku.\n\nInternet: používá se jen jednou, ke stažení hlasového modelu z GitHubu. Jako při každém stahování vidí GitHub vaši IP adresu. Nic z toho, co nahrajete, se neodesílá: přepis probíhá ve vašem telefonu.\n\nMikrofon: používá se jen během nahrávání. Nahrávky, přepisy a nastavení se ukládají do soukromého úložiště aplikace ve vašem telefonu.\n\nOznámení: ukazují průběh probíhajícího nahrávání nebo přepisu.\n\nSoubory opouštějí aplikaci jen tehdy, když se tak rozhodnete: při uložení do Dokumentů, sdílení nebo exportu zálohy. Poté jejich soukromí závisí na tom, kde je uchováváte a s kým je sdílíte.\n\nOdinstalováním aplikace se smažou všechna její data kromě toho, co jste uložili do Dokumentů nebo exportovali.",
+  "privacyText": "Scrita neshromažďuje, neodesílá ani nesdílí žádná data. Nemá účty, reklamy ani analytiku.\n\nInternet: používá se jen jednou, ke stažení hlasového modelu z GitHubu. Jako při každém stahování vidí GitHub vaši IP adresu. Nic z toho, co nahrajete, se neodesílá: přepis probíhá ve vašem telefonu.\n\nMikrofon: používá se jen během nahrávání. Nahrávky, přepisy a nastavení se ukládají do soukromého úložiště aplikace ve vašem telefonu.\n\nPoloha: volitelná a ve výchozím stavu vypnutá. Pokud ji zapnete v Nastavení, Scrita zjistí vaši polohu při spuštění nebo ukončení nahrávání a uloží souřadnice spolu s nahrávkou ve vašem telefonu. Zapisují se do textu přepisu, takže jsou jeho součástí, když ho sdílíte nebo uložíte.\n\nOznámení: ukazují průběh probíhajícího nahrávání nebo přepisu.\n\nSoubory opouštějí aplikaci jen tehdy, když se tak rozhodnete: při uložení do Dokumentů, sdílení nebo exportu zálohy. Poté jejich soukromí závisí na tom, kde je uchováváte a s kým je sdílíte.\n\nOdinstalováním aplikace se smažou všechna její data kromě toho, co jste uložili do Dokumentů nebo exportovali.",
   "theme": "Motiv",
   "backUp": "Zálohovat",
   "recordingsAndSettings": "Nahrávky a nastavení",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Tuto akci nelze vrátit zpět",
   "estimatedTime": "Odhadovaný čas",
   "transcribing": "Přepisování",
-  "paragraph": "Odstavec"
+  "paragraph": "Odstavec",
+  "location": "Poloha",
+  "saveLocation": "Ukládat polohu",
+  "saveLocationHint": "Kde se nahrávalo",
+  "locationPermissionNeeded": "Scrita potřebuje oprávnění k poloze, aby uložila, kde nahráváte. Zapněte ho v nastavení",
+  "openInMap": "Otevřít v mapě",
+  "noMapsApp": "Nenalezena žádná aplikace s mapami",
+  "tutorialLocationTitle": "Uložte místo (volitelné)",
+  "tutorialLocationBody": "Scrita může k přepisu přidat místo, kde jste nahrávali, s tlačítkem pro otevření v mapě. Je to vypnuté, dokud to nezapnete v Nastavení"
 }

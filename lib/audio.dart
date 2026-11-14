@@ -67,6 +67,28 @@ Future<String?> takeSharedAudio() =>
 /// granted again.
 Future<void> openAppSettings() => _channel.invokeMethod('openSettings');
 
+/// Asks for the location permission: a system dialog the first time, none
+/// once granted or denied for good. False if it is not granted.
+Future<bool> requestLocationPermission() async {
+  try {
+    return await _channel.invokeMethod<bool>('requestLocation') ?? false;
+  } catch (_) {
+    return false;
+  }
+}
+
+/// Where the phone is now as (latitude, longitude). Null without the
+/// permission, with location off, or with no fix within Android's timeout
+/// (about 30 s). Android only answers while the app is visible.
+Future<(double, double)?> currentLocation() async {
+  try {
+    final l = await _channel.invokeListMethod<double>('location');
+    return l == null ? null : (l[0], l[1]);
+  } catch (_) {
+    return null;
+  }
+}
+
 /// True from a share arriving while the app is open until Home takes it.
 /// TranscriptScreen closes on it, once idle, so Home can import the audio.
 final shareWaiting = ValueNotifier(false);

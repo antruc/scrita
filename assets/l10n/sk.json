@@ -104,7 +104,7 @@
   "system": "Systém",
   "light": "Svetlý",
   "dark": "Tmavý",
-  "privacyText": "Scrita nezhromažďuje, neodosiela ani nezdieľa žiadne údaje. Nemá účty, reklamy ani analytiku.\n\nInternet: používa sa iba raz, na stiahnutie hlasového modelu z GitHubu. Ako pri každom sťahovaní vidí GitHub vašu IP adresu. Nič z toho, čo nahráte, sa neodosiela: prepis prebieha vo vašom telefóne.\n\nMikrofón: používa sa iba počas nahrávania. Nahrávky, prepisy a nastavenia sa ukladajú do súkromného úložiska aplikácie vo vašom telefóne.\n\nUpozornenia: ukazujú priebeh prebiehajúceho nahrávania alebo prepisu.\n\nSúbory opúšťajú aplikáciu iba vtedy, keď sa tak rozhodnete: pri uložení do Dokumentov, zdieľaní alebo exporte zálohy. Potom ich súkromie závisí od toho, kde ich uchovávate a s kým ich zdieľate.\n\nOdinštalovaním aplikácie sa odstránia všetky jej údaje okrem toho, čo ste uložili do Dokumentov alebo exportovali.",
+  "privacyText": "Scrita nezhromažďuje, neodosiela ani nezdieľa žiadne údaje. Nemá účty, reklamy ani analytiku.\n\nInternet: používa sa iba raz, na stiahnutie hlasového modelu z GitHubu. Ako pri každom sťahovaní vidí GitHub vašu IP adresu. Nič z toho, čo nahráte, sa neodosiela: prepis prebieha vo vašom telefóne.\n\nMikrofón: používa sa iba počas nahrávania. Nahrávky, prepisy a nastavenia sa ukladajú do súkromného úložiska aplikácie vo vašom telefóne.\n\nPoloha: voliteľná a predvolene vypnutá. Ak ju zapnete v Nastaveniach, Scrita zistí vašu polohu pri spustení alebo ukončení nahrávania a uloží súradnice spolu s nahrávkou vo vašom telefóne. Zapisujú sa do textu prepisu, takže sú jeho súčasťou, keď ho zdieľate alebo uložíte.\n\nUpozornenia: ukazujú priebeh prebiehajúceho nahrávania alebo prepisu.\n\nSúbory opúšťajú aplikáciu iba vtedy, keď sa tak rozhodnete: pri uložení do Dokumentov, zdieľaní alebo exporte zálohy. Potom ich súkromie závisí od toho, kde ich uchovávate a s kým ich zdieľate.\n\nOdinštalovaním aplikácie sa odstránia všetky jej údaje okrem toho, čo ste uložili do Dokumentov alebo exportovali.",
   "theme": "Motív",
   "backUp": "Zálohovať",
   "recordingsAndSettings": "Nahrávky a nastavenia",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Túto akciu nemožno vrátiť späť",
   "estimatedTime": "Odhadovaný čas",
   "transcribing": "Prepisovanie",
-  "paragraph": "Odsek"
+  "paragraph": "Odsek",
+  "location": "Poloha",
+  "saveLocation": "Ukladať polohu",
+  "saveLocationHint": "Kde sa nahrávalo",
+  "locationPermissionNeeded": "Scrita potrebuje povolenie na polohu, aby uložila, kde nahrávate. Zapnite ho v nastaveniach",
+  "openInMap": "Otvoriť v mape",
+  "noMapsApp": "Nenašla sa žiadna aplikácia s mapami",
+  "tutorialLocationTitle": "Uložte miesto (voliteľné)",
+  "tutorialLocationBody": "Scrita môže k prepisu pridať miesto, kde ste nahrávali, s tlačidlom na otvorenie v mape. Je to vypnuté, kým to nezapnete v Nastaveniach"
 }

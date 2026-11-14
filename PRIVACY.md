@@ -18,6 +18,11 @@ transcription happens on your phone.
 **Microphone:** used only while you record. Recordings, transcripts and
 settings are stored in the app's private storage, on your phone.
 
+**Location:** optional and off by default. If you turn it on in Settings,
+Scrita reads your location when you start or stop a recording and stores the
+coordinates with it, on your phone. They are written in the transcript's
+text, so they go with it when you share or save it.
+
 **Notifications:** show the progress of a recording or transcription in
 progress.
 
@@ -39,6 +44,11 @@ grabas se envía: la transcripción se hace en tu teléfono.
 
 **Micrófono:** se usa solo mientras grabas. Las grabaciones, transcripciones
 y ajustes se guardan en el almacenamiento privado de la app, en tu teléfono.
+
+**Ubicación:** opcional y desactivada de inicio. Si la activas en
+Configuración, Scrita lee tu ubicación al empezar o terminar una grabación y
+guarda las coordenadas junto a ella, en tu teléfono. Se escriben en el texto
+de la transcripción, así que van con él cuando lo compartes o lo guardas.
 
 **Notificaciones:** muestran el progreso de una grabación o transcripción en
 curso.

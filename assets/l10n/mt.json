@@ -104,7 +104,7 @@
   "system": "Sistema",
   "light": "Ċar",
   "dark": "Skur",
-  "privacyText": "Scrita ma tiġborx, ma tibgħatx u ma taqsamx data. M'għandhiex kontijiet, reklami jew analitika.\n\nInternet: jintuża darba biss, biex jitniżżel il-mudell tal-vuċi minn GitHub. Bħal f'kull tniżżil, GitHub jara l-indirizz IP tiegħek. Xejn minn dak li tirreġistra ma jintbagħat: it-traskrizzjoni ssir fuq it-telefon tiegħek.\n\nMikrofonu: jintuża biss waqt li tirreġistra. Ir-reġistrazzjonijiet, it-traskrizzjonijiet u s-settings jinżammu fil-ħażna privata tal-app, fuq it-telefon tiegħek.\n\nNotifiki: juru l-progress ta' reġistrazzjoni jew traskrizzjoni li tkun għaddejja.\n\nIl-fajls joħorġu mill-app biss meta tiddeċiedi int: meta tissejvja f'Dokumenti, taqsam jew tesporta kopja ta' riżerva. Minn hemm, il-privatezza tagħhom tiddependi minn fejn iżżommhom u ma' min taqsamhom.\n\nMeta tneħħi l-app titħassar id-data kollha tagħha, ħlief dak li ssejvjajt f'Dokumenti jew esportajt.",
+  "privacyText": "Scrita ma tiġborx, ma tibgħatx u ma taqsamx data. M'għandhiex kontijiet, reklami jew analitika.\n\nInternet: jintuża darba biss, biex jitniżżel il-mudell tal-vuċi minn GitHub. Bħal f'kull tniżżil, GitHub jara l-indirizz IP tiegħek. Xejn minn dak li tirreġistra ma jintbagħat: it-traskrizzjoni ssir fuq it-telefon tiegħek.\n\nMikrofonu: jintuża biss waqt li tirreġistra. Ir-reġistrazzjonijiet, it-traskrizzjonijiet u s-settings jinżammu fil-ħażna privata tal-app, fuq it-telefon tiegħek.\n\nPost: mhux obbligatorju u mitfi awtomatikament. Jekk tixgħelu mis-Settings, Scrita taqra l-post tiegħek meta tibda jew twaqqaf reġistrazzjoni u żżomm il-koordinati magħha, fuq it-telefon tiegħek. Jinkitbu fit-test tat-traskrizzjoni, għalhekk imorru miegħu meta taqsmu jew tissejvjah.\n\nNotifiki: juru l-progress ta' reġistrazzjoni jew traskrizzjoni li tkun għaddejja.\n\nIl-fajls joħorġu mill-app biss meta tiddeċiedi int: meta tissejvja f'Dokumenti, taqsam jew tesporta kopja ta' riżerva. Minn hemm, il-privatezza tagħhom tiddependi minn fejn iżżommhom u ma' min taqsamhom.\n\nMeta tneħħi l-app titħassar id-data kollha tagħha, ħlief dak li ssejvjajt f'Dokumenti jew esportajt.",
   "theme": "Tema",
   "backUp": "Agħmel kopja",
   "recordingsAndSettings": "Reġistrazzjonijiet u settings",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Din l-azzjoni ma tistax titreġġa' lura",
   "estimatedTime": "Ħin stmat",
   "transcribing": "Qed tittraskrivi",
-  "paragraph": "Paragrafu"
+  "paragraph": "Paragrafu",
+  "location": "Post",
+  "saveLocation": "Issejvja l-post",
+  "saveLocationHint": "Fejn ġie rreġistrat",
+  "locationPermissionNeeded": "Scrita teħtieġ il-permess tal-post biex tissejvja fejn tirreġistra. Ixgħelu mis-settings",
+  "openInMap": "Iftaħ fil-mappa",
+  "noMapsApp": "Ma nstabet l-ebda app tal-mapep",
+  "tutorialLocationTitle": "Issejvja l-post (mhux obbligatorju)",
+  "tutorialLocationBody": "Scrita tista' żżid mat-traskrizzjoni l-post fejn irreġistrajt, b'buttuna biex tiftħu fil-mappa. Dan mitfi sakemm tixgħelu mis-Settings"
 }

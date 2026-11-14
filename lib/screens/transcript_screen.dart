@@ -10,6 +10,7 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../audio.dart';
 import '../background.dart';
@@ -433,6 +434,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
         audioPath: widget.audioPath,
         durationSeconds: result.durationSeconds,
         turns: result.turns,
+        location: _t?.location ?? await readGps(widget.audioPath),
       );
       // Keep the names already set. Speakers are numbered by order of
       // appearance, so index 0 is still whoever spoke first.
@@ -951,6 +953,12 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
                     tr('saveToDocuments'),
                     _saveToDocuments,
                   ),
+                  if (_t?.location case final l?)
+                    _menuItem(
+                      Icons.place_outlined,
+                      tr('openInMap'),
+                      () => _openMap(l),
+                    ),
                   if (_hasAudio)
                     _menuItem(
                       Icons.refresh,
@@ -982,6 +990,15 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
             : _buildTurns(theme),
       ),
     );
+  }
+
+  Future<void> _openMap((double, double) l) async {
+    final at = '${l.$1},${l.$2}';
+    try {
+      // q= drops a pin; a bare geo: only centers the map.
+      if (await launchUrl(Uri.parse('geo:$at?q=$at'))) return;
+    } catch (_) {}
+    _snack(tr('noMapsApp'));
   }
 
   PopupMenuItem<VoidCallback> _menuItem(

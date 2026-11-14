@@ -104,7 +104,7 @@
   "system": "Sistēma",
   "light": "Gaišs",
   "dark": "Tumšs",
-  "privacyText": "Scrita nevāc, nesūta un nekopīgo nekādus datus. Tai nav kontu, reklāmu vai analītikas.\n\nInternets: tiek izmantots tikai vienreiz, lai lejupielādētu balss modeli no GitHub. Tāpat kā jebkurā lejupielādē, GitHub redz jūsu IP adresi. Nekas no ierakstītā netiek nosūtīts: transkripcija notiek jūsu tālrunī.\n\nMikrofons: tiek izmantots tikai ierakstīšanas laikā. Ieraksti, transkripcijas un iestatījumi tiek glabāti lietotnes privātajā krātuvē jūsu tālrunī.\n\nPaziņojumi: rāda notiekošas ierakstīšanas vai transkripcijas norisi.\n\nFaili atstāj lietotni tikai tad, kad to izlemjat jūs: saglabājot mapē Dokumenti, kopīgojot vai eksportējot dublējumu. Pēc tam to privātums ir atkarīgs no tā, kur tos glabājat un ar ko kopīgojat.\n\nLietotnes atinstalēšana izdzēš visus tās datus, izņemot to, ko esat saglabājis mapē Dokumenti vai eksportējis.",
+  "privacyText": "Scrita nevāc, nesūta un nekopīgo nekādus datus. Tai nav kontu, reklāmu vai analītikas.\n\nInternets: tiek izmantots tikai vienreiz, lai lejupielādētu balss modeli no GitHub. Tāpat kā jebkurā lejupielādē, GitHub redz jūsu IP adresi. Nekas no ierakstītā netiek nosūtīts: transkripcija notiek jūsu tālrunī.\n\nMikrofons: tiek izmantots tikai ierakstīšanas laikā. Ieraksti, transkripcijas un iestatījumi tiek glabāti lietotnes privātajā krātuvē jūsu tālrunī.\n\nAtrašanās vieta: neobligāta un pēc noklusējuma izslēgta. Ja to ieslēdzat Iestatījumos, Scrita nolasa jūsu atrašanās vietu, kad sākat vai beidzat ierakstu, un glabā koordinātas kopā ar to jūsu tālrunī. Tās tiek ierakstītas transkripcijas tekstā, tāpēc tās tiek nodotas kopā ar to, kad to kopīgojat vai saglabājat.\n\nPaziņojumi: rāda notiekošas ierakstīšanas vai transkripcijas norisi.\n\nFaili atstāj lietotni tikai tad, kad to izlemjat jūs: saglabājot mapē Dokumenti, kopīgojot vai eksportējot dublējumu. Pēc tam to privātums ir atkarīgs no tā, kur tos glabājat un ar ko kopīgojat.\n\nLietotnes atinstalēšana izdzēš visus tās datus, izņemot to, ko esat saglabājis mapē Dokumenti vai eksportējis.",
   "theme": "Motīvs",
   "backUp": "Dublēt",
   "recordingsAndSettings": "Ieraksti un iestatījumi",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Šo darbību nevar atsaukt",
   "estimatedTime": "Aptuvenais laiks",
   "transcribing": "Notiek transkribēšana",
-  "paragraph": "Rindkopa"
+  "paragraph": "Rindkopa",
+  "location": "Atrašanās vieta",
+  "saveLocation": "Saglabāt atrašanās vietu",
+  "saveLocationHint": "Kur ierakstīts",
+  "locationPermissionNeeded": "Lai saglabātu, kur ierakstāt, Scrita ir nepieciešama atrašanās vietas atļauja. Ieslēdziet to iestatījumos",
+  "openInMap": "Atvērt kartē",
+  "noMapsApp": "Nav atrasta karšu lietotne",
+  "tutorialLocationTitle": "Saglabājiet vietu (neobligāti)",
+  "tutorialLocationBody": "Scrita var pievienot transkripcijai vietu, kur ierakstījāt, un pogu tās atvēršanai kartē. Tas ir izslēgts, līdz to ieslēdzat Iestatījumos"
 }

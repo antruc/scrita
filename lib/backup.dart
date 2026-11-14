@@ -1,5 +1,5 @@
 // Full backup in one .zip: every transcript (.json, .txt), every audio
-// and the settings. Import merges: a file whose name already exists is kept
+// (with its .gps location, if any) and the settings. Import merges: a file whose name already exists is kept
 // as it is, so restoring the same backup twice changes nothing.
 
 import 'dart:convert';
@@ -16,7 +16,7 @@ import 'store.dart';
 const _manifest = 'scrita_backup.json';
 
 String get _notABackup => tr('notABackup');
-const _exts = {'.json', '.txt', ...audioExts};
+const _exts = {'.json', '.txt', '.gps', ...audioExts};
 
 /// Writes a backup to Documents/Scrita and returns its path.
 Future<String> exportBackup() async {

@@ -104,7 +104,7 @@
   "system": "System",
   "light": "Hell",
   "dark": "Dunkel",
-  "privacyText": "Scrita sammelt, sendet und teilt keinerlei Daten. Es gibt keine Konten, keine Werbung und keine Analysen.\n\nInternet: wird nur einmal genutzt, um das Sprachmodell von GitHub herunterzuladen. Wie bei jedem Download sieht GitHub deine IP-Adresse. Nichts von dem, was du aufnimmst, wird gesendet: Die Transkription findet auf deinem Handy statt.\n\nMikrofon: wird nur genutzt, während du aufnimmst. Aufnahmen, Transkripte und Einstellungen werden im privaten Speicher der App auf deinem Handy abgelegt.\n\nBenachrichtigungen: zeigen den Fortschritt einer laufenden Aufnahme oder Transkription.\n\nDateien verlassen die App nur, wenn du es entscheidest: beim Speichern in Dokumente, beim Teilen oder beim Exportieren einer Sicherung. Danach hängt ihr Schutz davon ab, wo du sie aufbewahrst und mit wem du sie teilst.\n\nBeim Deinstallieren der App werden alle ihre Daten gelöscht, außer dem, was du in Dokumente gespeichert oder exportiert hast.",
+  "privacyText": "Scrita sammelt, sendet und teilt keinerlei Daten. Es gibt keine Konten, keine Werbung und keine Analysen.\n\nInternet: wird nur einmal genutzt, um das Sprachmodell von GitHub herunterzuladen. Wie bei jedem Download sieht GitHub deine IP-Adresse. Nichts von dem, was du aufnimmst, wird gesendet: Die Transkription findet auf deinem Handy statt.\n\nMikrofon: wird nur genutzt, während du aufnimmst. Aufnahmen, Transkripte und Einstellungen werden im privaten Speicher der App auf deinem Handy abgelegt.\n\nStandort: optional und standardmäßig aus. Wenn du ihn in den Einstellungen aktivierst, liest Scrita deinen Standort beim Starten oder Beenden einer Aufnahme und speichert die Koordinaten zusammen mit ihr auf deinem Handy. Sie stehen im Text des Transkripts und gehen deshalb mit, wenn du ihn teilst oder speicherst.\n\nBenachrichtigungen: zeigen den Fortschritt einer laufenden Aufnahme oder Transkription.\n\nDateien verlassen die App nur, wenn du es entscheidest: beim Speichern in Dokumente, beim Teilen oder beim Exportieren einer Sicherung. Danach hängt ihr Schutz davon ab, wo du sie aufbewahrst und mit wem du sie teilst.\n\nBeim Deinstallieren der App werden alle ihre Daten gelöscht, außer dem, was du in Dokumente gespeichert oder exportiert hast.",
   "theme": "Design",
   "backUp": "Sichern",
   "recordingsAndSettings": "Aufnahmen und Einstellungen",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Das kann nicht rückgängig gemacht werden",
   "estimatedTime": "Geschätzte Zeit",
   "transcribing": "Transkription läuft",
-  "paragraph": "Absatz"
+  "paragraph": "Absatz",
+  "location": "Standort",
+  "saveLocation": "Standort speichern",
+  "saveLocationHint": "Wo aufgenommen wurde",
+  "locationPermissionNeeded": "Scrita braucht die Standortberechtigung, um den Aufnahmeort zu speichern. Aktiviere sie in den Einstellungen",
+  "openInMap": "In Karte öffnen",
+  "noMapsApp": "Keine Karten-App gefunden",
+  "tutorialLocationTitle": "Ort speichern (optional)",
+  "tutorialLocationBody": "Scrita kann dem Transkript den Aufnahmeort hinzufügen, mit einer Schaltfläche zum Öffnen in der Karte. Das ist aus, bis du es in den Einstellungen aktivierst"
 }

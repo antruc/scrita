@@ -104,7 +104,7 @@
   "system": "Järjestelmä",
   "light": "Vaalea",
   "dark": "Tumma",
-  "privacyText": "Scrita ei kerää, lähetä eikä jaa mitään tietoja. Siinä ei ole tilejä, mainoksia eikä analytiikkaa.\n\nInternet: käytetään vain kerran, puhemallin lataamiseen GitHubista. Kuten missä tahansa latauksessa, GitHub näkee IP-osoitteesi. Mitään äänittämääsi ei lähetetä: litterointi tehdään puhelimessasi.\n\nMikrofoni: käytetään vain äänittäessäsi. Äänitykset, litteroinnit ja asetukset tallennetaan sovelluksen yksityiseen tallennustilaan puhelimessasi.\n\nIlmoitukset: näyttävät käynnissä olevan äänityksen tai litteroinnin edistymisen.\n\nAsiakirjat poistuvat sovelluksesta vain, kun itse päätät niin: kun tallennat Asiakirjat-kansioon, jaat tai viet varmuuskopion. Sen jälkeen niiden yksityisyys riippuu siitä, missä säilytät niitä ja kenelle jaat ne.\n\nSovelluksen poistaminen poistaa kaikki sen tiedot, paitsi sen, minkä olet tallentanut Asiakirjat-kansioon tai vienyt.",
+  "privacyText": "Scrita ei kerää, lähetä eikä jaa mitään tietoja. Siinä ei ole tilejä, mainoksia eikä analytiikkaa.\n\nInternet: käytetään vain kerran, puhemallin lataamiseen GitHubista. Kuten missä tahansa latauksessa, GitHub näkee IP-osoitteesi. Mitään äänittämääsi ei lähetetä: litterointi tehdään puhelimessasi.\n\nMikrofoni: käytetään vain äänittäessäsi. Äänitykset, litteroinnit ja asetukset tallennetaan sovelluksen yksityiseen tallennustilaan puhelimessasi.\n\nSijainti: valinnainen ja oletuksena pois päältä. Jos otat sen käyttöön Asetuksissa, Scrita lukee sijaintisi, kun aloitat tai lopetat äänityksen, ja tallentaa koordinaatit äänityksen yhteyteen puhelimeesi. Ne kirjoitetaan litteroinnin tekstiin, joten ne kulkevat sen mukana, kun jaat tai tallennat sen.\n\nIlmoitukset: näyttävät käynnissä olevan äänityksen tai litteroinnin edistymisen.\n\nAsiakirjat poistuvat sovelluksesta vain, kun itse päätät niin: kun tallennat Asiakirjat-kansioon, jaat tai viet varmuuskopion. Sen jälkeen niiden yksityisyys riippuu siitä, missä säilytät niitä ja kenelle jaat ne.\n\nSovelluksen poistaminen poistaa kaikki sen tiedot, paitsi sen, minkä olet tallentanut Asiakirjat-kansioon tai vienyt.",
   "theme": "Teema",
   "backUp": "Varmuuskopioi",
   "recordingsAndSettings": "Äänitykset ja asetukset",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "Tätä ei voi kumota",
   "estimatedTime": "Arvioitu aika",
   "transcribing": "Litteroidaan",
-  "paragraph": "Kappale"
+  "paragraph": "Kappale",
+  "location": "Sijainti",
+  "saveLocation": "Tallenna sijainti",
+  "saveLocationHint": "Missä äänitettiin",
+  "locationPermissionNeeded": "Scrita tarvitsee sijaintiluvan tallentaakseen äänityspaikan. Ota se käyttöön asetuksissa",
+  "openInMap": "Avaa kartassa",
+  "noMapsApp": "Karttasovellusta ei löytynyt",
+  "tutorialLocationTitle": "Tallenna paikka (valinnainen)",
+  "tutorialLocationBody": "Scrita voi lisätä litterointiin paikan, jossa äänitit, sekä painikkeen sen avaamiseen kartassa. Se on pois päältä, kunnes otat sen käyttöön Asetuksissa"
 }

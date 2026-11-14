@@ -104,7 +104,7 @@
   "system": "Sistema",
   "light": "Claro",
   "dark": "Oscuro",
-  "privacyText": "Scrita no recopila, envía ni comparte ningún dato. No tiene cuentas, anuncios ni analíticas.\n\nInternet: se usa una sola vez, para descargar el modelo de voz desde GitHub. Como en cualquier descarga, GitHub ve tu dirección IP. Nada de lo que grabas se envía: la transcripción se hace en tu teléfono.\n\nMicrófono: se usa solo mientras grabas. Las grabaciones, transcripciones y ajustes se guardan en el almacenamiento privado de la app, en tu teléfono.\n\nNotificaciones: muestran el progreso de una grabación o transcripción en curso.\n\nLos archivos solo salen de la app cuando tú lo decides: al guardar en Documentos, compartir o exportar una copia. Desde ahí, su privacidad depende de dónde los guardes o con quién los compartas.\n\nDesinstalar la app borra todos sus datos, salvo lo que hayas guardado en Documentos o exportado.",
+  "privacyText": "Scrita no recopila, envía ni comparte ningún dato. No tiene cuentas, anuncios ni analíticas.\n\nInternet: se usa una sola vez, para descargar el modelo de voz desde GitHub. Como en cualquier descarga, GitHub ve tu dirección IP. Nada de lo que grabas se envía: la transcripción se hace en tu teléfono.\n\nMicrófono: se usa solo mientras grabas. Las grabaciones, transcripciones y ajustes se guardan en el almacenamiento privado de la app, en tu teléfono.\n\nUbicación: opcional y desactivada de inicio. Si la activas en Configuración, Scrita lee tu ubicación al empezar o terminar una grabación y guarda las coordenadas junto a ella, en tu teléfono. Se escriben en el texto de la transcripción, así que van con él cuando lo compartes o lo guardas.\n\nNotificaciones: muestran el progreso de una grabación o transcripción en curso.\n\nLos archivos solo salen de la app cuando tú lo decides: al guardar en Documentos, compartir o exportar una copia. Desde ahí, su privacidad depende de dónde los guardes o con quién los compartas.\n\nDesinstalar la app borra todos sus datos, salvo lo que hayas guardado en Documentos o exportado.",
   "theme": "Tema",
   "backUp": "Hacer copia",
   "recordingsAndSettings": "Grabaciones y ajustes",
@@ -193,5 +193,13 @@
   "thisCannotBeUndone": "No se puede deshacer",
   "estimatedTime": "Tiempo estimado",
   "transcribing": "Transcribiendo",
-  "paragraph": "Párrafo"
+  "paragraph": "Párrafo",
+  "location": "Ubicación",
+  "saveLocation": "Guardar ubicación",
+  "saveLocationHint": "Dónde se grabó",
+  "locationPermissionNeeded": "Scrita necesita el permiso de ubicación para guardar dónde grabas. Actívalo en los ajustes",
+  "openInMap": "Abrir en el mapa",
+  "noMapsApp": "No hay una app de mapas",
+  "tutorialLocationTitle": "Guarda el lugar (opcional)",
+  "tutorialLocationBody": "Scrita puede agregar a la transcripción el lugar donde grabaste, con un botón para abrirlo en el mapa. Está apagado hasta que lo actives en Configuración"
 }

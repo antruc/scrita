@@ -747,6 +747,7 @@ class Transcript {
     required this.audioPath,
     required this.durationSeconds,
     required this.turns,
+    this.location,
     List<String>? speakerNames,
   }) : speakerNames =
            speakerNames ??
@@ -765,6 +766,10 @@ class Transcript {
   final List<Turn> turns;
   final List<String> speakerNames;
 
+  /// (latitude, longitude) where it was recorded. Null for imports, with the
+  /// setting off and for older transcripts.
+  final (double, double)? location;
+
   String speakerName(int i) =>
       i < speakerNames.length ? speakerNames[i] : defaultSpeakerName(i);
 
@@ -776,8 +781,15 @@ class Transcript {
       )
       ..writeln(
         '${tr('participants')}: ${speakerNames.join(', ')}',
-      )
-      ..writeln();
+      );
+    // 5 decimals: about 1 m, finer than a phone's fix.
+    if (location case (final lat, final lon)) {
+      b.writeln(
+        '${tr('location')}: '
+        '${lat.toStringAsFixed(5)}, ${lon.toStringAsFixed(5)}',
+      );
+    }
+    b.writeln();
     for (final t in turns) {
       b
         ..writeln('[${formatTimestamp(t.start)}] ${speakerName(t.speaker)}:')
@@ -853,6 +865,7 @@ class Transcript {
     'audioPath': audioPath,
     'durationSeconds': durationSeconds,
     'speakerNames': speakerNames,
+    if (location case (final lat, final lon)) 'location': [lat, lon],
     'turns': turns.map((t) => t.toJson()).toList(),
   };
 
@@ -864,6 +877,10 @@ class Transcript {
     audioPath: j['audioPath'] as String,
     durationSeconds: (j['durationSeconds'] as num).toDouble(),
     speakerNames: (j['speakerNames'] as List).cast<String>(),
+    location: switch (j['location']) {
+      [final num lat, final num lon] => (lat.toDouble(), lon.toDouble()),
+      _ => null,
+    },
     turns: (j['turns'] as List)
         .map((e) => Turn.fromJson(e as Map<String, dynamic>))
         .toList(),
