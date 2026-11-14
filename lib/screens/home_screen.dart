@@ -345,6 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // An action would keep it open until dismissed, and the file
             // must go once it times out.
             persist: false,
+            duration: const Duration(seconds: 10),
             action: SnackBarAction(
               label: tr('undo'),
               onPressed: () {},

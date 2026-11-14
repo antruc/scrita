@@ -776,6 +776,10 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       ..showSnackBar(
         SnackBar(
           content: Text(msg),
+          // An action would keep it open until dismissed, and a stale undo
+          // would discard later edits.
+          persist: false,
+          duration: const Duration(seconds: 10),
           action: SnackBarAction(
             label: tr('undo'),
             onPressed: () {
