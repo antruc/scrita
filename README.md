@@ -204,7 +204,10 @@ WAV 48 kHz ──► diarization ──► VAD ──► ASR per phrase ──�
 3. **Silero VAD** splits the recording into phrases. Past 20 s it ends a
    phrase at the next dip in speech, which can fall mid-word. This removes
    the silences where models hallucinate
-4. **Speech recognition** of each phrase with Parakeet TDT 0.6B v3
+4. **Speech recognition** of each phrase with Parakeet TDT 0.6B v3. A phrase
+   longer than 22 s is cut at quiet points first, because the model degrades
+   on long ones. A piece that returns almost no words is decoded again in
+   two halves
 5. **Speaker per word:** each word takes the speaker of the turn it overlaps
    most, and a phrase is split where the speaker changes
 6. A `.json` (to reopen and edit) and the `.txt` are saved
@@ -303,6 +306,11 @@ In debug and profile builds, each transcription ends with a timing summary
 - **Memory:** diarization needs the whole audio at 16 kHz, about 230 MB per
   hour of recording
 - When two people talk at once, the fragment goes to only one of them
+- **Wrong language:** Parakeet detects the language on its own in every
+  phrase and cannot be told which one to expect. Now and then a phrase comes
+  out partly in another language, most often English ("por su" heard as
+  "for sure"), and a sentence can be lost with it. It is more likely in
+  speech with no pauses. Review those passages against the audio
 - Numbers and proper names are sometimes wrong: review them by hand
 - Speaker boundaries can be off by about one word, and occasionally a whole
   paragraph gets the wrong speaker. Fix it with **Assign to** in the editor
