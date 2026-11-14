@@ -137,11 +137,7 @@ Future<PipelineResult> runPipeline({
       completer.completeError(Exception(msg.first));
     } else if (msg == null && !completer.isCompleted) {
       // The isolate exited without replying (e.g. out of memory).
-      completer.completeError(
-        FormatException(
-          tr('transcriptionStopped'),
-        ),
-      );
+      completer.completeError(FormatException(tr('transcriptionStopped')));
     }
   });
 

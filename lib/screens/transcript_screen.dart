@@ -34,9 +34,7 @@ Future<bool> confirmIrreversible(
     context: context,
     builder: (ctx) => AlertDialog(
       title: Text(title),
-      content: Text(
-        '$content. ${tr('thisCannotBeUndone')}',
-      ),
+      content: Text('$content. ${tr('thisCannotBeUndone')}'),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx, false),
@@ -217,9 +215,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     try {
       await (_playing ? _player.pause() : _player.resume());
     } catch (_) {
-      _snack(
-        tr('thisAudioCannotBePlayed'),
-      );
+      _snack(tr('thisAudioCannotBePlayed'));
     }
   }
 
@@ -235,9 +231,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setLocal) => AlertDialog(
-          title: Text(
-            tr('howManyPeopleAreSpeakingQuestion'),
-          ),
+          title: Text(tr('howManyPeopleAreSpeakingQuestion')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,9 +250,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                n == 1
-                    ? tr('oneVoiceHint')
-                    : tr('exactNumberHint'),
+                n == 1 ? tr('oneVoiceHint') : tr('exactNumberHint'),
                 style: Theme.of(ctx).textTheme.bodySmall,
               ),
               if (estimate > 0) ...[
@@ -341,10 +333,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
         tr('transcribingEllipsis'),
       );
     } catch (_) {
-      _snack(
-        tr('couldNotStartTranscription'),
-        retry: _transcribe,
-      );
+      _snack(tr('couldNotStartTranscription'), retry: _transcribe);
       return;
     }
     setState(() {
@@ -423,9 +412,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
 
       clock.stop();
       if (result.turns.isEmpty) {
-        _snack(
-          tr('noSpeechDetected'),
-        );
+        _snack(tr('noSpeechDetected'));
         return;
       }
       final transcript = Transcript(
@@ -469,10 +456,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       if (e is FormatException) {
         _snack(e.message);
       } else {
-        _snack(
-          tr('couldNotTranscribeTheAudio'),
-          retry: _transcribe,
-        );
+        _snack(tr('couldNotTranscribeTheAudio'), retry: _transcribe);
       }
     } finally {
       if (decoded != null) {
@@ -486,9 +470,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
         await BackgroundService.stop();
       } else {
-        await BackgroundService.finish(
-          tr('transcriptionFinished'),
-        );
+        await BackgroundService.finish(tr('transcriptionFinished'));
       }
       if (mounted) setState(() => _busy = false);
       _closeForShare();
@@ -580,9 +562,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       _saved = await saveTranscript(_t!, jsonPath: _saved!.jsonPath);
     } catch (_) {
       ok = false;
-      _snack(
-        tr('couldNotSaveChange'),
-      );
+      _snack(tr('couldNotSaveChange'));
     }
     if (mounted) setState(() {});
     return ok;
@@ -651,10 +631,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       ..addAll(out);
     // The undo snackbar would replace the error one.
     if (!await _persist()) return;
-    _showUndo(
-      tr('textAssignedTo', {'name': t.speakerName(speaker)}),
-      before,
-    );
+    _showUndo(tr('textAssignedTo', {'name': t.speakerName(speaker)}), before);
   }
 
   /// Lets the user fix a turn's text or reassign it to another speaker.
@@ -670,18 +647,14 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setLocal) => AlertDialog(
-          title: Text(
-            '${tr('paragraph')} ${formatTimestamp(turn.start)}',
-          ),
+          title: Text('${tr('paragraph')} ${formatTimestamp(turn.start)}'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 DropdownButtonFormField<int>(
                   initialValue: speaker,
-                  decoration: InputDecoration(
-                    labelText: tr('speaker'),
-                  ),
+                  decoration: InputDecoration(labelText: tr('speaker')),
                   items: [
                     for (var i = 0; i < t.speakerNames.length; i++)
                       DropdownMenuItem(value: i, child: Text(t.speakerName(i))),
@@ -744,7 +717,9 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
               index > 0 &&
                       index < t.turns.length - 1 &&
                       t.turns[index - 1].speaker == t.turns[index + 1].speaker
-                  ? tr('deleteParagraphJoinBody', {'name': t.speakerName(t.turns[index - 1].speaker)})
+                  ? tr('deleteParagraphJoinBody', {
+                      'name': t.speakerName(t.turns[index - 1].speaker),
+                    })
                   : tr('deleteParagraphBody'),
               tr('delete'),
             )
@@ -819,9 +794,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                tr('savedToDocumentsHint'),
-              ),
+              Text(tr('savedToDocumentsHint')),
               CheckboxListTile(
                 value: text,
                 onChanged: (v) => setLocal(() => text = v ?? text),
@@ -876,13 +849,8 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
     // Replaces "Saving the audio..." instead of queueing behind it.
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ok
-        ? _snack(
-            tr('savedToDocumentsScrita'),
-          )
-        : _snack(
-            tr('couldNotSaveToDocuments'),
-            retry: _saveToDocuments,
-          );
+        ? _snack(tr('savedToDocumentsScrita'))
+        : _snack(tr('couldNotSaveToDocuments'), retry: _saveToDocuments);
   }
 
   Future<void> _copy() async {
@@ -1139,7 +1107,9 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
                           for (var s = 0; s < t.speakerNames.length; s++)
                             if (s != turn.speaker)
                               ContextMenuButtonItem(
-                                label: tr('assignTo', {'name': t.speakerName(s)}),
+                                label: tr('assignTo', {
+                                  'name': t.speakerName(s),
+                                }),
                                 onPressed: () => run(
                                   () => _assignRange(i, sel.start, sel.end, s),
                                 ),

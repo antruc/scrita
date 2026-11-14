@@ -46,21 +46,9 @@ List<(AndroidAudioSource, String, String)> get _sources => [
     tr('noiseReduction'),
     tr('noiseReductionHint'),
   ),
-  (
-    AndroidAudioSource.mic,
-    tr('modeDefault'),
-    tr('modeDefaultHint'),
-  ),
-  (
-    AndroidAudioSource.camcorder,
-    tr('modeGroup'),
-    tr('modeGroupHint'),
-  ),
-  (
-    AndroidAudioSource.unprocessed,
-    tr('unprocessed'),
-    tr('unprocessedHint'),
-  ),
+  (AndroidAudioSource.mic, tr('modeDefault'), tr('modeDefaultHint')),
+  (AndroidAudioSource.camcorder, tr('modeGroup'), tr('modeGroupHint')),
+  (AndroidAudioSource.unprocessed, tr('unprocessed'), tr('unprocessedHint')),
 ];
 
 String _modeName(ThemeMode m) => switch (m) {
@@ -106,19 +94,13 @@ class SettingsScreen extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.file_upload_outlined),
               title: Text(tr('backUp')),
-              subtitle: Text(
-                tr('recordingsAndSettings'),
-              ),
+              subtitle: Text(tr('recordingsAndSettings')),
               onTap: () async {
                 if (!await _confirmExport(context) || !context.mounted) return;
-                await _run(
-                  context,
-                  tr('backupFailed'),
-                  () async {
-                    await exportBackup();
-                    return tr('backupSaved');
-                  },
-                );
+                await _run(context, tr('backupFailed'), () async {
+                  await exportBackup();
+                  return tr('backupSaved');
+                });
               },
             ),
             ListTile(
@@ -131,24 +113,20 @@ class SettingsScreen extends StatelessWidget {
                   allowedExtensions: ['zip'],
                 ))?.path;
                 if (picked == null || !context.mounted) return;
-                await _run(
-                  context,
-                  tr('couldNotRestoreTheBackup'),
-                  () async {
-                    try {
-                      await importBackup(picked);
-                      return tr('backupRestored');
-                    } finally {
-                      // file_picker's cache copy can be as big as the backup.
-                      if (p.isWithin(
-                        (await getTemporaryDirectory()).path,
-                        picked,
-                      )) {
-                        await File(picked).delete();
-                      }
+                await _run(context, tr('couldNotRestoreTheBackup'), () async {
+                  try {
+                    await importBackup(picked);
+                    return tr('backupRestored');
+                  } finally {
+                    // file_picker's cache copy can be as big as the backup.
+                    if (p.isWithin(
+                      (await getTemporaryDirectory()).path,
+                      picked,
+                    )) {
+                      await File(picked).delete();
                     }
-                  },
-                );
+                  }
+                });
                 // Apply the restored theme now, not at next launch.
                 setTheme();
               },
@@ -157,9 +135,9 @@ class SettingsScreen extends StatelessWidget {
               leading: const Icon(Icons.school_outlined),
               title: Text(tr('viewTutorial')),
               subtitle: Text(tr('howToUseScrita')),
-              onTap: () => Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (_) => const OnboardingScreen())),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+              ),
             ),
             ListTile(
               leading: const Icon(Icons.code),
@@ -215,7 +193,9 @@ class SettingsScreen extends StatelessWidget {
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(ctx),
-                      child: Text(MaterialLocalizations.of(ctx).closeButtonLabel),
+                      child: Text(
+                        MaterialLocalizations.of(ctx).closeButtonLabel,
+                      ),
                     ),
                   ],
                 ),
@@ -232,9 +212,7 @@ class SettingsScreen extends StatelessWidget {
         context: context,
         builder: (ctx) => AlertDialog(
           title: Text(tr('backUpQuestion')),
-          content: Text(
-            tr('backupConfirmBody'),
-          ),
+          content: Text(tr('backupConfirmBody')),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
@@ -298,32 +276,24 @@ class _AudioFormatTileState extends State<_AudioFormatTile> {
         final m4a = await showDialog<bool>(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text(
-              tr('audioFormatWhenSaving'),
-            ),
+            title: Text(tr('audioFormatWhenSaving')),
             content: RadioGroup<bool>(
               groupValue: exportM4a,
               onChanged: (v) => Navigator.pop(ctx, v),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    tr('audioFormatHint'),
-                  ),
+                  Text(tr('audioFormatHint')),
                   const SizedBox(height: 8),
                   RadioListTile(
                     value: true,
                     title: Text(tr('m4aRecommended')),
-                    subtitle: Text(
-                      tr('m4aHint'),
-                    ),
+                    subtitle: Text(tr('m4aHint')),
                   ),
                   RadioListTile(
                     value: false,
                     title: const Text('WAV'),
-                    subtitle: Text(
-                      tr('wavHint'),
-                    ),
+                    subtitle: Text(tr('wavHint')),
                   ),
                 ],
               ),
@@ -467,12 +437,8 @@ class _ThemeDialog extends StatelessWidget {
                 if (wallpaperSeed != null)
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      tr('wallpaperColors'),
-                    ),
-                    subtitle: Text(
-                      tr('wallpaperColorsHint'),
-                    ),
+                    title: Text(tr('wallpaperColors')),
+                    subtitle: Text(tr('wallpaperColorsHint')),
                     value: wallpaper,
                     // Off restores the saved palette.
                     onChanged: (on) => on

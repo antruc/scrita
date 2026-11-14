@@ -41,9 +41,8 @@ Future<SavedTranscript> saveTranscript(Transcript t, {String? jsonPath}) async {
   final tmp = File('$jsonPath.tmp');
   await tmp.writeAsString(t.encode(), flush: true);
   await tmp.rename(jsonPath);
-  await File(
-    p.setExtension(jsonPath, '.txt'),
-  ).writeAsString(t.toPlainText(), flush: true);
+  await File(p.setExtension(jsonPath, '.txt'))
+      .writeAsString(t.toPlainText(), flush: true);
   return SavedTranscript(jsonPath, t);
 }
 
@@ -116,9 +115,8 @@ Future<List<PendingAudio>> listPendingAudios(
     // imports write it; an estimate, only shown before transcribing.
     final h = await f.openRead(0, 32).expand((b) => b).toList();
     final byteRate = h.length == 32
-        ? ByteData.sublistView(
-            Uint8List.fromList(h),
-          ).getUint32(28, Endian.little)
+        ? ByteData.sublistView(Uint8List.fromList(h))
+              .getUint32(28, Endian.little)
         : 0;
     final seconds =
         (stat.size > 44 ? stat.size - 44 : 0) /
@@ -163,9 +161,8 @@ Future<String> exportToDocuments(
   try {
     if (text) await File(s.txtPath).copy(out('$name.txt'));
     if (srt) {
-      await File(
-        out('$name.srt'),
-      ).writeAsString(s.transcript.toSrt(), flush: true);
+      await File(out('$name.srt'))
+          .writeAsString(s.transcript.toSrt(), flush: true);
     }
     if (!withAudio) return dir;
     if (ext == p.extension(wav.path)) {
@@ -211,9 +208,7 @@ String safeName(String name) =>
 Future<String> documentsDir() async {
   final ext = await getExternalStorageDirectory();
   if (ext == null) {
-    throw Exception(
-      tr('noSharedStorage'),
-    );
+    throw Exception(tr('noSharedStorage'));
   }
   // .../Android/data/<package>/files -> root of shared storage.
   final root = ext.path.split('/Android/').first;

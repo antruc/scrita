@@ -18,9 +18,7 @@ import 'l10n.dart';
 Float32List readWavMono(String path, int toRate, {BlockResampler? resample}) {
   final f = File(path).openSync();
   try {
-    Never invalid() => throw FormatException(
-      tr('cannotOpenAudio'),
-    );
+    Never invalid() => throw FormatException(tr('cannotOpenAudio'));
     ByteData read(int n) {
       final b = f.readSync(n);
       if (b.length < n) invalid();
@@ -131,8 +129,11 @@ Float32List readWavMono(String path, int toRate, {BlockResampler? resample}) {
 }
 
 /// Resamples one block of a stream from [fromRate]; [last] flushes it.
-typedef BlockResampler =
-    Float32List Function(Float32List block, int fromRate, bool last);
+typedef BlockResampler = Float32List Function(
+  Float32List block,
+  int fromRate,
+  bool last,
+);
 
 /// Simple resampling for WAVs that are not at 16 kHz, readWavMono's default
 /// when no [BlockResampler] is given. Only tests rely on it: its box filter
@@ -776,12 +777,8 @@ class Transcript {
   String toPlainText() {
     final b = StringBuffer()
       ..writeln('${tr('date')}: ${formatDate(createdAt)}')
-      ..writeln(
-        '${tr('duration')}: ${formatTimestamp(durationSeconds)}',
-      )
-      ..writeln(
-        '${tr('participants')}: ${speakerNames.join(', ')}',
-      );
+      ..writeln('${tr('duration')}: ${formatTimestamp(durationSeconds)}')
+      ..writeln('${tr('participants')}: ${speakerNames.join(', ')}');
     // 5 decimals: about 1 m, finer than a phone's fix.
     if (location case (final lat, final lon)) {
       b.writeln(

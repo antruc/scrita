@@ -134,7 +134,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final left = models.bytesLeft(dir);
     final free = await freeBytes(dir);
     if (free != null && free < left + _spareBytes) {
-      return tr('notEnoughSpaceRetry', {'needed': models.formatMb(left + _spareBytes), 'free': models.formatMb(free)});
+      return tr('notEnoughSpaceRetry', {
+        'needed': models.formatMb(left + _spareBytes),
+        'free': models.formatMb(free),
+      });
     }
     switch (await network()) {
       case 'none':
@@ -190,9 +193,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       if (!mounted) return;
       setState(() => _ready = true);
       // Tapping it reopens the app if the user left during the download.
-      await BackgroundService.finish(
-        tr('scritaIsReady'),
-      );
+      await BackgroundService.finish(tr('scritaIsReady'));
     } on models.ModelDownloadError catch (e) {
       await BackgroundService.stop();
       if (mounted) setState(() => _error = e.message);
@@ -272,10 +273,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: Text(text, style: TextStyle(color: fg)),
                 ),
                 if (error)
-                  TextButton(
-                    onPressed: _download,
-                    child: Text(tr('retry')),
-                  ),
+                  TextButton(onPressed: _download, child: Text(tr('retry'))),
               ],
             ),
             if (!error && !_ready) ...[
@@ -321,10 +319,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _primary(_Kind kind) {
     if (kind == _Kind.permissions) {
-      return FilledButton(
-        onPressed: _askPermissions,
-        child: Text(tr('allow')),
-      );
+      return FilledButton(onPressed: _askPermissions, child: Text(tr('allow')));
     }
     if (kind == _Kind.download && !_started) {
       return FilledButton(
@@ -336,10 +331,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       );
     }
     if (!_last) {
-      return FilledButton(
-        onPressed: _next,
-        child: Text(tr('next')),
-      );
+      return FilledButton(onPressed: _next, child: Text(tr('next')));
     }
     if (_ready) {
       return FilledButton(
@@ -352,10 +344,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       );
     }
     if (_error != null) {
-      return FilledButton(
-        onPressed: _download,
-        child: Text(tr('retry')),
-      );
+      return FilledButton(onPressed: _download, child: Text(tr('retry')));
     }
     return FilledButton(
       onPressed: null,
@@ -512,9 +501,7 @@ class _PermissionsArt extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.notifications_none),
           title: Text(tr('notifications')),
-          subtitle: Text(
-            tr('notificationsHint'),
-          ),
+          subtitle: Text(tr('notificationsHint')),
         ),
       ],
     ),
@@ -542,12 +529,7 @@ class _HomeArt extends StatelessWidget {
       Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          row(
-            Icons.graphic_eq,
-            tr('voiceNote'),
-            '02:14',
-            false,
-          ),
+          row(Icons.graphic_eq, tr('voiceNote'), '02:14', false),
           row(
             Icons.description_outlined,
             tr('interview'),
@@ -622,8 +604,7 @@ Widget _paragraph(ThemeData theme, String name, Color color, Widget text) =>
       ),
     );
 
-String get _question =>
-    tr('demoQuestion');
+String get _question => tr('demoQuestion');
 String get _answer => tr('demoAnswer');
 
 /// Two paragraphs of a transcript, each with its speaker's color.
@@ -667,10 +648,7 @@ class _AssignArt extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextButton(
-                  onPressed: () {},
-                  child: Text(tr('demoAssignTo')),
-                ),
+                TextButton(onPressed: () {}, child: Text(tr('demoAssignTo'))),
                 TextButton(onPressed: () {}, child: Text(tr('edit'))),
               ],
             ),

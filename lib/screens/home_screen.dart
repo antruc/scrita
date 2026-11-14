@@ -117,9 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // Once denied, Android stops asking: only its settings can grant it.
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            tr('micPermissionNeeded'),
-          ),
+          content: Text(tr('micPermissionNeeded')),
           action: SnackBarAction(
             label: tr('openSettings'),
             onPressed: openAppSettings,
@@ -138,9 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
         tr('recordingEllipsis'),
       );
     } catch (_) {
-      _snack(
-        tr('couldNotStartRecording'),
-      );
+      _snack(tr('couldNotStartRecording'));
       return;
     }
     try {
@@ -148,9 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
       await _recorder.start(prefs.audioSource);
     } catch (_) {
       await BackgroundService.stop();
-      _snack(
-        tr('micBusy'),
-      );
+      _snack(tr('micBusy'));
       return;
     }
     // Not awaited: a fix can take half a minute.
@@ -252,9 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
       try {
         await File(path).delete();
       } catch (_) {}
-      _snack(
-        tr('importFailed'),
-      );
+      _snack(tr('importFailed'));
       return;
     } finally {
       if (p.isWithin((await getTemporaryDirectory()).path, picked)) {
@@ -262,9 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
     if (!supported) {
-      _snack(
-        tr('unsupportedFormat', {'formats': _formats()}),
-      );
+      _snack(tr('unsupportedFormat', {'formats': _formats()}));
       return;
     }
     await _openAudio(path, DateTime.now(), autoTranscribe: true);
@@ -346,10 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // must go once it times out.
             persist: false,
             duration: const Duration(seconds: 10),
-            action: SnackBarAction(
-              label: tr('undo'),
-              onPressed: () {},
-            ),
+            action: SnackBarAction(label: tr('undo'), onPressed: () {}),
           ),
         )
         .closed;
@@ -551,10 +538,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Icon(Icons.fiber_manual_record, color: theme.colorScheme.error),
             const SizedBox(width: 8),
-            Text(
-              tr('recording'),
-              style: theme.textTheme.titleMedium,
-            ),
+            Text(tr('recording'), style: theme.textTheme.titleMedium),
             const Spacer(),
             Text(t, style: theme.textTheme.headlineSmall),
           ],

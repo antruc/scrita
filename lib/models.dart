@@ -30,9 +30,9 @@ int _detectThreads() {
       for (final d in Directory('/sys/devices/system/cpu').listSync())
         if (cpu.hasMatch(p.basename(d.path)))
           int.parse(
-            File(
-              '${d.path}/cpufreq/cpuinfo_max_freq',
-            ).readAsStringSync().trim(),
+            File('${d.path}/cpufreq/cpuinfo_max_freq')
+                .readAsStringSync()
+                .trim(),
           ),
     ]);
   } catch (_) {
@@ -75,10 +75,22 @@ const modelsUrl =
 /// Downloaded files: name -> (bytes, SHA-256). Set by
 /// tool/fetch_models.dart. Do not edit by hand.
 const asrDownloads = <String, (int, String)>{
-  'asr-encoder.int8.onnx': (652184281, 'acfc2b4456377e15d04f0243af540b7fe7c992f8d898d751cf134c3a55fd2247'),
-  'asr-decoder.int8.onnx': (11845275, '179e50c43d1a9de79c8a24149a2f9bac6eb5981823f2a2ed88d655b24248db4e'),
-  'asr-joiner.int8.onnx': (6355277, '3164c13fc2821009440d20fcb5fdc78bff28b4db2f8d0f0b329101719c0948b3'),
-  'asr-tokens.txt': (93939, 'd58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d'),
+  'asr-encoder.int8.onnx': (
+    652184281,
+    'acfc2b4456377e15d04f0243af540b7fe7c992f8d898d751cf134c3a55fd2247',
+  ),
+  'asr-decoder.int8.onnx': (
+    11845275,
+    '179e50c43d1a9de79c8a24149a2f9bac6eb5981823f2a2ed88d655b24248db4e',
+  ),
+  'asr-joiner.int8.onnx': (
+    6355277,
+    '3164c13fc2821009440d20fcb5fdc78bff28b4db2f8d0f0b329101719c0948b3',
+  ),
+  'asr-tokens.txt': (
+    93939,
+    'd58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d',
+  ),
 };
 
 /// Total download size in bytes.
@@ -175,9 +187,7 @@ Future<void> downloadModels(
   } on Exception catch (e) {
     // SocketException, HttpException, TimeoutException, HandshakeException.
     debugPrint('Model download: $e');
-    throw ModelDownloadError(
-      tr('downloadFailed'),
-    );
+    throw ModelDownloadError(tr('downloadFailed'));
   } finally {
     client.close(force: true);
   }
@@ -218,9 +228,7 @@ Future<String> prepareModels({void Function(String)? onStatus}) async {
       await stamp.exists() && await stamp.readAsString() == expectedStamp;
 
   if (!upToDate) {
-    onStatus?.call(
-      tr('firstSetup'),
-    );
+    onStatus?.call(tr('firstSetup'));
     for (final src in assets) {
       final data = await rootBundle.load(src);
       await File(p.join(dir, p.basename(src))).writeAsBytes(
@@ -241,9 +249,7 @@ Future<String> prepareModels({void Function(String)? onStatus}) async {
       'Missing models: ${missing.join(', ')}. '
       'Run dart run tool/fetch_models.dart before building',
     );
-    throw StateError(
-      tr('badInstall'),
-    );
+    throw StateError(tr('badInstall'));
   }
   return dir;
 }

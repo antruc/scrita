@@ -43,10 +43,7 @@ Future<void> main() async {
             child: ListView(
               padding: const EdgeInsets.all(24),
               children: [
-                Text(
-                  tr('startupFailed'),
-                  style: const TextStyle(fontSize: 18),
-                ),
+                Text(tr('startupFailed'), style: const TextStyle(fontSize: 18)),
                 const SizedBox(height: 24),
                 // The error stays hidden; the user pastes it into a bug report.
                 Builder(
@@ -57,11 +54,7 @@ Future<void> main() async {
                       await Clipboard.setData(ClipboardData(text: '$e\n\n$s'));
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            tr('detailsCopied'),
-                          ),
-                        ),
+                        SnackBar(content: Text(tr('detailsCopied'))),
                       );
                     },
                   ),

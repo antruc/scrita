@@ -243,7 +243,10 @@ void main() {
       words(8),
     ]);
     // No cue runs into the next one, the last ends at the turn's end.
-    expect(times(cues[1])[1].compareTo(times(cues[2])[0]), lessThanOrEqualTo(0));
+    expect(
+      times(cues[1])[1].compareTo(times(cues[2])[0]),
+      lessThanOrEqualTo(0),
+    );
     expect(cues[3], endsWith('--> 00:00:20,000\n${words(8)}\n${words(2)}'));
   });
 
@@ -399,9 +402,8 @@ void main() {
         resample: (block, from, last) {
           calls.add((block.length, from, last));
           return Float32List.fromList(
-            [
-              for (var i = 0; i < block.length; i += 3) block[i],
-            ].sublist(0, last ? null : block.length ~/ 3 - 1),
+            [for (var i = 0; i < block.length; i += 3) block[i]]
+                .sublist(0, last ? null : block.length ~/ 3 - 1),
           );
         },
       );

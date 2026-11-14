@@ -13,13 +13,11 @@ void main() {
       final root = await Directory.systemTemp.createTemp('scrita_backup_test');
       addTearDown(() => root.delete(recursive: true));
       final src = await Directory(p.join(root.path, 'src')).create();
-      final dst = await Directory(
-        p.join(root.path, 'dst', 'scrita'),
-      ).create(recursive: true);
+      final dst = await Directory(p.join(root.path, 'dst', 'scrita'))
+          .create(recursive: true);
 
-      await File(
-        p.join(src.path, 'a.json'),
-      ).writeAsString(jsonEncode({'audioPath': '/old/device/a.wav'}));
+      await File(p.join(src.path, 'a.json'))
+          .writeAsString(jsonEncode({'audioPath': '/old/device/a.wav'}));
       await File(p.join(src.path, 'a.txt')).writeAsString('hola');
       await File(p.join(src.path, 'a.wav')).writeAsBytes([1, 2, 3]);
       final pending = File(p.join(src.path, 'b.wav'));
@@ -38,9 +36,9 @@ void main() {
       final r = await readBackup(zip, dst.path);
       expect(r.added, 5);
       expect(r.prefs, {'audioSource': 'mic', 'lastSpeakers': 3});
-      final j =
-          jsonDecode(await File(p.join(dst.path, 'a.json')).readAsString())
-              as Map;
+      final j = jsonDecode(
+        await File(p.join(dst.path, 'a.json')).readAsString(),
+      ) as Map;
       expect(j['audioPath'], p.join(dst.path, 'a.wav'));
       expect(await File(p.join(dst.path, 'a.wav')).readAsBytes(), [1, 2, 3]);
       expect(await File(p.join(dst.path, 'b.wav')).lastModified(), date);
@@ -57,9 +55,8 @@ void main() {
 
       // Another recording already has the audio's name: the transcript is
       // left out instead of pointing at the wrong audio.
-      final other = await Directory(
-        p.join(root.path, 'other', 'scrita'),
-      ).create(recursive: true);
+      final other = await Directory(p.join(root.path, 'other', 'scrita'))
+          .create(recursive: true);
       await File(p.join(other.path, 'a.wav')).writeAsBytes([9]);
       await readBackup(zip, other.path);
       expect(File(p.join(other.path, 'a.json')).existsSync(), isFalse);
@@ -78,9 +75,8 @@ void main() {
     () async {
       final root = await Directory.systemTemp.createTemp('scrita_slip_test');
       addTearDown(() => root.delete(recursive: true));
-      final dst = await Directory(
-        p.join(root.path, 'dst', 'scrita'),
-      ).create(recursive: true);
+      final dst = await Directory(p.join(root.path, 'dst', 'scrita'))
+          .create(recursive: true);
       final file = File(p.join(root.path, 'x.json'))..writeAsStringSync('{}');
       final zip = p.join(root.path, 'evil.zip');
       final enc = ZipFileEncoder()..create(zip);

@@ -96,9 +96,7 @@ class BackgroundService {
       callback: startForegroundCallback,
     );
     if (result is ServiceRequestFailure) {
-      throw Exception(
-        tr('serviceStartFailed', {'error': result.error}),
-      );
+      throw Exception(tr('serviceStartFailed', {'error': result.error}));
     }
   }
 
