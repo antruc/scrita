@@ -38,7 +38,6 @@ Sure, my name is...
 - [How it works](#how-it-works)
 - [Development](#development)
 - [Known limitations](#known-limitations)
-- [Roadmap](#roadmap)
 - [License](#license)
 - [Credits](#credits)
 
@@ -276,8 +275,7 @@ models again
 In debug and profile builds, each transcription ends with a timing summary
 (also in `flutter logs`). Measure with `flutter run --profile`
 
-<details>
-<summary><b>Foreground service</b></summary>
+### Foreground service
 
 - Recording starts a `microphone` type service. Android 14+ requires starting
   it with the app visible and the microphone permission granted, which is
@@ -287,10 +285,7 @@ In debug and profile builds, each transcription ends with a timing summary
 - While the service runs, the back button minimizes the app instead of
   closing it. Closing it from "recents" stops the service (`stopWithTask`)
 
-</details>
-
-<details>
-<summary><b>Tuning</b></summary>
+### Tuning
 
 - **Threads:** the app counts the phone's big cores (faster than the slowest
   cluster) and uses at most 4. If it cannot read the frequencies, it uses 2
@@ -301,8 +296,6 @@ In debug and profile builds, each transcription ends with a timing summary
 - `speakerMinRun` in `lib/transcript.dart` (1 s): the shortest run split off
   a phrase as another speaker. Raise it if stray words land on the wrong
   speaker; lower it if a short "yes" from the other one is lost
-
-</details>
 
 ## Known limitations
 
@@ -319,11 +312,6 @@ In debug and profile builds, each transcription ends with a timing summary
   paragraph gets the wrong speaker. Fix it with **Assign to** in the editor
 - Imported files of 60 s or more are decoded in 3 parallel parts; the text
   may differ slightly at a seam from a single-pass decode
-
-## Roadmap
-
-- [ ] Export to .docx besides .txt and .srt
-- [ ] Play a single paragraph's audio while editing it
 
 ## License
 
