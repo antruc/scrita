@@ -261,10 +261,12 @@ class MainActivity : FlutterActivity() {
             done.countDown()
         }
 
+        // Each step on its own: a codec that fails to release must not
+        // leave the extractor and the thread behind.
         fun release() {
             runCatching { codec?.stop() }
-            codec?.release()
-            extractor.release()
+            runCatching { codec?.release() }
+            runCatching { extractor.release() }
             thread.quitSafely()
         }
     }

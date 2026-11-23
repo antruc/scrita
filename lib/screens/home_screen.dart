@@ -35,9 +35,16 @@ class _HomeScreenState extends State<HomeScreen> {
   String _status = tr('gettingAppReady');
   String? _modelDir;
 
-  double _level = -60;
+  // Notifiers, not setState: only the recording footer repaints, not the
+  // whole list, several times a second.
+  final _level = ValueNotifier<double>(-60);
+  final _elapsed = ValueNotifier(0); // seconds
   StreamSubscription<double>? _levelSub;
   Timer? _ticker;
+
+  /// Stops the level meter while the app is hidden: with the screen off it
+  /// would keep asking the platform for the amplitude for hours.
+  late final AppLifecycleListener _lifecycle;
 
   List<SavedTranscript> _history = [];
   List<PendingAudio> _pending = [];
@@ -48,6 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _lifecycle = AppLifecycleListener(
+      onHide: _stopLevel,
+      onShow: () {
+        if (_phase == _Phase.recording) _listenLevel();
+      },
+    );
     listenSharedAudio(_checkShared);
     _init();
   }
@@ -89,8 +102,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    _lifecycle.dispose();
     _levelSub?.cancel();
     _ticker?.cancel();
+    _level.dispose();
+    _elapsed.dispose();
     _recorder.dispose();
     BackgroundService.stop();
     super.dispose();
@@ -149,22 +165,37 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     // Not awaited: a fix can take half a minute.
     _saveLocation(_recorder.path);
-    _levelSub = _recorder.level.listen((l) => setState(() => _level = l));
+    _level.value = -60;
+    _elapsed.value = 0;
+    _listenLevel();
     _ticker = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {});
-      if (timer.tick % 5 == 0) {
+      _elapsed.value = _recorder.elapsed.inSeconds;
+      // Every 30 s: each update is a call to Android's notification
+      // service, for hours. Calibration: lower it for a livelier counter.
+      if (timer.tick % 30 == 0) {
         BackgroundService.update(
           '${tr('recording')} - '
-          '${formatTimestamp(_recorder.elapsed.inSeconds.toDouble())}',
+          '${formatTimestamp(_elapsed.value.toDouble())}',
         );
       }
     });
     setState(() => _phase = _Phase.recording);
   }
 
+  // record skips the platform call while its stream has no listener.
+  void _listenLevel() {
+    _levelSub?.cancel();
+    _levelSub = _recorder.level.listen((l) => _level.value = l);
+  }
+
+  void _stopLevel() {
+    _levelSub?.cancel();
+    _levelSub = null;
+  }
+
   Future<void> _stopRecording() async {
     _ticker?.cancel();
-    await _levelSub?.cancel();
+    _stopLevel();
     String? path;
     try {
       path = await _recorder.stop();
@@ -525,11 +556,15 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Widget _buildRecording(ThemeData theme) {
-    final e = _recorder.elapsed;
-    final t = formatTimestamp(e.inSeconds.toDouble());
+  Widget _buildRecording(ThemeData theme) => ListenableBuilder(
+    listenable: Listenable.merge([_level, _elapsed]),
+    builder: (_, _) => _buildMeter(theme),
+  );
+
+  Widget _buildMeter(ThemeData theme) {
+    final t = formatTimestamp(_elapsed.value.toDouble());
     // -60 dB → 0, 0 dB → 1
-    final level = ((_level + 60) / 60).clamp(0.0, 1.0);
+    final level = ((_level.value + 60) / 60).clamp(0.0, 1.0);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,

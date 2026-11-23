@@ -265,10 +265,18 @@ Future<PipelineResult> _process(
     models.buildAsrConfig(req.modelDir),
   );
   final vadConfig = models.buildVadConfig(req.modelDir);
-  final vad = sherpa_onnx.VoiceActivityDetector(
-    config: vadConfig,
-    bufferSizeInSeconds: 60,
-  );
+  // The recognizer holds the ASR model in native memory, which killing the
+  // isolate does not free: release it if the VAD fails to load.
+  late final sherpa_onnx.VoiceActivityDetector vad;
+  try {
+    vad = sherpa_onnx.VoiceActivityDetector(
+      config: vadConfig,
+      bufferSizeInSeconds: 60,
+    );
+  } catch (_) {
+    recognizer.free();
+    rethrow;
+  }
   final window = vadConfig.sileroVad.windowSize;
   t.asrSetup = part.elapsedMicroseconds / 1e6;
 

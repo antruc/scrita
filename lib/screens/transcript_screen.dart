@@ -129,7 +129,10 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
   final _subs = <StreamSubscription<Object?>>[];
   bool _hasAudio = false;
   bool _playing = false;
-  Duration _pos = Duration.zero;
+
+  /// A notifier, not setState: it changes several times a second while
+  /// playing, and only the slider shows it.
+  final _pos = ValueNotifier(Duration.zero);
   Duration _dur = Duration.zero;
 
   bool _busy = false;
@@ -184,6 +187,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       s.cancel();
     }
     _player.dispose();
+    _pos.dispose();
     _lifecycle.dispose();
     super.dispose();
   }
@@ -199,7 +203,7 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
       _player.onPlayerStateChanged.listen(
         (s) => setState(() => _playing = s == PlayerState.playing),
       ),
-      _player.onPositionChanged.listen((d) => setState(() => _pos = d)),
+      _player.onPositionChanged.listen((d) => _pos.value = d),
       _player.onDurationChanged.listen((d) => setState(() => _dur = d)),
     ]);
     // Keep the source loaded after it ends, so play works again.
@@ -1006,29 +1010,32 @@ class _TranscriptScreenState extends State<TranscriptScreen> {
           onPressed: _togglePlay,
         ),
         Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Slider(
-                value: _pos.inMilliseconds.clamp(0, max).toDouble(),
-                max: max > 0 ? max.toDouble() : 1,
-                // M3's secondaryContainer vanishes on the footer's
-                // surfaceContainerHigh; outline keeps 3:1 on every seed.
-                inactiveColor: theme.colorScheme.outline,
-                onChanged: max > 0
-                    ? (v) => _player.seek(Duration(milliseconds: v.round()))
-                    : null,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 24),
-                child: Text(
-                  '${formatTimestamp(_pos.inSeconds.toDouble())} / '
-                  '${formatTimestamp(_dur.inSeconds.toDouble())}',
-                  style: theme.textTheme.bodySmall,
+          child: ValueListenableBuilder(
+            valueListenable: _pos,
+            builder: (_, pos, _) => Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Slider(
+                  value: pos.inMilliseconds.clamp(0, max).toDouble(),
+                  max: max > 0 ? max.toDouble() : 1,
+                  // M3's secondaryContainer vanishes on the footer's
+                  // surfaceContainerHigh; outline keeps 3:1 on every seed.
+                  inactiveColor: theme.colorScheme.outline,
+                  onChanged: max > 0
+                      ? (v) => _player.seek(Duration(milliseconds: v.round()))
+                      : null,
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 24),
+                  child: Text(
+                    '${formatTimestamp(pos.inSeconds.toDouble())} / '
+                    '${formatTimestamp(_dur.inSeconds.toDouble())}',
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
