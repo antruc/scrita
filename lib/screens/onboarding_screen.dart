@@ -5,7 +5,7 @@
 // The illustrations are drawn with the app's own widgets, not screenshots:
 // they follow the theme and language and add nothing to the APK.
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 
 import '../audio.dart' show freeBytes, network;

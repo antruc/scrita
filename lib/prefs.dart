@@ -1,7 +1,7 @@
 // User settings, persisted with shared_preferences. Loaded once in main(),
 // so reads are synchronous everywhere else.
 
-import 'package:flutter/material.dart' show Color, Colors, ThemeMode;
+import 'package:material_ui/material_ui.dart' show Color, Colors, ThemeMode;
 import 'package:record/record.dart' show AndroidAudioSource;
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -5,7 +5,7 @@ speak. No cloud: everything happens on the phone. Internet is used once, to
 download the voice model**
 
 ![Android 11+](https://img.shields.io/badge/Android-11%2B-3DDC84?logo=android&logoColor=white)
-![Flutter 3.44+](https://img.shields.io/badge/Flutter-3.44%2B-02569B?logo=flutter&logoColor=white)
+![Flutter 3.47+](https://img.shields.io/badge/Flutter-3.47%2B-02569B?logo=flutter&logoColor=white)
 ![Offline](https://img.shields.io/badge/transcription-offline-success)
 ![sherpa-onnx](https://img.shields.io/badge/engine-sherpa--onnx-orange)
 [![License: GPL v3+](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
@@ -120,7 +120,7 @@ Gradle and model downloads
 
 | What | Version / size |
 |---|---|
-| [Flutter](https://docs.flutter.dev/get-started/install) | 3.44 or later |
+| [Flutter](https://docs.flutter.dev/get-started/install) | 3.47 or later |
 | Android SDK | Platform API 37, Build-Tools, Command-line Tools, Platform-Tools |
 | JDK | The one bundled with Android Studio (JBR 21) is enough |
 | Phone | Android 11 (API 30) or later, arm64 recommended |
@@ -345,7 +345,7 @@ redistributing an APK with the model must keep that NOTICE
 
 | Package | License |
 |---|---|
-| Flutter SDK (`flutter`, `flutter_localizations`) | BSD-3-Clause |
+| Flutter SDK (`flutter`), `material_ui` | BSD-3-Clause |
 | `sherpa_onnx` (includes onnxruntime, MIT) | Apache-2.0 |
 | `record`, `path_provider`, `path`, `share_plus`, `shared_preferences`, `ffi`, `url_launcher`, `crypto` | BSD-3-Clause |
 | `file_picker`, `flutter_foreground_task`, `audioplayers`, `archive` | MIT |
