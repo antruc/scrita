@@ -218,7 +218,13 @@ Future<String> prepareModels({void Function(String)? onStatus}) async {
   final assets =
       manifest
           .listAssets()
-          .where((a) => a.startsWith('assets/models/'))
+          // Hidden files (.gitkeep) can be listed but not bundled (seen with
+          // Flutter 3.50): loading one throws. fetch_models skips them too.
+          .where(
+            (a) =>
+                a.startsWith('assets/models/') &&
+                !p.basename(a).startsWith('.'),
+          )
           .toList()
         ..sort();
 
